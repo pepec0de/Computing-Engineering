@@ -20,6 +20,12 @@ class Polinomios {
 };
 
 void Polinomios::CargarPolinomios() {
+    // Inicializamos vectores
+    for (int i = 0; i < N; i++) {
+        Polinomio1[i] = 0;
+        Polinomio2[i] = 0;
+    }
+    
     // Aqui ponemos un bucle while para hacer que el usuario tenga en cuenta que el grado maximo es 5
     do {
         cout << "Introduzca el valor del grado del primer polinomio (Maximo 5): ";
