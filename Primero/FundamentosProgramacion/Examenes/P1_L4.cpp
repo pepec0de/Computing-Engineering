@@ -29,10 +29,10 @@ void examen::cargar() {
 	cout << "Introduzca los valores de la tabla";
 	for (int i = 0; i < ncolumnas; i++) {
 		// Indicamos al usuario en que columna se encuentra
-		cout << "Columna " << i << endl;		
+		cout << "Columna " << i+1 << endl;		
 		for (int j = 0; j < nfilas; j++) {
 			// Indicamos al usuario la fila donde esta
-			cout << "Indique el valor en la fila " << j << ": ";
+			cout << "Indique el valor en la fila " << j+1 << ": ";
 			cin >> t[i][j];
 		}
 	}
@@ -45,6 +45,7 @@ bool examen::esta() {
 	int nCol;
 	cout << "Indique la columna donde buscar: ";
 	cin >> nCol;
+	nCol--;
 	for (int i = 0; i < nfilas; i++) {
 		// Como despues de que se cumpla la condicion no tenemos que hacer
 		// nada mas podemos poner el return para para el for en vez de poner break
