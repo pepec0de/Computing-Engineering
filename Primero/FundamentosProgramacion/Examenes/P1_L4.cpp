@@ -59,7 +59,7 @@ int main() {
 	if (e.esta()) {
 		cout << "Su valor se encuentra en la tabla.\n";
 	} else {
-		cout << "Su valor no se encuentra en la columna indicada";
+		cout << "Su valor no se encuentra en la columna indicada.\n";
 	}
 	return 0;
 }
