@@ -26,7 +26,7 @@ void examen::cargar() {
 		cin >> ncolumnas;
 	} while(ncolumnas < 0 || ncolumnas > 6);
 	
-	cout << "Introduzca los valores de la tabla";
+	cout << "Introduzca los valores de la tabla.\n";
 	for (int i = 0; i < ncolumnas; i++) {
 		// Indicamos al usuario en que columna se encuentra
 		cout << "Columna " << i+1 << endl;		
