@@ -27,7 +27,7 @@ void examen::cargar() {
 	cout << "Introduzca los valores de la tabla";
 	for (int i = 0; i < ncolumnas; i++) {
 		cout << "Columna " << i << endl;		
-		for (int j = 0; j < ncolumnas; j++) {
+		for (int j = 0; j < nfilas; j++) {
 			cout << "Valor en fila " << j << ": ";
 			cin >> t[i][j];
 		}
