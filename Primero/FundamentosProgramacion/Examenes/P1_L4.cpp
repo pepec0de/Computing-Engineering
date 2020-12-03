@@ -16,6 +16,7 @@ public:
 };
 
 void examen::cargar() {
+	// Pedimos los valores de la tabla dentro del intervalo
 	do {
 		cout << "Indique el numero de filas: ";
 		cin >> nfilas;
@@ -24,11 +25,14 @@ void examen::cargar() {
 		cout << "Indique el numero de columnas: ";
 		cin >> ncolumnas;
 	} while(ncolumnas < 0 || ncolumnas > 6);
+	
 	cout << "Introduzca los valores de la tabla";
 	for (int i = 0; i < ncolumnas; i++) {
+		// Indicamos al usuario en que columna se encuentra
 		cout << "Columna " << i << endl;		
 		for (int j = 0; j < nfilas; j++) {
-			cout << "Valor en fila " << j << ": ";
+			// Indicamos al usuario la fila donde esta
+			cout << "Indique el valor en la fila " << j << ": ";
 			cin >> t[i][j];
 		}
 	}
@@ -42,11 +46,20 @@ bool examen::esta() {
 	cout << "Indique la columna donde buscar: ";
 	cin >> nCol;
 	for (int i = 0; i < nfilas; i++) {
+		// Como despues de que se cumpla la condicion no tenemos que hacer
+		// nada mas podemos poner el return para para el for en vez de poner break
 		if (t[nCol][i] == valor) return true;
 	}
 	return false;
 }
 
 int main() {
-
+	examen e;
+	e.cargar();
+	if (e.esta()) {
+		cout << "Su valor se encuentra en la tabla.\n";
+	} else {
+		cout << "Su valor no se encuentra en la columna indicada";
+	}
+	return 0;
 }
