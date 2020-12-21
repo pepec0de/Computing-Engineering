@@ -1,10 +1,78 @@
 #include <iostream>
+#include <string.h>
 
 using namespace std;
 
 typedef char Cadena[50]; // Tipo de datos Cadena
+#define MAX_CUENTAS 10 // Numero de cuentas
+#define MAX_CLIENTES 100 // Numero de clientes
 
-#define MAX_CUENTAS 100 // Numero de cuentas
+class Cliente {
+    Cadena Nombre, Direccion;
+    Cuenta Cuentas[MAX_CUENTAS];
+    int NoCuentas;
+    
+public:
+    Cliente();
+    void ActualizarCliente(Cadena pNomb, Cadena pDir);
+    void DameNombre(Cadena pNom);
+    void DameDireccion(Cadena pDir);
+    int BuscarCuenta(int pNoCuenta);
+    bool CrearCuenta(Cuenta pCu);
+    bool ActualizarCuenta(Cuenta pCu);
+    bool BorrarCuenta(int pNoCuenta);
+    int DameNoCuentas();
+    Cuenta DameCuenta(int pos);
+    void Mostrar(char Campo);
+};
+
+Cliente::Cliente() {
+    strcpy(Nombre, "");
+    strcpy(Direccion, "");
+    NoCuentas = 0;
+}
+
+void Cliente::ActualizarCliente(Cadena pNomb, Cadena pDir) {
+    strcpy(Nombre, pNomb);
+    strcpy(Direccion, pDir);
+
+}
+
+void Cliente::DameNombre(Cadena pNom) {
+
+}
+
+void Cliente::DameDireccion(Cadena pDir) {
+
+}
+
+int Cliente::BuscarCuenta(int pNoCuenta) {
+
+}
+
+bool Cliente::CrearCuenta(Cuenta pCu) {
+
+}
+
+bool Cliente::ActualizarCuenta(Cuenta pCu) {
+
+}
+
+bool Cliente::BorrarCuenta(int pNoCuenta) {
+
+}
+
+int Cliente::DameNoCuentas() {
+
+}
+
+Cuenta Cliente::DameCuenta(int pos) {
+
+}
+
+void Cliente::Mostrar(char Campo) {
+
+}
 
 class Cuenta { // Contiene los datos de una cuenta bancaria
     float Saldo; // Saldo de la cuenta
@@ -154,7 +222,7 @@ int main() {
                             cout << "No puede ser negativo. Indiquelo de nuevo: ";
                             cin >> saldo;
                         }
-                        if (DatosCuentas[buscarCuenta].ActualizarSaldo(saldo)) {
+                        if (!DatosCuentas[buscarCuenta].ActualizarSaldo(saldo)) {
                             cout << "El saldo se actualizo correctamente.\n";
                         } else {
                             cout << "Error! La cuenta " << noCuenta << " esta bloqueada.\n";

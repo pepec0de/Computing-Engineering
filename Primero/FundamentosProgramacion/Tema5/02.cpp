@@ -32,14 +32,18 @@ void Tictactoe::Pintar() {
     // Bucle anidado para imprimir la matriz bidimensional
     for (int i = 0; i < 3; i++) {
         cout << "\t";
-        for (int j = 0; j < 3; j++) {
-            cout << Tablero[i][j];
-            // Si no es el ultimo elemento de la fila ponemos | despues
-            // y si es ponemos salto
-            if (j < 2) cout << "|"; else cout << endl;
+        for (int j = 0; j < 3-1; j++) {
+            cout << Tablero[i][j] << "|";
         }
+        cout << Tablero[i][3-1] << endl;
         // Si no es el ultimo caracter
-        if (i < 2) cout << "\t-+-+-\n";
+        if (i < 3-1) {
+            cout << "\t";
+            for (int k = 0; k < 3-1; k++) {
+                cout << "-+";
+            }
+            cout << "-\n";
+        }
     }
 }
 
@@ -57,36 +61,31 @@ bool Tictactoe::PonerFicha(char ficha, int fila, int columna) {
 }
 
 bool Tictactoe::ComprobarFila(char ficha, int fila) {
-    // Resultado de la funcion
-    bool result = true;
-    // Hacemos un recorrido de busqueda para buscar el 
+    // Bucle de busqueda para buscar el
     // caracter que no coincida
     int j = 0;
-    while (j < 3 && result) {
-        if (Tablero[fila][j] != ficha) result = false;
+    while (j < 3 && Tablero[fila][j] == ficha) {
         j++;
     }
-    return result;
+    return j == 3;
 }
 
 bool Tictactoe::ComprobarColumna(char ficha, int columna) {
     // Resultado de la funcion
-    bool result = true;
-    // Hacemos un recorrido de busqueda para buscar el 
+    // Hacemos un recorrido de busqueda para buscar el
     // caracter que no coincida
     int i = 0;
-    while (i < 3 && result) {
-        if (Tablero[i][columna] != ficha) result = false;
+    while (i < 3 && Tablero[i][columna] == ficha) {
         i++;
     }
-    return result;
+    return i == 3;
 }
 
 bool Tictactoe::ComprobarDiagonal(char ficha, int fila, int columna) {
     // Resultado de la funcion
     bool result = false;
     if (Tablero[1][1] == ficha) {
-        result = ( Tablero[0][0] == ficha && Tablero[2][2] == ficha ) || 
+        result = ( Tablero[0][0] == ficha && Tablero[2][2] == ficha ) ||
                 ( Tablero[0][2] == ficha && Tablero[2][0] == ficha);
     }
     return result;
@@ -125,14 +124,13 @@ void PedirPosicion(char ficha, int &fila, int &columna) {
 
 int main() {
     Tictactoe juego;
-    char ficha = 'X';
+    char ficha = 'X', opc;
     int fila, columna;
     bool terminado = false;
     bool jugada = false;
-    cout << "Bienvenido al juego de tres en raya!\n";
-    do {
-        cout << endl;
-        juego.Pintar();
+    cout << "Bienvenido al juego de tres en raya!\n\n";
+
+    juego.Pintar();
     while (!terminado) {
         cout << "Jugador " << ficha << ". Por favor, Introduzca las coordenadas.\n";
         while(!jugada) {
@@ -152,16 +150,20 @@ int main() {
             cout << "El juego acaba en empate!\n";
             terminado = true;
         } else {
-            // Turnamos 
+            // Turnamos
             if (ficha == 'X') ficha = 'O'; else ficha = 'X';
         }
+        if (terminado) {
+            juego.LimpiarTablero();
+            cout << "Desea jugar otra vez? (S/n): ";
+            cin >> opc;
+            opc = toupper(opc);
+            if (opc == 'S') {
+                terminado = false;
+                juego.Pintar();
+            }
+        }
     }
-    juego.LimpiarTablero();
-    cout << "Desea jugar otra vez? (S/n): ";
-    char opc;
-    cin >> opc;
-    if (opc == 'S' || opc == 's') terminado = false;
-    } while(!terminado);
     cout << "\nGracias por jugar!\n";
     return 0;
-} 
+}
