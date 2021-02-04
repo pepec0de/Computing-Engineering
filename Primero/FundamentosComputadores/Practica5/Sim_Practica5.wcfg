@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/pepe/Documentos/Universidad/UWU/Asignaturas/Fundamentos de computadores/Xilinx ISE Projects/Practica5/test_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_unsigned" />
+            <top_module name="test" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="13" />
+   <wvobject fp_name="/test/g3" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">g3</obj_property>
+      <obj_property name="ObjectShortName">g3</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/g2" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">g2</obj_property>
+      <obj_property name="ObjectShortName">g2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/g1" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">g1</obj_property>
+      <obj_property name="ObjectShortName">g1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/g0" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">g0</obj_property>
+      <obj_property name="ObjectShortName">g0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/uut/entrada" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">entrada[3:0]</obj_property>
+      <obj_property name="ObjectShortName">entrada[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/p" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">p</obj_property>
+      <obj_property name="ObjectShortName">p</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#00ffff</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/s" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">s</obj_property>
+      <obj_property name="ObjectShortName">s</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#00ffff</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/t" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">t</obj_property>
+      <obj_property name="ObjectShortName">t</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#00ffff</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/c" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">c</obj_property>
+      <obj_property name="ObjectShortName">c</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#00ffff</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/s0" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">s0</obj_property>
+      <obj_property name="ObjectShortName">s0</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#ffff00</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/s1" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">s1</obj_property>
+      <obj_property name="ObjectShortName">s1</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#ffff00</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/s2" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">s2</obj_property>
+      <obj_property name="ObjectShortName">s2</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#ffff00</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/s3" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">s3</obj_property>
+      <obj_property name="ObjectShortName">s3</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#ffff00</obj_property>
+   </wvobject>
+</wave_config>
