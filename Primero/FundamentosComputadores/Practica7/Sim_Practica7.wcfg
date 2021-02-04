@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/pepe/Documentos/Universidad/UWU/Asignaturas/Fundamentos de computadores/Xilinx ISE Projects/Practica7/test_isim_beh1.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="std_logic_1164" />
+            <top_module name="test" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="14" />
+   <wvobject fp_name="/test/m" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">m</obj_property>
+      <obj_property name="ObjectShortName">m</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/fc1" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">fc1</obj_property>
+      <obj_property name="ObjectShortName">fc1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/fc2" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">fc2</obj_property>
+      <obj_property name="ObjectShortName">fc2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/fc3" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">fc3</obj_property>
+      <obj_property name="ObjectShortName">fc3</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/fc4" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">fc4</obj_property>
+      <obj_property name="ObjectShortName">fc4</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/ck" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ck</obj_property>
+      <obj_property name="ObjectShortName">ck</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/rs" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rs</obj_property>
+      <obj_property name="ObjectShortName">rs</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/t" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">t</obj_property>
+      <obj_property name="ObjectShortName">t</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/ep1" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ep1</obj_property>
+      <obj_property name="ObjectShortName">ep1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/ep2" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ep2</obj_property>
+      <obj_property name="ObjectShortName">ep2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/rp1" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rp1</obj_property>
+      <obj_property name="ObjectShortName">rp1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/rp2" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rp2</obj_property>
+      <obj_property name="ObjectShortName">rp2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/ck_period" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">ck_period</obj_property>
+      <obj_property name="ObjectShortName">ck_period</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/uut/estado" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">estado</obj_property>
+      <obj_property name="ObjectShortName">estado</obj_property>
+   </wvobject>
+</wave_config>
