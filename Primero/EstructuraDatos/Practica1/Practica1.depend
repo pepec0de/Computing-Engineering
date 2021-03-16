@@ -1,0 +1,40 @@
+# depslib dependency file v1.0
+1584205420 source:d:\jgonzalezoria\workspace\uhu\ing_informatica\estr_datos_i\practica1\main.cpp
+	<iostream>
+
+1615809796 
+
+1615804855 source:d:\jgonzalezoria\workspace\uhu\ing_informatica\estr_datos_i\practica1\src\ttienda.cpp
+	"TTienda.h"
+
+1615804855 "
+
+1615809976 d:\jgonzalezoria\workspace\uhu\ing_informatica\estr_datos_i\practica1\include\ttienda.h
+	"TTipos.h"
+
+1615809796 d:\jgonzalezoria\workspace\uhu\ing_informatica\estr_datos_i\practica1\include\ttipos.h
+	<string.h>
+	<iostream>
+	<fstream>
+
+1615812921 source:/home/pepe/Documentos/Universidad/UWU/Asignaturas/2doCuatri/Estructura de Datos I/Practica1/main.cpp
+	<iostream>
+	"TAlmacen.h"
+
+1615811056 source:/home/pepe/Documentos/Universidad/UWU/Asignaturas/2doCuatri/Estructura de Datos I/Practica1/src/TAlmacen.cpp
+	"TAlmacen.h"
+
+1615812737 /home/pepe/Documentos/Universidad/UWU/Asignaturas/2doCuatri/Estructura de Datos I/Practica1/include/TAlmacen.h
+	"TTipos.h"
+
+1615809796 /home/pepe/Documentos/Universidad/UWU/Asignaturas/2doCuatri/Estructura de Datos I/Practica1/include/TTipos.h
+	<string.h>
+	<iostream>
+	<fstream>
+
+1615804855 source:/home/pepe/Documentos/Universidad/UWU/Asignaturas/2doCuatri/Estructura de Datos I/Practica1/src/TTienda.cpp
+	"TTienda.h"
+
+1615809976 /home/pepe/Documentos/Universidad/UWU/Asignaturas/2doCuatri/Estructura de Datos I/Practica1/include/TTienda.h
+	"TTipos.h"
+
