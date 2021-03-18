@@ -164,25 +164,13 @@ bool TAlmacen::EliminarProducto(int pPos) {
     FicheProductos.read((char*) &prodEliminar, sizeof(TProducto));
     if (FicheProductos.good()) {
         TProducto prodActual; // auxiliar
-
-        fstream nuevoFichero;
-        nuevoFichero.open("temp.dat", ios::binary | ios::out);
-        // Volcamos primero la cabecera
-        nuevoFichero.write((char*) &NProduc, sizeof(int));
-        nuevoFichero.write((char*) &Nombre, sizeof(Cadena));
-        nuevoFichero.write((char*) &Direccion, sizeof(Cadena));
-
-        // Posicionamos despues de la cabecera
-        FicheProductos.seekg(nuevoFichero.tellp());
-        // Volcamos los productos menos el producto a eliminar
         for (int i = 0; i < NProduc; i++) {
+            FicheProductos.seekg(nPos+sizeof(TProducto)*(i+1)); // lectura
             FicheProductos.read((char*) &prodActual, sizeof(TProducto));
-            if (prodActual != prodEliminar) {
-                nuevoFichero.write((char*) &prodActual, sizeof(TProducto));
-            }
+            FicheProductos.seekp(nPos+sizeof(TProducto)*i); // escritura
+            FicheProductos.write((char*) &prodActual, sizeof(TProducto));
+            if (FicheProductos.eof()) break;
         }
-        //remove("Almacen.dat"); ????
-        //rename("temp.dat", "Almacen.dat");
         return true;
     }
     return false;
