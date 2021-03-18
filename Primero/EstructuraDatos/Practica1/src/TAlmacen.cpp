@@ -181,7 +181,7 @@ bool TAlmacen::EliminarProducto(int pPos) {
                 nuevoFichero.write((char*) &prodActual, sizeof(TProducto));
             }
         }
-        //remove("Almacen.dat");
+        //remove("Almacen.dat"); ????
         //rename("temp.dat", "Almacen.dat");
         return true;
     }
