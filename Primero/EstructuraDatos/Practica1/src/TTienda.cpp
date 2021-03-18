@@ -5,38 +5,50 @@ void TTienda::OrdenarProductos() {
 
 }
 
+// Constructor que debe inicializar los atributos de la clase.
 TTienda::TTienda()
 {
     //ctor
-
+    strcpy(Nombre, "");
+    strcpy(Direccion, "");
+    strcpy(NomFiche, "");
+    Estantes = new TEstante[10];
+    NEstan = 0;
+    Tamano = 0;
 }
 
+// Destructor que cerrará la tienda en caso de que el usuario no lo haya hecho.
 TTienda::~TTienda()
 {
     //dtor
+    if (EstaAbierta()) {
+        CerrarTienda();
+    }
 }
 
-//Devuelve los atributos nombre y dirección por parámetro.
+// Devuelve los atributos nombre y dirección por parámetro.
 void TTienda::DatosTienda(Cadena pNombTienda, Cadena pDirTienda) {
-
+    strcpy(pNombTienda, Nombre);
+    strcpy(pDirTienda, Direccion);
 }
 
-//Crea un fichero binario vacío con el nombre pasado por parámetro e inicializa los atributos nombre y
-//dirección mediante los parámetros y a continuación lo cerrará. Devolverá true si ha podido crear el
-//fichero.
+// Crea un fichero binario vacío con el nombre pasado por parámetro e inicializa los atributos nombre y
+// dirección mediante los parámetros y a continuación lo cerrará. Devolverá true si ha podido crear el
+// fichero.
 bool TTienda::CrearTienda(Cadena pNombTienda, Cadena pDirTienda, Cadena pNomFiche) {
+
     return false;
 }
 
-//Abre un fichero y lo carga a memoria. Si ya había un fichero previamente cargado, guardará los datos
-//de la tienda y procederá a cargar el nuevo fichero. Si el fichero es el mismo que el que está en
-//memoria, eliminará los datos y procederá a cargar nuevamente los datos del fichero. Devolverá true
-//si se ha podido cargar el fichero.
+// Abre un fichero y lo carga a memoria. Si ya había un fichero previamente cargado, guardará los datos
+// de la tienda y procederá a cargar el nuevo fichero. Si el fichero es el mismo que el que está en
+// memoria, eliminará los datos y procederá a cargar nuevamente los datos del fichero. Devolverá true
+// si se ha podido cargar el fichero.
 bool TTienda::AbrirTienda(Cadena pNomFiche) {
     return false;
 }
 
-//Vuelca los datos de la memoria al fichero. Devolverá true si se han guardado los datos.
+// Vuelca los datos de la memoria al fichero. Devolverá true si se han guardado los datos.
 bool TTienda::GuardarTienda() {
     return false;
 }

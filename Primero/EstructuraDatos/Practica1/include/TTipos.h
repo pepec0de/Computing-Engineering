@@ -5,14 +5,12 @@
 #include <fstream>
 typedef char Cadena[90];
 #define Incremento 4
-struct TFecha //Almacena una fecha
-{
+struct TFecha {//Almacena una fecha
     int Dia;
     int Mes;
     int Anyo;
 };
-struct TProducto
-{
+struct TProducto {
     Cadena CodProd; //Código de producto.
     int Cantidad; //Cantidad en el almacén.
     Cadena NombreProd; //Nombre del producto.

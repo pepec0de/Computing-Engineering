@@ -40,9 +40,12 @@ void TAlmacen::DatosAlmacen(Cadena pNombAlmacen, Cadena pDirAlmacen) {
 // Crea un fichero binario vacío con el nombre pasado por parámetro. Crea la cabecera del fichero
 // y lo deja abierto para su utilización. Devuelve true si se ha creado.
 bool TAlmacen::CrearAlmacen(Cadena pNomFiche) {
-    fstream nuevoFiche;
-    nuevoFiche.open(pNomFiche, ios::binary | ios::out | ios::in);
-    if (!nuevoFiche.fail()) {
+    FicheProductos.open(pNomFiche, ios::binary | ios::out | ios::trunc);
+    if (!FicheProductos.fail()) {
+        FicheProductos.seekp(0);
+        FicheProductos.write((char*) &NProduc, sizeof(int));
+        FicheProductos.write((char*) &Nombre, sizeof(Cadena));
+        FicheProductos.write((char*) &Direccion, sizeof(Cadena));
         return true;
     }
     return false;
@@ -83,20 +86,104 @@ bool TAlmacen::AbrirAlmacen(Cadena pNomFiche) {
 bool TAlmacen::CerrarAlmacen() {
     NProduc = -1;
     FicheProductos.close();
-    FicheProductos.clear();
 
     return !FicheProductos.is_open();
 }
 
+// Devuelve true si el fichero está abierto.
 bool TAlmacen::EstaAbierto() {
     return NProduc != -1;
 }
 
+// Devuelve el número de productos.
 int TAlmacen::NProductos() {
     return NProduc;
 }
 
+// Dado un código de producto, devuelve la posición dentro del fichero donde se encuentra. Si no
+// lo encuentra devuelve -1.
 int TAlmacen::BuscarProducto(Cadena pCodProd) {
+    Cadena codActual;
+    FicheProductos.seekg(0);
+    do {
+        if (FicheProductos.eof()) {
+            // Con return automaticamente sale del metodo
+            return -1;
+        }
+        FicheProductos.read((char*) &codActual, sizeof(Cadena));
+    } while(strcmp(codActual, pCodProd) != 0);
 
-    return 0;
+    return FicheProductos.tellg();
+}
+
+// Dado la posición devuelve el producto del fichero situado en dicha posición. Debe verificar
+// previamente que la posición sea correcta. Si la posición no es correcta devolverá un producto cuyo
+// código tendrá el valor “NULO”.
+TProducto TAlmacen::ObtenerProducto(int pPos) {
+    TProducto resultado;
+    FicheProductos.seekg(pPos);
+    FicheProductos.read((char*) &resultado, sizeof(TProducto));
+    if (!FicheProductos.good()) {
+        // La posicion no es correcta, ya que el tipo de variable es distinto
+        strcpy(resultado.CodProd, "NULO");
+    }
+    return resultado;
+}
+
+// Dado un producto, lo busca en el fichero y si no lo encuentra lo añade al final del fichero.
+// Devuelve true si se ha añadido el producto.
+bool TAlmacen::AnadirProducto(TProducto pProduc) {
+    if (BuscarProducto(pProduc.CodProd) == -1) {
+        FicheProductos.seekp(0, ios::end);
+        FicheProductos.write((char*) &pProduc, sizeof(TProducto));
+        return true;
+    }
+    return false;
+}
+
+// Dada la posición de un producto en el fichero lo actualiza con la información del producto pasado
+// por parámetro. Devuelve true si se ha actualizado el producto. Se debe verificar previamente que la
+// posición sea correcta.
+bool TAlmacen::ActualizarProducto(int pPos, TProducto pProduc) {
+    TProducto aux;
+    FicheProductos.seekg(pPos);
+    FicheProductos.read((char*) &aux, sizeof(TProducto));
+    if (FicheProductos.good()) {
+        FicheProductos.seekp(pPos);
+        FicheProductos.write((char*) &pProduc, sizeof(TProducto));
+        return true;
+    }
+    return false;
+}
+
+// Dado la posición de un producto en el fichero lo borra. Devuelve true si se ha podido borrar. Se
+// debe verificar que la posición sea correcta.
+bool TAlmacen::EliminarProducto(int pPos) {
+    TProducto prodEliminar;
+    FicheProductos.seekg(pPos);
+    FicheProductos.read((char*) &prodEliminar, sizeof(TProducto));
+    if (FicheProductos.good()) {
+        TProducto prodActual; // auxiliar
+
+        fstream nuevoFichero;
+        nuevoFichero.open("temp.dat", ios::binary | ios::out);
+        // Volcamos primero la cabecera
+        nuevoFichero.write((char*) &NProduc, sizeof(int));
+        nuevoFichero.write((char*) &Nombre, sizeof(Cadena));
+        nuevoFichero.write((char*) &Direccion, sizeof(Cadena));
+
+        // Posicionamos despues de la cabecera
+        FicheProductos.seekg(nuevoFichero.tellp());
+        // Volcamos los productos menos el producto a eliminar
+        for (int i = 0; i < NProduc; i++) {
+            FicheProductos.read((char*) &prodActual, sizeof(TProducto));
+            if (prodActual != prodEliminar) {
+                nuevoFichero.write((char*) &prodActual, sizeof(TProducto));
+            }
+        }
+        //remove("Almacen.dat");
+        //rename("temp.dat", "Almacen.dat");
+        return true;
+    }
+    return false;
 }
