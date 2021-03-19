@@ -38,10 +38,10 @@
 1615809976 /home/pepe/Documentos/Universidad/UWU/Asignaturas/2doCuatri/Estructura de Datos I/Practica1/include/TTienda.h
 	"TTipos.h"
 
-1616009216 source:/home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/src/TTienda.cpp
+1616088793 source:/home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/src/TTienda.cpp
 	"TTienda.h"
 
-1615813079 /home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/include/TTienda.h
+1616087253 /home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/include/TTienda.h
 	"TTipos.h"
 
 1616086661 /home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/include/TTipos.h
@@ -49,7 +49,7 @@
 	<iostream>
 	<fstream>
 
-1616087533 source:/home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/src/TAlmacen.cpp
+1616147784 source:/home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/src/TAlmacen.cpp
 	"TAlmacen.h"
 
 1615813052 /home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/include/TAlmacen.h

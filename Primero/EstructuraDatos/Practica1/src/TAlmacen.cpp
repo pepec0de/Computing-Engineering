@@ -164,13 +164,23 @@ bool TAlmacen::EliminarProducto(int pPos) {
     FicheProductos.read((char*) &prodEliminar, sizeof(TProducto));
     if (FicheProductos.good()) {
         TProducto prodActual; // auxiliar
+        int tamano = 0;
+        FicheProductos.seekg(0, ios::end);
+        tamano = FicheProductos.tellg();
         for (int i = 0; i < NProduc; i++) {
-            FicheProductos.seekg(nPos+sizeof(TProducto)*(i+1)); // lectura
-            FicheProductos.read((char*) &prodActual, sizeof(TProducto));
-            FicheProductos.seekp(nPos+sizeof(TProducto)*i); // escritura
-            FicheProductos.write((char*) &prodActual, sizeof(TProducto));
-            if (FicheProductos.eof()) break;
+            // Comprobamos que el producto no este en la ultima posicion
+            if (pPos+sizeof(TProducto) < tamano) {
+                // Sustituimos el producto que se quiere eliminar por el que esta justo despues de este
+                FicheProductos.seekg(pPos+sizeof(TProducto)*(i+1)); // lectura
+                FicheProductos.read((char*) &prodActual, sizeof(TProducto));
+                FicheProductos.seekp(pPos+sizeof(TProducto)*i); // escritura
+                FicheProductos.write((char*) &prodActual, sizeof(TProducto));
+                if (FicheProductos.eof()) break;
+            }
         }
+        NProduc--;
+        FicheProductos.seekp(0);
+        FicheProductos.write((char*) &NProduc, sizeof(int));
         return true;
     }
     return false;

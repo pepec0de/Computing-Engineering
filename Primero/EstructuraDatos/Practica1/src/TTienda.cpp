@@ -24,6 +24,7 @@ TTienda::~TTienda()
     if (EstaAbierta()) {
         CerrarTienda();
     }
+    delete [] Estantes;
 }
 
 // Devuelve los atributos nombre y dirección por parámetro.
@@ -36,8 +37,18 @@ void TTienda::DatosTienda(Cadena pNombTienda, Cadena pDirTienda) {
 // dirección mediante los parámetros y a continuación lo cerrará. Devolverá true si ha podido crear el
 // fichero.
 bool TTienda::CrearTienda(Cadena pNombTienda, Cadena pDirTienda, Cadena pNomFiche) {
+    bool resultado = false;
 
-    return false;
+    strcpy(Nombre, pNombTienda);
+    strcpy(Direccion, pDirTienda);
+
+    fstream fichero;
+    fichero.open(pNomFiche, ios::binary | ios::out | ios::trunc);
+    if (!fichero.fail()) {
+        resultado = true;
+    }
+    fichero.close();
+    return resultado;
 }
 
 // Abre un fichero y lo carga a memoria. Si ya había un fichero previamente cargado, guardará los datos
@@ -45,6 +56,9 @@ bool TTienda::CrearTienda(Cadena pNombTienda, Cadena pDirTienda, Cadena pNomFich
 // memoria, eliminará los datos y procederá a cargar nuevamente los datos del fichero. Devolverá true
 // si se ha podido cargar el fichero.
 bool TTienda::AbrirTienda(Cadena pNomFiche) {
+    if (EstaAbierta()) {
+
+    }
     return false;
 }
 
