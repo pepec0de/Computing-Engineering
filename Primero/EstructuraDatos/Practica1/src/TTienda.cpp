@@ -57,19 +57,66 @@ bool TTienda::CrearTienda(Cadena pNombTienda, Cadena pDirTienda, Cadena pNomFich
 // si se ha podido cargar el fichero.
 bool TTienda::AbrirTienda(Cadena pNomFiche) {
     if (EstaAbierta()) {
+        GuardarTienda();
+    }
+    fstream fichero;
+    fichero.open(pNomFiche, ios::binary | ios::out | ios::in);
+    if (!fichero.fail()) {
+        strcpy(NomFiche, pNomFiche);
 
+        fichero.seekg(0);
+        fichero.read((char*) &Nombre, sizeof(Cadena));
+        fichero.read((char*) &Direccion, sizeof(Cadena));
+        delete [] Estantes;
+
+        // Cargamos los estantes
+        Tamano = 5;
+        int i = -1;
+        Estantes = new TEstante[Tamano];
+        while(!fichero.eof()) {
+            i++;
+            fichero.read((char*) &Estantes[i], sizeof(TEstante*));
+            if (i+1 == Tamano) {
+                // Pedimos mas memoria
+                TEstante *aux = new TEstante[Tamano+5];
+                for (int j = 0; j < Tamano; j++) {
+                    aux[j] = Estantes[j];
+                }
+                Estantes = aux;
+                delete [] aux;
+            }
+        }
+        NEstan = i+1;
+        return true;
     }
     return false;
 }
 
 // Vuelca los datos de la memoria al fichero. Devolverá true si se han guardado los datos.
 bool TTienda::GuardarTienda() {
-    return false;
+    fstream fichero;
+    fichero.open(NomFiche, ios::binary | ios::out);
+    fichero.seekp(0);
+    fichero.write((char*) &Nombre, sizeof(Cadena));
+    fichero.write((char*) &Direccion, sizeof(Cadena));
+    for (int i = 0; i < Tamano && Estantes[i] != NULL; i++) {
+        fichero.write((char*) &Estantes[i]; sizeof(TEstante*));
+    }
+    return fichero.good();
 }
 
 // Guarda los datos de la memoria en el fichero y borra todos los atributos del objeto. Devuelve true
 // si se ha podido guardar los datos.
 bool TTienda::CerrarTienda() {
+    if (GuardarTienda()) {
+        strcpy(Nombre, "");
+        strcpy(Direccion, "");
+        strcpy(NomFiche, "");
+        delete [] Estantes;
+        NEstan = 0;
+        Tamano = 0;
+        return true;
+    }
     return false;
 }
 
@@ -80,7 +127,7 @@ bool TTienda::EstaAbierta() {
 
 // Devuelve el número de estantes de la tienda.
 int TTienda::NoEstantes() {
-    return 0;
+    return NEstan;
 }
 
 // Dado un código de estante, devuelve la posición dentro del vector donde se encuentra. Si no lo
