@@ -1,5 +1,7 @@
 #include "TAlmacen.h"
 
+/// Para las dudas buscar "DUDA"
+
 using namespace std;
 
 TAlmacen::TAlmacen() {
@@ -24,11 +26,12 @@ TAlmacen::TAlmacen() {
         FicheProductos.clear();
         FicheProductos.open("Almacen.dat", ios::binary | ios::out | ios::in);
     }
-    FicheProductos.close();
+    FicheProductos.close(); // DUDA: hay que cerrarlo?
 }
 
+//Destructor que cerrará el almacén en caso de que el usuario no lo haya hecho.
 TAlmacen::~TAlmacen() {
-    //dtor
+    CerrarAlmacen();
 }
 
 // Devuelve los atributos nombre y dirección por parámetro.
@@ -40,24 +43,36 @@ void TAlmacen::DatosAlmacen(Cadena pNombAlmacen, Cadena pDirAlmacen) {
 // Crea un fichero binario vacío con el nombre pasado por parámetro. Crea la cabecera del fichero
 // y lo deja abierto para su utilización. Devuelve true si se ha creado.
 bool TAlmacen::CrearAlmacen(Cadena pNomFiche) {
+    bool resultado = false;
     FicheProductos.open(pNomFiche, ios::binary | ios::out | ios::trunc);
     if (!FicheProductos.fail()) {
         FicheProductos.seekp(0);
+        // DUDA : es correcto?
+        NProduc = 0; // para ingresar el valor 0 a nuestro archivo
         FicheProductos.write((char*) &NProduc, sizeof(int));
-        FicheProductos.write((char*) &Nombre, sizeof(Cadena));
-        FicheProductos.write((char*) &Direccion, sizeof(Cadena));
-        return true;
+        NProduc = -1; // valor irreal porque el almacen sigue estando cerrado
+        FicheProductos.write((char*) Nombre, sizeof(Cadena));
+        FicheProductos.write((char*) Direccion, sizeof(Cadena));
+        resultado = true;
     }
-    return false;
+    return resultado;
 }
 
 // Igual que el método anterior, pero actualizando los atributos nombre y dirección con los valores
 // pasados por parámetro. Devuelve true si ha podido crear el fichero.
 bool TAlmacen::CrearAlmacen(Cadena pNombAlmacen, Cadena pDirAlmacen, Cadena pNomFiche) {
+    bool resultado = false;
+    // Asignamos los valores antes para que la funcion CrearAlmacen ingrese en el archivo los datos
     strcpy(Nombre, pNombAlmacen);
     strcpy(Direccion, pDirAlmacen);
-
-    return CrearAlmacen(pNomFiche);
+    if (CrearAlmacen(pNomFiche)) {
+        resultado = true;
+    } else {
+        // Si falla resetamos los atributos DUDA : esta bien?
+        strcpy(Nombre, "");
+        strcpy(Direccion, "");
+    }
+    return resultado;
 }
 
 // Abre un fichero y actualiza los atributos de la clase con los datos de cabecera del fichero y lo
@@ -67,26 +82,28 @@ bool TAlmacen::CrearAlmacen(Cadena pNombAlmacen, Cadena pDirAlmacen, Cadena pNom
 // 1 -> Nombre
 // 2 -> Direccion
 bool TAlmacen::AbrirAlmacen(Cadena pNomFiche) {
-    if (EstaAbierto()) return false;
-
-    FicheProductos.open(pNomFiche, ios::binary | ios::out | ios::in);
-    if (!FicheProductos.fail()) {
-        FicheProductos.seekg(0);
-        FicheProductos.read((char*) &NProduc, sizeof(int));
-        FicheProductos.read((char*) &Nombre, sizeof(Cadena));
-        FicheProductos.read((char*) &Direccion, sizeof(Cadena));
-        return true;
+    bool resultado = false;
+    if (!EstaAbierto()) {
+        FicheProductos.open(pNomFiche, ios::binary | ios::out | ios::in);
+        if (!FicheProductos.fail()) {
+            FicheProductos.seekg(0);
+            // Si el almacen esta recien creado NProduc se quedara con el valor 0
+            FicheProductos.read((char*) &NProduc, sizeof(int));
+            FicheProductos.read((char*) Nombre, sizeof(Cadena));
+            FicheProductos.read((char*) Direccion, sizeof(Cadena));
+            resultado = true;
+        }
     }
-
-    return false;
+    return resultado;
 }
 
 // Cierra el fichero e inicializa los atributos a valores iniciales. Devuelve true si se ha cerrado el
 // almacén.
 bool TAlmacen::CerrarAlmacen() {
+    strcpy(Nombre, "");
+    strcpy(Direccion, "");
     NProduc = -1;
     FicheProductos.close();
-
     return !FicheProductos.is_open();
 }
 
@@ -103,17 +120,19 @@ int TAlmacen::NProductos() {
 // Dado un código de producto, devuelve la posición dentro del fichero donde se encuentra. Si no
 // lo encuentra devuelve -1.
 int TAlmacen::BuscarProducto(Cadena pCodProd) {
-    Cadena codActual;
-    FicheProductos.seekg(0);
-    do {
-        if (FicheProductos.eof()) {
-            // Con return automaticamente sale del metodo
-            return -1;
-        }
-        FicheProductos.read((char*) &codActual, sizeof(Cadena));
-    } while(strcmp(codActual, pCodProd) != 0);
+    int resultado = -1;
+    if (EstaAbierto()) {
+        Cadena codActual;
+        FicheProductos.seekg(0);
+        do {
+            FicheProductos.read((char*) &codActual, sizeof(Cadena));
+        } while(strcmp(codActual, pCodProd) != 0 && !FicheProductos.eof());
 
-    return FicheProductos.tellg();
+        if (!FicheProductos.eof()) {
+            resultado = FicheProductos.tellg();
+        }
+    }
+    return resultado;
 }
 
 // Dado la posición devuelve el producto del fichero situado en dicha posición. Debe verificar
@@ -121,11 +140,13 @@ int TAlmacen::BuscarProducto(Cadena pCodProd) {
 // código tendrá el valor “NULO”.
 TProducto TAlmacen::ObtenerProducto(int pPos) {
     TProducto resultado;
-    FicheProductos.seekg(pPos);
-    FicheProductos.read((char*) &resultado, sizeof(TProducto));
-    if (!FicheProductos.good()) {
-        // La posicion no es correcta, ya que el tipo de variable es distinto
-        strcpy(resultado.CodProd, "NULO");
+    if (EstaAbierto()) {
+        FicheProductos.seekg(pPos);
+        FicheProductos.read((char*) &resultado, sizeof(TProducto));
+        if (!FicheProductos.good()) {
+            // La posicion no es correcta, ya que el tipo de variable es distinto
+            strcpy(resultado.CodProd, "NULO");
+        }
     }
     return resultado;
 }
@@ -133,55 +154,63 @@ TProducto TAlmacen::ObtenerProducto(int pPos) {
 // Dado un producto, lo busca en el fichero y si no lo encuentra lo añade al final del fichero.
 // Devuelve true si se ha añadido el producto.
 bool TAlmacen::AnadirProducto(TProducto pProduc) {
-    if (BuscarProducto(pProduc.CodProd) == -1) {
+    bool resultado = false;
+    if (EstaAbierto() && BuscarProducto(pProduc.CodProd) == -1) {
         FicheProductos.seekp(0, ios::end);
         FicheProductos.write((char*) &pProduc, sizeof(TProducto));
-        return true;
+        resultado = true;
     }
-    return false;
+    return resultado;
 }
 
 // Dada la posición de un producto en el fichero lo actualiza con la información del producto pasado
 // por parámetro. Devuelve true si se ha actualizado el producto. Se debe verificar previamente que la
 // posición sea correcta.
 bool TAlmacen::ActualizarProducto(int pPos, TProducto pProduc) {
-    TProducto aux;
-    FicheProductos.seekg(pPos);
-    FicheProductos.read((char*) &aux, sizeof(TProducto));
-    if (FicheProductos.good()) {
-        FicheProductos.seekp(pPos);
-        FicheProductos.write((char*) &pProduc, sizeof(TProducto));
-        return true;
+    bool resultado = false;
+    if (EstaAbierto()) {
+        TProducto aux;
+        FicheProductos.seekg(pPos);
+        FicheProductos.read((char*) &aux, sizeof(TProducto));
+        if (FicheProductos.good()) {
+            FicheProductos.seekp(pPos);
+            FicheProductos.write((char*) &pProduc, sizeof(TProducto));
+            resultado = true;
+        }
     }
-    return false;
+    return resultado;
 }
 
 // Dado la posición de un producto en el fichero lo borra. Devuelve true si se ha podido borrar. Se
 // debe verificar que la posición sea correcta.
 bool TAlmacen::EliminarProducto(int pPos) {
-    TProducto prodEliminar;
-    FicheProductos.seekg(pPos);
-    FicheProductos.read((char*) &prodEliminar, sizeof(TProducto));
-    if (FicheProductos.good()) {
-        TProducto prodActual; // auxiliar
-        int tamano = 0;
-        FicheProductos.seekg(0, ios::end);
-        tamano = FicheProductos.tellg();
-        for (int i = 0; i < NProduc; i++) {
-            // Comprobamos que el producto no este en la ultima posicion
-            if (pPos+sizeof(TProducto) < tamano) {
-                // Sustituimos el producto que se quiere eliminar por el que esta justo despues de este
-                FicheProductos.seekg(pPos+sizeof(TProducto)*(i+1)); // lectura
-                FicheProductos.read((char*) &prodActual, sizeof(TProducto));
-                FicheProductos.seekp(pPos+sizeof(TProducto)*i); // escritura
-                FicheProductos.write((char*) &prodActual, sizeof(TProducto));
+    bool resultado = false;
+    if (EstaAbierto()) {
+        TProducto prodEliminar;
+        FicheProductos.seekg(pPos);
+        FicheProductos.read((char*) &prodEliminar, sizeof(TProducto));
+        if (FicheProductos.good()) {
+            TProducto prodActual; // auxiliar
+            int tamano = 0;
+            FicheProductos.seekg(0, ios::end);
+            tamano = FicheProductos.tellg();
+            for (int i = 0; i < NProduc; i++) { /// COMPROBAR
                 if (FicheProductos.eof()) break;
+                // Comprobamos que el producto no este en la ultima posicion
+                if (pPos+(int)sizeof(TProducto) < tamano) {
+                    // Sustituimos el producto que se quiere eliminar por el que esta justo despues de este
+                    FicheProductos.seekg(pPos+sizeof(TProducto)*(i+1)); // lectura
+                    FicheProductos.read((char*) &prodActual, sizeof(TProducto));
+                    FicheProductos.seekp(pPos+sizeof(TProducto)*i); // escritura
+                    FicheProductos.write((char*) &prodActual, sizeof(TProducto));
+                }
             }
+            // Actualizamos el valor de productos
+            NProduc--;
+            FicheProductos.seekp(0);
+            FicheProductos.write((char*) &NProduc, sizeof(int));
+            resultado = true;
         }
-        NProduc--;
-        FicheProductos.seekp(0);
-        FicheProductos.write((char*) &NProduc, sizeof(int));
-        return true;
     }
-    return false;
+    return resultado;
 }
