@@ -46,11 +46,9 @@ bool TAlmacen::CrearAlmacen(Cadena pNomFiche) {
     bool resultado = false;
     FicheProductos.open(pNomFiche, ios::binary | ios::out | ios::trunc);
     if (!FicheProductos.fail()) {
-        FicheProductos.seekp(0);
-        // DUDA : es correcto?
-        NProduc = 0; // para ingresar el valor 0 a nuestro archivo
+        FicheProductos.seekp(0, ios::beg);
+        NProduc = 0; // 0 productos para dejarlo abierto
         FicheProductos.write((char*) &NProduc, sizeof(int));
-        NProduc = -1; // valor irreal porque el almacen sigue estando cerrado
         FicheProductos.write((char*) Nombre, sizeof(Cadena));
         FicheProductos.write((char*) Direccion, sizeof(Cadena));
         resultado = true;
@@ -86,7 +84,7 @@ bool TAlmacen::AbrirAlmacen(Cadena pNomFiche) {
     if (!EstaAbierto()) {
         FicheProductos.open(pNomFiche, ios::binary | ios::out | ios::in);
         if (!FicheProductos.fail()) {
-            FicheProductos.seekg(0);
+            FicheProductos.seekg(0, ios::beg);
             // Si el almacen esta recien creado NProduc se quedara con el valor 0
             FicheProductos.read((char*) &NProduc, sizeof(int));
             FicheProductos.read((char*) Nombre, sizeof(Cadena));
@@ -109,6 +107,7 @@ bool TAlmacen::CerrarAlmacen() {
 
 // Devuelve true si el fichero está abierto.
 bool TAlmacen::EstaAbierto() {
+    // Si esta abierto : NProduc >= 0
     return NProduc != -1;
 }
 
@@ -122,15 +121,26 @@ int TAlmacen::NProductos() {
 int TAlmacen::BuscarProducto(Cadena pCodProd) {
     int resultado = -1;
     if (EstaAbierto()) {
-        Cadena codActual;
-        FicheProductos.seekg(0);
-        do {
-            FicheProductos.read((char*) &codActual, sizeof(Cadena));
-        } while(strcmp(codActual, pCodProd) != 0 && !FicheProductos.eof());
-
-        if (!FicheProductos.eof()) {
-            resultado = FicheProductos.tellg();
+        TProducto prodActual;
+        // Calculamos el tamaño del archivo
+        FicheProductos.seekg(0, ios::end); // eof() = false
+        int tamano = FicheProductos.tellg();
+        cout << "[BuscarProducto] Tamaño del archivo: " << tamano << endl;
+        // Tenemos que posicionarnos detras de la cabecera
+        FicheProductos.seekg(sizeof(int)+2*sizeof(Cadena), ios::beg);
+        cout << "[BuscarProducto] Comenzamos en la pos : " << FicheProductos.tellg() << endl;
+        if (FicheProductos.tellg() < tamano) {
+            do {
+                FicheProductos.read((char*) &prodActual, sizeof(TProducto));
+                cout << "[BuscarProducto] Codigo de producto actual : " << prodActual.CodProd << endl;
+                cout << "[BuscarProducto] Loop pos actual : " << FicheProductos.tellg() << endl;
+                return 0;
+            } while(strcmp(prodActual.CodProd, pCodProd) != 0 && FicheProductos.tellg() <= tamano);
+            if (FicheProductos.tellg() <= tamano) {
+                resultado = FicheProductos.tellg();
+            }
         }
+        cout << "[BuscarProducto] resultado : " << resultado << endl;
     }
     return resultado;
 }
@@ -141,7 +151,7 @@ int TAlmacen::BuscarProducto(Cadena pCodProd) {
 TProducto TAlmacen::ObtenerProducto(int pPos) {
     TProducto resultado;
     if (EstaAbierto()) {
-        FicheProductos.seekg(pPos);
+        FicheProductos.seekg(pPos, ios::beg);
         FicheProductos.read((char*) &resultado, sizeof(TProducto));
         if (!FicheProductos.good()) {
             // La posicion no es correcta, ya que el tipo de variable es distinto
@@ -157,7 +167,10 @@ bool TAlmacen::AnadirProducto(TProducto pProduc) {
     bool resultado = false;
     if (EstaAbierto() && BuscarProducto(pProduc.CodProd) == -1) {
         FicheProductos.seekp(0, ios::end);
+        cout << "[AnadirProducto] Posicion del cursor: " << FicheProductos.tellp() << endl;
         FicheProductos.write((char*) &pProduc, sizeof(TProducto));
+        cout << "[AnadirProducto] Añadido producto en: " << FicheProductos.tellp() << endl;
+        NProduc++;
         resultado = true;
     }
     return resultado;
@@ -170,10 +183,10 @@ bool TAlmacen::ActualizarProducto(int pPos, TProducto pProduc) {
     bool resultado = false;
     if (EstaAbierto()) {
         TProducto aux;
-        FicheProductos.seekg(pPos);
+        FicheProductos.seekg(pPos, ios::beg);
         FicheProductos.read((char*) &aux, sizeof(TProducto));
         if (FicheProductos.good()) {
-            FicheProductos.seekp(pPos);
+            FicheProductos.seekp(pPos, ios::beg);
             FicheProductos.write((char*) &pProduc, sizeof(TProducto));
             resultado = true;
         }
@@ -187,7 +200,7 @@ bool TAlmacen::EliminarProducto(int pPos) {
     bool resultado = false;
     if (EstaAbierto()) {
         TProducto prodEliminar;
-        FicheProductos.seekg(pPos);
+        FicheProductos.seekg(pPos, ios::beg);
         FicheProductos.read((char*) &prodEliminar, sizeof(TProducto));
         if (FicheProductos.good()) {
             TProducto prodActual; // auxiliar
@@ -199,15 +212,15 @@ bool TAlmacen::EliminarProducto(int pPos) {
                 // Comprobamos que el producto no este en la ultima posicion
                 if (pPos+(int)sizeof(TProducto) < tamano) {
                     // Sustituimos el producto que se quiere eliminar por el que esta justo despues de este
-                    FicheProductos.seekg(pPos+sizeof(TProducto)*(i+1)); // lectura
+                    FicheProductos.seekg(pPos+sizeof(TProducto)*(i+1), ios::beg); // lectura
                     FicheProductos.read((char*) &prodActual, sizeof(TProducto));
-                    FicheProductos.seekp(pPos+sizeof(TProducto)*i); // escritura
+                    FicheProductos.seekp(pPos+sizeof(TProducto)*i, ios::beg); // escritura
                     FicheProductos.write((char*) &prodActual, sizeof(TProducto));
                 }
             }
             // Actualizamos el valor de productos
             NProduc--;
-            FicheProductos.seekp(0);
+            FicheProductos.seekp(0, ios::beg);
             FicheProductos.write((char*) &NProduc, sizeof(int));
             resultado = true;
         }

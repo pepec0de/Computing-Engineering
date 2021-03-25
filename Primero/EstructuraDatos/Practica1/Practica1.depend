@@ -49,13 +49,13 @@
 	<iostream>
 	<fstream>
 
-1616504253 source:/home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/src/TAlmacen.cpp
+1616668165 source:/home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/src/TAlmacen.cpp
 	"TAlmacen.h"
 
 1615813052 /home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/include/TAlmacen.h
 	"TTipos.h"
 
-1616504452 source:/home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/main.cpp
+1616668346 source:/home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/main.cpp
 	<iostream>
 	<TTipos.h>
 	<TAlmacen.h>
