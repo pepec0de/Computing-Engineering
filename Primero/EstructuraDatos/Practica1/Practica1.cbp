@@ -40,10 +40,6 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="src/TAlmacen.cpp" />
 		<Unit filename="src/TTienda.cpp" />
-		<Extensions>
-			<lib_finder disable_auto="1" />
-			<code_completion />
-			<debugger />
-		</Extensions>
+		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

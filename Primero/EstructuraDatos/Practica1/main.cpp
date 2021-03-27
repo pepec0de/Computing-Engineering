@@ -13,6 +13,7 @@ using namespace std;
     + CrearAlmacen(Cadena pNombAlmacen, Cadena pDirAlmacen, Cadena pNomFiche)
     + AbrirAlmacen(Cadena pNomFiche)
     +
+    + AnadirProducto(TProducto pProduc)
 */
 int main1() {
     fstream fichero;
@@ -29,7 +30,6 @@ int main1() {
 
 int main()
 {
-    cout << "sizeof(TProducto) = " << sizeof(TProducto) << endl;
     TAlmacen miAlmacen;
     miAlmacen.CrearAlmacen("Almacenes Gory", "C/ Paseo Maritimo", "miAlmacen.dat");
     if (miAlmacen.AbrirAlmacen("miAlmacen.dat")) {
@@ -46,17 +46,7 @@ int main()
 
     TProducto prod1;
 
-    TFecha fecha;
-    fecha.Anyo = 2002;
-    fecha.Dia = 11;
-    fecha.Mes = 2;
-
-    prod1.Caducicidad = fecha;
-    prod1.Cantidad = 10;
     strcpy(prod1.CodProd, "941924");
-    strcpy(prod1.NombreProd, "Leche");
-    prod1.Precio = 14.34;
-    strcpy(prod1.Descripcion, "Leche asturiana");
 
     if (miAlmacen.AnadirProducto(prod1)) {
         cout << "el producto se ha añadido con exito\n";

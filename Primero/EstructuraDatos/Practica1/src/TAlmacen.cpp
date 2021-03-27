@@ -122,7 +122,6 @@ int TAlmacen::NProductos() {
 int TAlmacen::BuscarProducto(Cadena pCodProd) {
     int resultado = -1;
     if (EstaAbierto()) {
-        TProducto prodActual;
         // Calculamos el tamaño del archivo
         FicheProductos.seekg(0, ios::end); // eof() = false
         int tamano = FicheProductos.tellg();
@@ -131,18 +130,16 @@ int TAlmacen::BuscarProducto(Cadena pCodProd) {
         FicheProductos.seekg(sizeof(int)+2*sizeof(Cadena), ios::beg);
         cout << "[BuscarProducto] Comenzamos en la pos : " << FicheProductos.tellg() << endl;
         if (FicheProductos.tellg() < tamano) {
+            TProducto prodActual;
             do {
                 FicheProductos.read((char*) &prodActual, sizeof(TProducto));
-                cout << "[BuscarProducto] Codigo de producto actual : " << prodActual.CodProd << endl;
-                cout << "[BuscarProducto] Loop pos actual : " << FicheProductos.tellg() << endl;
-                return 0;
             } while(strcmp(prodActual.CodProd, pCodProd) != 0 && FicheProductos.tellg() < tamano);
             if (FicheProductos.tellg() < tamano) {
                 resultado = FicheProductos.tellg();
             }
         }
-        cout << "[BuscarProducto] resultado : " << resultado << endl;
     }
+    cout << "[BuscarProducto] resultado : " << resultado << endl;
     return resultado;
 }
 
