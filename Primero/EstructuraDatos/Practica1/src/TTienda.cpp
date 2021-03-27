@@ -4,8 +4,22 @@
 // Método privado para ordenar los estantes del vector. La ordenación se realizará por el código de
 // producto en orden ascendente. En caso de tener el mismo código se ordenará por la posición del
 // producto en el estante en orden ascendente.
-void TTienda::OrdenarProductos() {
-
+void TTienda::OrdenarProductos() { // Ordenacion de mayor a  menos
+    for (int i = 0; i < NEstan; i++) {
+        int max_index = i;
+        for (int j = i+1; j < NEstan; j++) {
+            if (strcmp(Estantes[i].CodProd, Estantes[j].CodProd) == 0) {
+                if (Estantes[i].Posicion < Estantes[j].Posicion) {
+                    max_index = j;
+                }
+            } else if (stoi(Estantes[i].CodProd) < stoi(Estantes[j].CodProd)) {
+                max_index = j;
+            }
+        }
+        TEstante aux = Estantes[i];
+        Estantes[i] = Estantes[max_index];
+        Estantes[max_index] = aux;
+    }
 }
 
 // Constructor que debe inicializar los atributos de la clase.
@@ -77,7 +91,7 @@ bool TTienda::AbrirTienda(Cadena pNomFiche) {
     if (!fichero.fail()) {
         strcpy(NomFiche, pNomFiche);
 
-        fichero.seekg(0);
+        fichero.seekg(0, ios::beg);
         fichero.read((char*) Nombre, sizeof(Cadena));
         fichero.read((char*) Direccion, sizeof(Cadena));
 
@@ -107,7 +121,7 @@ bool TTienda::AbrirTienda(Cadena pNomFiche) {
 bool TTienda::GuardarTienda() {
     fstream fichero;
     fichero.open(NomFiche, ios::binary | ios::out);
-    fichero.seekp(0);
+    fichero.seekp(0, ios::beg);
     fichero.write((char*) Nombre, sizeof(Cadena));
     fichero.write((char*) Direccion, sizeof(Cadena));
     fichero.write((char*) Estantes, sizeof(Estantes)*NEstan); // mas limpio

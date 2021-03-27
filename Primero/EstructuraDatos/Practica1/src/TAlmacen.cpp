@@ -15,6 +15,7 @@ TAlmacen::TAlmacen() {
      * ios::out -> modo escritura
      * ios::in -> modo lectura
      * ios::trunc -> crear el archivo de nuevo
+     * ios::app -> añadir contenido al final del archivo
      */
     FicheProductos.open("Almacen.dat", ios::binary | ios::out | ios::in);
     if (FicheProductos.fail()) {
@@ -135,8 +136,8 @@ int TAlmacen::BuscarProducto(Cadena pCodProd) {
                 cout << "[BuscarProducto] Codigo de producto actual : " << prodActual.CodProd << endl;
                 cout << "[BuscarProducto] Loop pos actual : " << FicheProductos.tellg() << endl;
                 return 0;
-            } while(strcmp(prodActual.CodProd, pCodProd) != 0 && FicheProductos.tellg() <= tamano);
-            if (FicheProductos.tellg() <= tamano) {
+            } while(strcmp(prodActual.CodProd, pCodProd) != 0 && FicheProductos.tellg() < tamano);
+            if (FicheProductos.tellg() < tamano) {
                 resultado = FicheProductos.tellg();
             }
         }
