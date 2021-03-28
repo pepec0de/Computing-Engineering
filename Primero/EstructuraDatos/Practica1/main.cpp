@@ -12,8 +12,12 @@ using namespace std;
     + CrearAlmacen(Cadena pNomFiche)
     + CrearAlmacen(Cadena pNombAlmacen, Cadena pDirAlmacen, Cadena pNomFiche)
     + AbrirAlmacen(Cadena pNomFiche)
-    +
     + AnadirProducto(TProducto pProduc)
+    + BuscarProducto(Cadena pCodProd)
+
+    TTienda:
+    +
+
 */
 int main1() {
     fstream fichero;
@@ -53,7 +57,11 @@ int main()
     }
     Cadena prod;
     strcpy(prod, "941924");
-    cout << "El producto se encuentra en la posicion: " << miAlmacen.BuscarProducto(prod) << endl;
+    int pos = miAlmacen.BuscarProducto(prod);
+    cout << "El producto se encuentra en la posicion: " << pos << endl;
 
+    if (miAlmacen.EliminarProducto(pos)) {
+        cout << "Producto eliminado\n";
+    }
     return 0;
 }

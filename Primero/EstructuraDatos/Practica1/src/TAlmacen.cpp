@@ -45,7 +45,7 @@ void TAlmacen::DatosAlmacen(Cadena pNombAlmacen, Cadena pDirAlmacen) {
 // y lo deja abierto para su utilización. Devuelve true si se ha creado.
 bool TAlmacen::CrearAlmacen(Cadena pNomFiche) {
     bool resultado = false;
-    FicheProductos.open(pNomFiche, ios::binary | ios::out | ios::trunc);
+    FicheProductos.open(pNomFiche, ios::binary | ios::out | ios::in | ios::trunc);
     if (!FicheProductos.fail()) {
         FicheProductos.seekp(0, ios::beg);
         NProduc = 0; // 0 productos para dejarlo abierto
@@ -67,7 +67,7 @@ bool TAlmacen::CrearAlmacen(Cadena pNombAlmacen, Cadena pDirAlmacen, Cadena pNom
     if (CrearAlmacen(pNomFiche)) {
         resultado = true;
     } else {
-        // Si falla resetamos los atributos DUDA : esta bien?
+        // Si falla reseteamos los atributos DUDA : esta bien?
         strcpy(Nombre, "");
         strcpy(Direccion, "");
     }
@@ -125,21 +125,19 @@ int TAlmacen::BuscarProducto(Cadena pCodProd) {
         // Calculamos el tamaño del archivo
         FicheProductos.seekg(0, ios::end); // eof() = false
         int tamano = FicheProductos.tellg();
-        cout << "[BuscarProducto] Tamaño del archivo: " << tamano << endl;
         // Tenemos que posicionarnos detras de la cabecera
         FicheProductos.seekg(sizeof(int)+2*sizeof(Cadena), ios::beg);
-        cout << "[BuscarProducto] Comenzamos en la pos : " << FicheProductos.tellg() << endl;
         if (FicheProductos.tellg() < tamano) {
             TProducto prodActual;
+            FicheProductos.seekg(sizeof(int)+2*sizeof(Cadena), ios::beg);
             do {
                 FicheProductos.read((char*) &prodActual, sizeof(TProducto));
             } while(strcmp(prodActual.CodProd, pCodProd) != 0 && FicheProductos.tellg() < tamano);
-            if (FicheProductos.tellg() < tamano) {
-                resultado = FicheProductos.tellg();
+            if (FicheProductos.tellg() <= tamano) {
+                resultado = FicheProductos.tellg() - sizeof(TProducto);
             }
         }
     }
-    cout << "[BuscarProducto] resultado : " << resultado << endl;
     return resultado;
 }
 
@@ -165,10 +163,10 @@ bool TAlmacen::AnadirProducto(TProducto pProduc) {
     bool resultado = false;
     if (EstaAbierto() && BuscarProducto(pProduc.CodProd) == -1) {
         FicheProductos.seekp(0, ios::end);
-        cout << "[AnadirProducto] Posicion del cursor: " << FicheProductos.tellp() << endl;
         FicheProductos.write((char*) &pProduc, sizeof(TProducto));
-        cout << "[AnadirProducto] Añadido producto en: " << FicheProductos.tellp() << endl;
         NProduc++;
+        FicheProductos.seekp(0, ios::beg);
+        FicheProductos.write((char*) &NProduc, sizeof(int));
         resultado = true;
     }
     return resultado;

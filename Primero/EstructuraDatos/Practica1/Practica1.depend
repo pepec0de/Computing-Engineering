@@ -1,0 +1,24 @@
+# depslib dependency file v1.0
+1616957979 source:/home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/main.cpp
+	<iostream>
+	<TTipos.h>
+	<TAlmacen.h>
+	<TTienda.h>
+
+1616880996 /home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/include/TTipos.h
+	<string.h>
+	<iostream>
+	<fstream>
+
+1616880996 /home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/include/TAlmacen.h
+	"TTipos.h"
+
+1616880996 /home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/include/TTienda.h
+	"TTipos.h"
+
+1616958066 source:/home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/src/TAlmacen.cpp
+	"TAlmacen.h"
+
+1616881040 source:/home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/src/TTienda.cpp
+	"TTienda.h"
+
