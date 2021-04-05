@@ -1,24 +1,24 @@
 # depslib dependency file v1.0
-1616957979 source:/home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/main.cpp
+1617658444 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\main.cpp
 	<iostream>
-	<TTipos.h>
-	<TAlmacen.h>
-	<TTienda.h>
+	"include/TAlmacen.h"
+	"include/TTienda.h"
+	<locale.h>
 
-1616880996 /home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/include/TTipos.h
+1617644703 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\src\talmacen.cpp
+	"../include/TAlmacen.h"
+
+1617657077 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\include\talmacen.h
+	"TTipos.h"
+
+1616884596 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\include\ttipos.h
 	<string.h>
 	<iostream>
 	<fstream>
 
-1616880996 /home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/include/TAlmacen.h
+1617659044 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\src\ttienda.cpp
+	"../include/TTienda.h"
+
+1617657343 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\include\ttienda.h
 	"TTipos.h"
-
-1616880996 /home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/include/TTienda.h
-	"TTipos.h"
-
-1616958066 source:/home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/src/TAlmacen.cpp
-	"TAlmacen.h"
-
-1616881040 source:/home/pepe/Documentos/Programas/Dev/Computing-Engineering/Primero/EstructuraDatos/Practica1/src/TTienda.cpp
-	"TTienda.h"
 

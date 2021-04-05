@@ -1,7 +1,8 @@
 #include <iostream>
-#include <TTipos.h>
-#include <TAlmacen.h>
-#include <TTienda.h>
+#include "include/TAlmacen.h"
+#include "include/TTienda.h"
+
+#include <locale.h>
 
 using namespace std;
 
@@ -16,52 +17,41 @@ using namespace std;
     + BuscarProducto(Cadena pCodProd)
 
     TTienda:
+    + DatosTienda(Cadena pNombTienda, Cadena pDirTienda)
+    + CrearTienda(Cadena pNombTienda, Cadena pDirTienda, Cadena pNomFiche)
+    + DUDA CON AbrirTienda(Cadena pNomFiche)
+    + GuardarTienda()
+    + CerrarTienda()
+    + BuscarEstante(int pCodEstante)
+    + ObtenerEstante(int pPos)
+    + AnadirEstante(TEstante pEstante)
     +
 
 */
-int main1() {
-    fstream fichero;
-    fichero.open("miAlmacen.dat", ios::binary | ios::in);
-    fichero.seekg(0, ios::end);
-    cout << fichero.tellp() << endl;
-    cout << fichero.tellg() << endl;
-    if (fichero.eof()) {
-        cout << "eof is true.\n";
-    } else cout << "eof is false.\n";
-    fichero.close();
+int main() {
+    setlocale(LC_CTYPE, "Spanish");
+    TTienda miTienda;
+    if (miTienda.CrearTienda("Gory Tienda", "C/ Caceres", "miTienda.dat")) {
+        cout << "Se ha creado con exito la tienda.\n";
+    }
+    TEstante estante;
+    strcpy(estante.CodProd, "LECHE");
+    estante.CodEstante = 123;
+    if (miTienda.AnadirEstante(estante)) {
+        cout << "Se ha añadido el estante.\n";
+    }
+    cout << miTienda.ObtenerEstante(0).CodProd << endl;
     return 0;
 }
 
-int main()
-{
-    TAlmacen miAlmacen;
-    miAlmacen.CrearAlmacen("Almacenes Gory", "C/ Paseo Maritimo", "miAlmacen.dat");
-    if (miAlmacen.AbrirAlmacen("miAlmacen.dat")) {
-        cout << "Se ha abierto\n";
-    } else {
-        cout << "Ya estaba abierto\n";
-    }
-    if (miAlmacen.EstaAbierto()) {
-        cout << "El almacen esta abierto!\n";
-    } else {
-        cout << "El almacen esta cerrado!\n";
-    }
-    cout << "Productos: " << miAlmacen.NProductos() << endl;
-
-    TProducto prod1;
-
-    strcpy(prod1.CodProd, "941924");
-
-    if (miAlmacen.AnadirProducto(prod1)) {
-        cout << "el producto se ha aÃ±adido con exito\n";
-    }
-    Cadena prod;
-    strcpy(prod, "941924");
-    int pos = miAlmacen.BuscarProducto(prod);
-    cout << "El producto se encuentra en la posicion: " << pos << endl;
-
-    if (miAlmacen.EliminarProducto(pos)) {
-        cout << "Producto eliminado\n";
-    }
-    return 0;
-}
+//int main()
+//{
+//    setlocale(LC_CTYPE, "Spanish");
+//    TTienda miTienda;
+//
+//    if (miTienda.AbrirTienda("miTienda.dat")) {
+//        cout << "Se ha abierto la tienda!\n";
+//    }
+//
+//    return 0;
+//}
