@@ -98,21 +98,21 @@ bool TTienda::AbrirTienda(Cadena pNomFiche) {
         fichero.read((char*) Nombre, sizeof(Cadena));
         fichero.read((char*) Direccion, sizeof(Cadena));
         // Cargamos los estantes
-        int i = 0;
+        NEstan = 0;
         while(fichero.tellg() < bytesFichero) {
-            fichero.read((char*) &Estantes[i], sizeof(TEstante*));
-            i++;
-            if (i+1 == Tamano) {
+            fichero.read((char*) &Estantes[NEstan], sizeof(TEstante*));
+            NEstan++;
+            if (NEstan+1 == Tamano) {
                 // Pedimos mas memoria
-                TEstante *aux = new TEstante[Tamano+Incremento];
-                for (int j = 0; j < Tamano; j++) {
-                    aux[j] = Estantes[j];
+                Tamano += Incremento;
+                TEstante *aux = new TEstante[Tamano];
+                for (int i = 0; i < NEstan; i++) {
+                    aux[i] = Estantes[i];
                 }
                 Estantes = aux;
                 delete [] aux;
             }
         }
-        NEstan = i;
         resultado = true;
     }
     return resultado;
@@ -128,7 +128,6 @@ bool TTienda::GuardarTienda() {
     fichero.write((char*) Direccion, sizeof(Cadena));
     fichero.write((char*) Estantes, sizeof(TEstante)*NEstan); // mas limpio
     if (!fichero.fail()) {
-        cout << "[GuardarTienda] Se ha guardado la tienda con exito.\n";
         resultado = true;
     }
     fichero.close();
@@ -178,13 +177,24 @@ TEstante TTienda::ObtenerEstante(int pPos) {
 // Añade un estante nuevo al vector siempre que el estante no esté previamente almacenado en memoria.
 // El vector de estantes debe siempre estar ordenado. Devolverá true si se ha añadido el estante.
 bool TTienda::AnadirEstante(TEstante pEstante) {
+    bool resultado = false;
     if (BuscarEstante(pEstante.CodEstante) == -1) {
+        if (NEstan+1 == Tamano) {
+            // Pedimos mas memoria si se va a acabar la capacidad del vector
+            Tamano += Incremento;
+            TEstante *aux = new TEstante[Tamano];
+            for (int i = 0; i < NEstan; i++) {
+                aux[i] = Estantes[i];
+            }
+            Estantes = aux;
+            delete [] aux;
+        }
         Estantes[NEstan] = pEstante;
         NEstan++;
         OrdenarProductos();
-        return true;
+        resultado = true;
     }
-    return false;
+    return resultado;
 }
 
 // Dado la posición de un estante lo borra desplazando el resto de estantes una posición hacia abajo.
@@ -194,9 +204,19 @@ bool TTienda::AnadirEstante(TEstante pEstante) {
 bool TTienda::EliminarEstante(int pPos) {
     bool resultado = false;
     if (pPos >= 0 && pPos < NEstan) {
-        NEstan--;
         for (int i = pPos; i < NEstan; i++) {
             Estantes[i] = Estantes[i+1];
+        }
+        NEstan--;
+        // Reducimos memoria
+        if (Tamano > NEstan) {
+            Tamano = NEstan;
+            TEstante *aux = new TEstante[Tamano];
+            for (int i = 0; i < NEstan; i++) {
+                aux[i] = Estantes[i];
+            }
+            Estantes = aux;
+            delete [] aux;
         }
         resultado = true;
     }
@@ -223,6 +243,7 @@ bool TTienda::ActualizarEstante(int pPos, TEstante pEstante) {
 //  0 si la posición es incorrecta.
 //  1 si se ha repuesto unidades hasta llegar a la capacidad máxima del estante.
 //  2 si no se ha completado el estante al completo.
+/// TODO: COMPROBAR
 int TTienda::ReponerEstante(int pPos, TProducto &pProduc) {
     int resultado = 0;
     if (Estantes[pPos].CodProd == pProduc.CodProd) {
