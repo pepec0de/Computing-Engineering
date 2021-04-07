@@ -27,8 +27,16 @@
 #include "include/TTienda.h"
 
 #include <locale.h>
+#include <conio.h>
 
 using namespace std;
+
+TAlmacen almacen;
+
+void pausa() {
+    cout << "\nOK. (Presione Enter)";
+    getch();
+}
 
 int MenuPrincipal(Cadena NombAlmacen, Cadena NombTienda) {
     int opc = 0;
@@ -38,13 +46,14 @@ int MenuPrincipal(Cadena NombAlmacen, Cadena NombTienda) {
         else if (strcmp(NombTienda, "") == 0) cout << "----- Menú Principal ----- " << NombAlmacen << endl;
         else if (strcmp(NombAlmacen, "") + strcmp(NombTienda, "") == 0) cout << "----- Menú Principal -----\n";
         else cout << "----- Menú Principal ----- " << NombAlmacen << ", " << NombTienda << endl;
-        cout << "1.- Gestión del Almacenes.\n";
+        cout << "1.- Gestión de Almacenes.\n";
         cout << "2.- Gestión de la Tienda.\n";
         cout << "3.- Reposición de Productos en Tienda.\n";
         cout << "0.- Salir.\n";
         if (opc == 0) cout << "\n\tSeleccione una opción: "; else cout << "\n\tOpción incorrecta. Seleccione otra opción: ";
         cin >> opc;
     } while (opc < 0 || opc > 3);
+    cout << endl;
     return opc;
 }
 
@@ -65,6 +74,7 @@ int MenuAlmacen(Cadena NombAlmacen) {
         if (opc == 0) cout << "\n\tSeleccione una opción: "; else cout << "\n\tOpción incorrecta. Seleccione otra opción: ";
         cin >> opc;
     } while(opc < 0 || opc > 8);
+    cout << endl;
     return opc;
 }
 
@@ -86,13 +96,14 @@ int MenuTienda(Cadena NombTienda) {
         if (opc == 0) cout << "\n\tSeleccione una opción: "; else cout << "\n\tOpción incorrecta. Seleccione otra opción: ";
         cin >> opc;
     } while(opc < 0 || opc > 9);
+    cout << endl;
     return opc;
 }
 
 void GestionAlmacen(Cadena &NombAlmacen) {
-    TAlmacen almacen;
-    Cadena dir;
+    Cadena Direccion;
     Cadena nFichero;
+    //TProducto prod;
     int opc = -1;
     while (opc != 0) {
         opc = MenuAlmacen(NombAlmacen);
@@ -101,20 +112,53 @@ void GestionAlmacen(Cadena &NombAlmacen) {
                 cout << "Indique el nombre del almacén: ";
                 cin >> NombAlmacen;
                 cout << "Indique la dirección del almacén: ";
-                cin >> dir;
+                cin >> Direccion;
                 cout << "Indique el nombre del fichero: ";
                 cin >> nFichero;
-                if (almacen.CrearAlmacen(NombAlmacen, dir, nFichero)) {
+                if (almacen.CrearAlmacen(NombAlmacen, Direccion, nFichero)) {
                     cout << "El almacén " << NombAlmacen << " se ha creado con éxito.\n";
                 } else {
                     cout << "ERROR! No se ha podido crear el almacén.\n";
                 }
+                pausa();
                 break;
             case 2: /// Abrir un fichero de almacén
+                cout << "Indique el nombre del fichero: ";
+                cin >> nFichero;
+                if (almacen.AbrirAlmacen(nFichero)) {
+                    almacen.DatosAlmacen(NombAlmacen, Direccion);
+                    cout << "Se ha abierto el almacén" << NombAlmacen << " con éxito.\n";
+                } else {
+                    cout << "ERROR! No se ha podido abrir el fichero.\n";
+                }
+                pausa();
                 break;
             case 3: /// Cerrar un almacén
+                if (almacen.CerrarAlmacen()) {
+                    strcpy(NombAlmacen, "");
+                    cout << "Se ha cerrado el almacén.\n";
+                } else {
+                    cout << "ERROR! No se ha podido cerrar el almacén.\n";
+                }
+                pausa();
                 break;
             case 4: /// Listar productos del almacén
+                // Cabecera
+                cout << "Listado del almacén \"" << NombAlmacen << "\" localizado en " << Direccion << endl;
+                for (int i = 0; i < 21+(int)strlen(NombAlmacen)+16+(int)strlen(Direccion); i++) cout << "*";
+                cout << endl;
+                cout << "NO PRODUCTOS = " << almacen.NProductos() << endl; // DEBUG
+                cout << "CODIGO\tNOMBRE\t\tPRECIO\tCANTIDAD\tFECHA CADUCIDAD\n";
+                for (int i = 0; i < almacen.NProductos(); i++) {
+                    cout << almacen.ObtenerProducto(i).CodProd << "\t"
+                        << almacen.ObtenerProducto(i).NombreProd << "\t\t"
+                        << almacen.ObtenerProducto(i).Precio << "\t"
+                        << almacen.ObtenerProducto(i).Cantidad << "\t"
+                        << almacen.ObtenerProducto(i).Caducicidad.Dia << "\\"
+                        << almacen.ObtenerProducto(i).Caducicidad.Mes << "\\"
+                        << almacen.ObtenerProducto(i).Caducicidad.Anyo << endl;
+                }
+                pausa();
                 break;
             case 5: /// Añadir un producto
                 break;

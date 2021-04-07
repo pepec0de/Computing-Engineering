@@ -15,23 +15,23 @@ TAlmacen::TAlmacen() {
      * ios::out -> modo escritura
      * ios::in -> modo lectura
      * ios::trunc -> crear el archivo de nuevo
-     * ios::app -> añadir contenido al final del archivo
+     * ios::app -> aï¿½adir contenido al final del archivo
      */
 }
 
-//Destructor que cerrará el almacén en caso de que el usuario no lo haya hecho.
+//Destructor que cerrarï¿½ el almacï¿½n en caso de que el usuario no lo haya hecho.
 TAlmacen::~TAlmacen() {
     CerrarAlmacen();
 }
 
-// Devuelve los atributos nombre y dirección por parámetro.
+// Devuelve los atributos nombre y direcciï¿½n por parï¿½metro.
 void TAlmacen::DatosAlmacen(Cadena pNombAlmacen, Cadena pDirAlmacen) {
     strcpy(pNombAlmacen, Nombre);
     strcpy(pDirAlmacen, Direccion);
 }
 
-// Crea un fichero binario vacío con el nombre pasado por parámetro. Crea la cabecera del fichero
-// y lo deja abierto para su utilización. Devuelve true si se ha creado.
+// Crea un fichero binario vacï¿½o con el nombre pasado por parï¿½metro. Crea la cabecera del fichero
+// y lo deja abierto para su utilizaciï¿½n. Devuelve true si se ha creado.
 bool TAlmacen::CrearAlmacen(Cadena pNomFiche) {
     bool resultado = false;
     FicheProductos.open(pNomFiche, ios::binary | ios::out | ios::in | ios::trunc);
@@ -46,8 +46,8 @@ bool TAlmacen::CrearAlmacen(Cadena pNomFiche) {
     return resultado;
 }
 
-// Igual que el método anterior, pero actualizando los atributos nombre y dirección con los valores
-// pasados por parámetro. Devuelve true si ha podido crear el fichero.
+// Igual que el mÃ©todo anterior, pero actualizando los atributos nombre y direcciÃ³n con los valores
+// pasados por parÃ¡metro. Devuelve true si ha podido crear el fichero.
 bool TAlmacen::CrearAlmacen(Cadena pNombAlmacen, Cadena pDirAlmacen, Cadena pNomFiche) {
     bool resultado = false;
     // Asignamos los valores antes para que la funcion CrearAlmacen ingrese en el archivo los datos
@@ -65,7 +65,7 @@ bool TAlmacen::CrearAlmacen(Cadena pNombAlmacen, Cadena pDirAlmacen, Cadena pNom
 }
 
 // Abre un fichero y actualiza los atributos de la clase con los datos de cabecera del fichero y lo
-// lo deja abierto. No se puede abrir un fichero si previamente el almacén está abierto. Devuelve true
+// lo deja abierto. No se puede abrir un fichero si previamente el almacï¿½n estï¿½ abierto. Devuelve true
 // si ha podido abrir el fichero.
 // 0 -> Numero Productos
 // 1 -> Nombre
@@ -87,7 +87,7 @@ bool TAlmacen::AbrirAlmacen(Cadena pNomFiche) {
 }
 
 // Cierra el fichero e inicializa los atributos a valores iniciales. Devuelve true si se ha cerrado el
-// almacén.
+// almacï¿½n.
 bool TAlmacen::CerrarAlmacen() {
     if (EstaAbierto()) FicheProductos.close();
     strcpy(Nombre, "");
@@ -96,18 +96,18 @@ bool TAlmacen::CerrarAlmacen() {
     return true;
 }
 
-// Devuelve true si el fichero está abierto.
+// Devuelve true si el fichero estï¿½ abierto.
 bool TAlmacen::EstaAbierto() {
     // Si esta abierto : NProduc >= 0
     return NProduc != -1;
 }
 
-// Devuelve el número de productos.
+// Devuelve el nï¿½mero de productos.
 int TAlmacen::NProductos() {
     return NProduc;
 }
 
-// Dado un código de producto, devuelve la posición dentro del fichero donde se encuentra. Si no
+// Dado un cï¿½digo de producto, devuelve la posiciï¿½n dentro del fichero donde se encuentra. Si no
 // lo encuentra devuelve -1. POSICION DE PRODUCTO -> NO DEL BYTE DEL FICHERO
 int TAlmacen::BuscarProducto(Cadena pCodProd) {
     int resultado = -1;
@@ -130,9 +130,9 @@ int TAlmacen::BuscarProducto(Cadena pCodProd) {
     return resultado;
 }
 
-// Dado la posición devuelve el producto del fichero situado en dicha posición. Debe verificar
-// previamente que la posición sea correcta. Si la posición no es correcta devolverá un producto cuyo
-// código tendrá el valor “NULO”.
+// Dado la posiciï¿½n devuelve el producto del fichero situado en dicha posiciï¿½n. Debe verificar
+// previamente que la posiciï¿½n sea correcta. Si la posiciï¿½n no es correcta devolverï¿½ un producto cuyo
+// cï¿½digo tendrï¿½ el valor ï¿½NULOï¿½.
 TProducto TAlmacen::ObtenerProducto(int pPos) {
     TProducto resultado;
     if (EstaAbierto()) {
@@ -146,8 +146,8 @@ TProducto TAlmacen::ObtenerProducto(int pPos) {
     return resultado;
 }
 
-// Dado un producto, lo busca en el fichero y si no lo encuentra lo añade al final del fichero.
-// Devuelve true si se ha añadido el producto.
+// Dado un producto, lo busca en el fichero y si no lo encuentra lo aï¿½ade al final del fichero.
+// Devuelve true si se ha aï¿½adido el producto.
 bool TAlmacen::AnadirProducto(TProducto pProduc) {
     bool resultado = false;
     if (EstaAbierto() && BuscarProducto(pProduc.CodProd) == -1) {
@@ -161,9 +161,9 @@ bool TAlmacen::AnadirProducto(TProducto pProduc) {
     return resultado;
 }
 
-// Dada la posición de un producto en el fichero lo actualiza con la información del producto pasado
-// por parámetro. Devuelve true si se ha actualizado el producto. Se debe verificar previamente que la
-// posición sea correcta.
+// Dada la posiciï¿½n de un producto en el fichero lo actualiza con la informaciï¿½n del producto pasado
+// por parï¿½metro. Devuelve true si se ha actualizado el producto. Se debe verificar previamente que la
+// posiciï¿½n sea correcta.
 bool TAlmacen::ActualizarProducto(int pPos, TProducto pProduc) {
     bool resultado = false;
     if (EstaAbierto()) {
@@ -179,8 +179,8 @@ bool TAlmacen::ActualizarProducto(int pPos, TProducto pProduc) {
     return resultado;
 }
 
-// Dado la posición de un producto en el fichero lo borra. Devuelve true si se ha podido borrar. Se
-// debe verificar que la posición sea correcta.
+// Dado la posiciï¿½n de un producto en el fichero lo borra. Devuelve true si se ha podido borrar. Se
+// debe verificar que la posiciï¿½n sea correcta.
 bool TAlmacen::EliminarProducto(int pPos) {
     bool resultado = false;
     if (EstaAbierto()) {

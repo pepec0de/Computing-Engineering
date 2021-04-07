@@ -1,10 +1,11 @@
 # depslib dependency file v1.0
-1617711962 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\main.cpp
+1617746564 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\main.cpp
 	<iostream>
 	<cstdlib>
 	"include/TAlmacen.h"
 	"include/TTienda.h"
 	<locale.h>
+	<conio.h>
 
 1617644703 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\src\talmacen.cpp
 	"../include/TAlmacen.h"
