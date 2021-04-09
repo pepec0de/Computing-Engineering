@@ -57,8 +57,9 @@ void TTienda::DatosTienda(Cadena pNombTienda, Cadena pDirTienda) {
 bool TTienda::CrearTienda(Cadena pNombTienda, Cadena pDirTienda, Cadena pNomFiche) {
     bool resultado = false;
 
-    fstream fichero;
-    fichero.open(pNomFiche, ios::binary | ios::out | ios::trunc);
+    //fstream fichero;
+    ofstream fichero;
+    fichero.open(pNomFiche, ios::binary);
     if (!fichero.fail()) {
         // Inicializan los atributos
         strcpy(Nombre, pNombTienda);
@@ -72,6 +73,7 @@ bool TTienda::CrearTienda(Cadena pNombTienda, Cadena pDirTienda, Cadena pNomFich
         fichero.write((char*) Direccion, sizeof(Cadena));
         resultado = true;
     }
+    fichero.close();
     return resultado;
 }
 
@@ -85,8 +87,8 @@ bool TTienda::AbrirTienda(Cadena pNomFiche) {
     if (EstaAbierta()) {
         GuardarTienda();
     }
-    fstream fichero;
-    fichero.open(pNomFiche, ios::binary | ios::in);
+    ifstream fichero;
+    fichero.open(pNomFiche, ios::binary);
     if (!fichero.fail()) {
         // Leemos el tamaño del archivo
         fichero.seekg(0, ios::end);
@@ -99,10 +101,12 @@ bool TTienda::AbrirTienda(Cadena pNomFiche) {
         fichero.read((char*) Direccion, sizeof(Cadena));
         // Cargamos los estantes
         NEstan = 0;
+        Tamano = Incremento;
+        Estantes = new TEstante[Tamano];
         while(fichero.tellg() < bytesFichero) {
-            fichero.read((char*) &Estantes[NEstan], sizeof(TEstante*));
+            fichero.read((char*) &Estantes[NEstan], sizeof(TEstante));
             NEstan++;
-            if (NEstan+1 == Tamano) {
+            if (NEstan == Tamano) {
                 // Pedimos mas memoria
                 Tamano += Incremento;
                 TEstante *aux = new TEstante[Tamano];
@@ -115,14 +119,15 @@ bool TTienda::AbrirTienda(Cadena pNomFiche) {
         }
         resultado = true;
     }
+    fichero.close();
     return resultado;
 }
 
 // Vuelca los datos de la memoria al fichero. Devolverá true si se han guardado los datos.
 bool TTienda::GuardarTienda() {
     bool resultado = false;
-    fstream fichero;
-    fichero.open(NomFiche, ios::binary | ios::out | ios::trunc);
+    ofstream fichero;
+    fichero.open(NomFiche, ios::binary);
     fichero.seekp(0, ios::beg);
     fichero.write((char*) Nombre, sizeof(Cadena));
     fichero.write((char*) Direccion, sizeof(Cadena));
@@ -142,6 +147,8 @@ bool TTienda::CerrarTienda() {
         strcpy(Nombre, "");
         strcpy(Direccion, "");
         strcpy(NomFiche, "");
+        // Pongo esto para evitar crash. DUDA
+        Estantes = new TEstante[Tamano];
         delete [] Estantes;
         NEstan = -1;
         Tamano = -1;
@@ -152,7 +159,7 @@ bool TTienda::CerrarTienda() {
 
 // Devuelve true si la tienda está abierta.
 bool TTienda::EstaAbierta() {
-    return NEstan >= 0;
+    return NEstan != -1;
 }
 
 // Devuelve el número de estantes de la tienda.

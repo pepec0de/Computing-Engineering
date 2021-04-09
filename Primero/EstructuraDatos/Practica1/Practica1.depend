@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1617746564 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\main.cpp
+1617968581 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\main.cpp
 	<iostream>
 	<cstdlib>
 	"include/TAlmacen.h"
@@ -7,7 +7,7 @@
 	<locale.h>
 	<conio.h>
 
-1617644703 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\src\talmacen.cpp
+1617967348 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\src\talmacen.cpp
 	"../include/TAlmacen.h"
 
 1617657077 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\include\talmacen.h
@@ -18,7 +18,7 @@
 	<iostream>
 	<fstream>
 
-1617703145 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\src\ttienda.cpp
+1617968329 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\src\ttienda.cpp
 	"../include/TTienda.h"
 
 1617657343 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\include\ttienda.h
