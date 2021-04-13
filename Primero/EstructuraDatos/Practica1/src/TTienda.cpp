@@ -57,7 +57,6 @@ void TTienda::DatosTienda(Cadena pNombTienda, Cadena pDirTienda) {
 bool TTienda::CrearTienda(Cadena pNombTienda, Cadena pDirTienda, Cadena pNomFiche) {
     bool resultado = false;
 
-    //fstream fichero;
     ofstream fichero;
     fichero.open(pNomFiche, ios::binary);
     if (!fichero.fail()) {
@@ -91,32 +90,18 @@ bool TTienda::AbrirTienda(Cadena pNomFiche) {
     fichero.open(pNomFiche, ios::binary);
     if (!fichero.fail()) {
         // Leemos el tamaño del archivo
-        fichero.seekg(0, ios::end);
-        int bytesFichero = fichero.tellg();
-
         strcpy(NomFiche, pNomFiche);
 
-        fichero.seekg(0, ios::beg);
         fichero.read((char*) Nombre, sizeof(Cadena));
         fichero.read((char*) Direccion, sizeof(Cadena));
+        fichero.seekg(0, ios::end);
+        // Numero de estantes = Total / estante
+        NEstan = ((int)fichero.tellg()) / (int)sizeof(TEstante); // = 98
+        Tamano = NEstan;
         // Cargamos los estantes
-        NEstan = 0;
-        Tamano = Incremento;
         Estantes = new TEstante[Tamano];
-        while(fichero.tellg() < bytesFichero) {
-            fichero.read((char*) &Estantes[NEstan], sizeof(TEstante));
-            NEstan++;
-            if (NEstan == Tamano) {
-                // Pedimos mas memoria
-                Tamano += Incremento;
-                TEstante *aux = new TEstante[Tamano];
-                for (int i = 0; i < NEstan; i++) {
-                    aux[i] = Estantes[i];
-                }
-                Estantes = aux;
-                delete [] aux;
-            }
-        }
+        fichero.seekg(sizeof(Cadena)*2, ios::beg);
+        fichero.read((char*) Estantes, sizeof(TEstante)*NEstan);
         resultado = true;
     }
     fichero.close();
@@ -147,8 +132,8 @@ bool TTienda::CerrarTienda() {
         strcpy(Nombre, "");
         strcpy(Direccion, "");
         strcpy(NomFiche, "");
-        // Pongo esto para evitar crash. DUDA
-        Estantes = new TEstante[Tamano];
+// Pongo esto para evitar crash. DUDA
+//Estantes = new TEstante[Tamano];
         delete [] Estantes;
         NEstan = -1;
         Tamano = -1;
@@ -178,7 +163,7 @@ int TTienda::BuscarEstante(int pCodEstante) {
 
 // Dado la posición el estante que está en la posición indicada por parámetro.
 TEstante TTienda::ObtenerEstante(int pPos) {
-    return Estantes[pPos];
+    return Estantes[pPos-1];
 }
 
 // Añade un estante nuevo al vector siempre que el estante no esté previamente almacenado en memoria.
@@ -222,6 +207,7 @@ bool TTienda::EliminarEstante(int pPos) {
             for (int i = 0; i < NEstan; i++) {
                 aux[i] = Estantes[i];
             }
+            delete [] Estantes;
             Estantes = aux;
             delete [] aux;
         }
@@ -253,7 +239,7 @@ bool TTienda::ActualizarEstante(int pPos, TEstante pEstante) {
 /// TODO: COMPROBAR
 int TTienda::ReponerEstante(int pPos, TProducto &pProduc) {
     int resultado = 0;
-    if (Estantes[pPos].CodProd == pProduc.CodProd) {
+    if (strcmp(Estantes[pPos].CodProd, pProduc.CodProd) == 0) {
         if (Estantes[pPos].Capacidad <= Estantes[pPos].NoProductos+pProduc.Cantidad) {
             pProduc.Cantidad -= Estantes[pPos].Capacidad - Estantes[pPos].NoProductos;
             Estantes[pPos].NoProductos = Estantes[pPos].Capacidad;

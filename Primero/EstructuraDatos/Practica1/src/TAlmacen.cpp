@@ -137,7 +137,7 @@ int TAlmacen::BuscarProducto(Cadena pCodProd) {
 TProducto TAlmacen::ObtenerProducto(int pPos) {
     TProducto resultado;
     if (EstaAbierto()) {
-        FicheProductos.seekg(sizeof(int)+sizeof(Cadena)*2 + pPos*sizeof(TProducto), ios::beg);
+        FicheProductos.seekg(sizeof(int)+sizeof(Cadena)*2 + (pPos-1)*sizeof(TProducto), ios::beg);
         FicheProductos.read((char*) &resultado, sizeof(TProducto));
         if (FicheProductos.fail()) {
             // La posicion no es correcta, ya que el tipo de variable es distinto
@@ -187,18 +187,18 @@ bool TAlmacen::EliminarProducto(int pPos) {
     if (EstaAbierto()) {
         // Comprobamos que la posicion sea correcta
         TProducto prodEliminar;
-        FicheProductos.seekg(sizeof(int)+ 2*sizeof(Cadena) + pPos*sizeof(TProducto), ios::beg);
+        FicheProductos.seekg(sizeof(int) + 2*sizeof(Cadena) + pPos*sizeof(TProducto), ios::beg);
         FicheProductos.read((char*) &prodEliminar, sizeof(TProducto));
         if (!FicheProductos.fail()) {
             TProducto prodActual;
             // tellg() = Estamos detras del producto a eliminar
-            /// TODO: COMPROBAR
             if (pPos < NProduc-1) { // Si el producto esta en la ultima posicion no ejecutamos el bucle ya que se queda como basura
                 for (int i = pPos; i < NProduc; i++) {
+                    /// TODO: COMPROBAR
                     // Sustituimos el producto que se quiere eliminar por el que esta justo despues de este
-                    FicheProductos.seekg(sizeof(int )+ 2*sizeof(Cadena) + (pPos + 1)*sizeof(TProducto), ios::beg);
+                    FicheProductos.seekg(sizeof(int)+ 2*sizeof(Cadena) + (i + 1)*sizeof(TProducto), ios::beg);
                     FicheProductos.read((char*) &prodActual, sizeof(TProducto)); // leemos el siguiente producto
-                    FicheProductos.seekp(sizeof(int)+ 2*sizeof(Cadena) + pPos*sizeof(TProducto), ios::beg); // escritura
+                    FicheProductos.seekp(sizeof(int)+ 2*sizeof(Cadena) + i*sizeof(TProducto), ios::beg); // escritura
                     FicheProductos.write((char*) &prodActual, sizeof(TProducto));
                 }
             }
