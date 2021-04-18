@@ -96,7 +96,7 @@ bool TTienda::AbrirTienda(Cadena pNomFiche) {
         fichero.read((char*) Direccion, sizeof(Cadena));
         fichero.seekg(0, ios::end);
         // Numero de estantes = Total / estante
-        NEstan = ((int)fichero.tellg()) / (int)sizeof(TEstante); // = 98
+        NEstan = ((int)fichero.tellg() / (int)sizeof(TEstante))-1; // = 98
         Tamano = NEstan;
         // Cargamos los estantes
         Estantes = new TEstante[Tamano];
@@ -113,10 +113,9 @@ bool TTienda::GuardarTienda() {
     bool resultado = false;
     ofstream fichero;
     fichero.open(NomFiche, ios::binary);
-    fichero.seekp(0, ios::beg);
     fichero.write((char*) Nombre, sizeof(Cadena));
     fichero.write((char*) Direccion, sizeof(Cadena));
-    fichero.write((char*) Estantes, sizeof(TEstante)*NEstan); // mas limpio
+    fichero.write((char*) Estantes, sizeof(TEstante)*NEstan);
     if (!fichero.fail()) {
         resultado = true;
     }
@@ -132,8 +131,6 @@ bool TTienda::CerrarTienda() {
         strcpy(Nombre, "");
         strcpy(Direccion, "");
         strcpy(NomFiche, "");
-// Pongo esto para evitar crash. DUDA
-//Estantes = new TEstante[Tamano];
         delete [] Estantes;
         NEstan = -1;
         Tamano = -1;
@@ -163,7 +160,7 @@ int TTienda::BuscarEstante(int pCodEstante) {
 
 // Dado la posición el estante que está en la posición indicada por parámetro.
 TEstante TTienda::ObtenerEstante(int pPos) {
-    return Estantes[pPos-1];
+    return Estantes[pPos];
 }
 
 // Añade un estante nuevo al vector siempre que el estante no esté previamente almacenado en memoria.

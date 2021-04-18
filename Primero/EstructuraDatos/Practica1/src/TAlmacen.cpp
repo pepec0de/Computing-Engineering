@@ -89,7 +89,8 @@ bool TAlmacen::AbrirAlmacen(Cadena pNomFiche) {
 // Cierra el fichero e inicializa los atributos a valores iniciales. Devuelve true si se ha cerrado el
 // almac�n.
 bool TAlmacen::CerrarAlmacen() {
-    if (EstaAbierto()) FicheProductos.close();
+    FicheProductos.close();
+    FicheProductos.clear();
     strcpy(Nombre, "");
     strcpy(Direccion, "");
     NProduc = -1;
@@ -109,6 +110,7 @@ int TAlmacen::NProductos() {
 
 // Dado un c�digo de producto, devuelve la posici�n dentro del fichero donde se encuentra. Si no
 // lo encuentra devuelve -1.
+
 //POSICION DE PRODUCTO -> NO DEL BYTE DEL FICHERO
 int TAlmacen::BuscarProducto(Cadena pCodProd) {
     int resultado = -1;
@@ -137,7 +139,7 @@ int TAlmacen::BuscarProducto(Cadena pCodProd) {
 TProducto TAlmacen::ObtenerProducto(int pPos) {
     TProducto resultado;
     if (EstaAbierto()) {
-        FicheProductos.seekg(sizeof(int)+sizeof(Cadena)*2 + (pPos-1)*sizeof(TProducto), ios::beg);
+        FicheProductos.seekg(sizeof(int)+sizeof(Cadena)*2 + pPos*sizeof(TProducto), ios::beg);
         FicheProductos.read((char*) &resultado, sizeof(TProducto));
         if (FicheProductos.fail()) {
             // La posicion no es correcta, ya que el tipo de variable es distinto

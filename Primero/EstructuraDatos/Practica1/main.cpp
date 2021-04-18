@@ -34,17 +34,10 @@ using namespace std;
 TAlmacen almacen;
 TTienda tienda;
 
-/*
-TODO (Pepe#1#04/08/21):
-Solucionar BUG:
-Despues de abrir y listar los productos de la TIENDA, al listar los productos del ALMACEN
-salen todos los datos NULOS
-*/
-
 // Funcion para mostrar un producto
 void MostrarProducto(TProducto prod) {
     cout << prod.CodProd << "\t"
-         << prod.NombreProd << "\t\t\t\t\t"
+         << prod.NombreProd << "\t\t\t\t"
          << prod.Precio << "\t"
          << prod.Cantidad << "\t\t"
          << prod.Caducicidad.Dia << "/"
@@ -53,7 +46,7 @@ void MostrarProducto(TProducto prod) {
 }
 
 void MostrarEstante(TEstante testante) {
-    TProducto prod = almacen.ObtenerProducto(almacen.BuscarProducto(testante.CodProd)+1);
+    TProducto prod = almacen.ObtenerProducto(almacen.BuscarProducto(testante.CodProd));
     cout << testante.CodEstante << "\t"
          << testante.Posicion << "\t"
          << testante.Capacidad << "\t\t"
@@ -226,8 +219,8 @@ void GestionAlmacen(Cadena nombre) {
                 for (int i = 0; i < 21+(int)strlen(nombre)+16+(int)strlen(Direccion); i++) cout << "*";
                 cout << endl;
                 cout << "NÚMERO DE PRODUCTOS: " << almacen.NProductos() << endl; // DEBUG
-                cout << "CODIGO\tNOMBRE\t\t\t\t\tPRECIO\tCANTIDAD\tFECHA CADUCIDAD\n";
-                for (int i = 1; i <= almacen.NProductos(); i++) {
+                cout << "CODIGO\tNOMBRE\t\t\t\t\tPRECIO\tCANTIDAD\tFECHA CADUCIDAD\n"; // DUDA: ponemos la descripcion?
+                for (int i = 0; i < almacen.NProductos(); i++) {
                     MostrarProducto(almacen.ObtenerProducto(i));
                 }
             } else {
@@ -348,8 +341,8 @@ void GestionAlmacen(Cadena nombre) {
             if (almacen.EstaAbierto()) {
                 cout << "Indique el código del producto a consultar: ";
                 pedirCadena(prod.CodProd);
-                pos = almacen.BuscarProducto(prod.CodProd)+1;
-                if (pos == 0) { // Valor irreal
+                pos = almacen.BuscarProducto(prod.CodProd);
+                if (pos == -1) { // Valor irreal
                     cout << "ERROR! No se ha encontrado un producto con el código indicado.\n";
                 } else {
                     cout << "Producto encontrado.\n";
@@ -459,8 +452,7 @@ void GestionTienda(Cadena nombre) {
                     cout << endl;
                     cout << "NÚMERO DE ESTANTES: " << tienda.NoEstantes() << endl;
                     cout << "CODIGO POSICION CAPACIDAD CODIGO PRODUCTO NOMBRE\t\t\tPRECIO\tNoPRODUCTOS\tVALOR TOTAL\n";
-                    // i = 1; Si no, no funciona
-                    for (int i = 1; i <= tienda.NoEstantes(); i++) {
+                    for (int i = 0; i < tienda.NoEstantes(); i++) {
                         MostrarEstante(tienda.ObtenerEstante(i));
                     }
                 } else {
@@ -487,8 +479,8 @@ void GestionTienda(Cadena nombre) {
                         cin >> estante.Capacidad;
                         cout << "Indique el código del producto del estante: ";
                         pedirCadena(estante.CodProd);
-                        pos = almacen.BuscarProducto(estante.CodProd)+1;
-                        if (pos == 0) {
+                        pos = almacen.BuscarProducto(estante.CodProd);
+                        if (pos == -1) {
                             cout << "ERROR! El código del producto indicado no se encuentra en el almacén.\n";
                         } else {
                             prod = almacen.ObtenerProducto(pos);
@@ -529,8 +521,8 @@ void GestionTienda(Cadena nombre) {
             if (tienda.EstaAbierta()) {
                 cout << "Indique el código del estante a actualizar: ";
                 cin >> estante.CodEstante;
-                pos = tienda.BuscarEstante(estante.CodEstante)+1;
-                if (pos == 0) {
+                pos = tienda.BuscarEstante(estante.CodEstante);
+                if (pos == -1) {
                     cout << "ERROR! No se ha encontrado un estante con el código indicado.\n";
                 } else {
                     cout << "Estante encontrado.\n";
@@ -539,7 +531,7 @@ void GestionTienda(Cadena nombre) {
                     MostrarEstante(estante);
                     if (confirmar("¿Desea actualizar el número de productos? (S/n): ")) {
                         // Recogemos el producto
-                        prod = almacen.ObtenerProducto(almacen.BuscarProducto(estante.CodProd)+1);
+                        prod = almacen.ObtenerProducto(almacen.BuscarProducto(estante.CodProd));
                         // Recogemos en opc el dato de numero de productos original
                         opc = estante.NoProductos;
                         cout << "Indique el número de productos nuevo: ";
@@ -548,7 +540,8 @@ void GestionTienda(Cadena nombre) {
                             cout << "Valor inválido. Indique el número de productos nuevo: ";
                             cin >> estante.NoProductos;
                         }
-                        /* Si la cantidad es menor a la que había, se ha de devolver la
+                       /*
+                        *  Si la cantidad es menor a la que había, se ha de devolver la
                         *  diferencia al almacén y si es mayor habrá que reponer esa
                         *  cantidad desde el almacén. En el caso que la cantidad a reponer
                         *  sea superior a la que hay en el almacén se repondrá solo la cantidad
@@ -586,8 +579,8 @@ void GestionTienda(Cadena nombre) {
                 if (almacen.EstaAbierto()) {
                     cout << "Indique el código del estante a consultar: ";
                     cin >> estante.CodEstante;
-                    pos = tienda.BuscarEstante(estante.CodEstante)+1;
-                    if (pos == 0) {
+                    pos = tienda.BuscarEstante(estante.CodEstante);
+                    if (pos == -1) {
                         cout << "ERROR! No se ha encontrado un estante con el código indicado.\n";
                     } else {
                         cout << "CODIGO POSICION CAPACIDAD CODIGO PRODUCTO NOMBRE\t\t\tPRECIO\tNoPRODUCTOS\tVALOR TOTAL\n";
@@ -606,8 +599,8 @@ void GestionTienda(Cadena nombre) {
                 if (almacen.EstaAbierto()) {
                     cout << "Indique el código del estante a eliminar: ";
                     cin >> estante.CodEstante;
-                    pos = tienda.BuscarEstante(estante.CodEstante)+1;
-                    if (pos == 0) {
+                    pos = tienda.BuscarEstante(estante.CodEstante);
+                    if (pos == -1) {
                         cout << "ERROR! No se ha encontrado un estante con el código indicado.\n";
                     } else {
                         estante = tienda.ObtenerEstante(pos);
@@ -640,15 +633,16 @@ void ReposicionProductos() {
         TEstante estante;
         TProducto prod;
         Cadena cEstado;
-        int pProd = 0;
+        int pProd = -1;
         int estado;
         cout << "CÓDIGO CAPACIDAD NOMBRE\t\t\t\tESTADO REPUESTO OCUPACIÓN(%)\n";
-        for (int i = 1; i <= tienda.NoEstantes(); i++) {
+        for (int i = 0; i < tienda.NoEstantes(); i++) {
             estante = tienda.ObtenerEstante(i);
-            pProd = almacen.BuscarProducto(estante.CodProd)+1;
-            if (pProd != 0) {
+            pProd = almacen.BuscarProducto(estante.CodProd);
+            if (pProd != -1) {
                 prod = almacen.ObtenerProducto(pProd);
                 estado = tienda.ReponerEstante(i, prod);
+                estante = tienda.ObtenerEstante(i);
                 switch (estado) {
                 case 1:
                     strcpy(cEstado, "COMPLETO");
@@ -657,6 +651,7 @@ void ReposicionProductos() {
                     strcpy(cEstado, "PARCIAL");
                     break;
                 default:
+                    cout << "estado = " << estado << endl;
                     strcpy(cEstado, "NO");
                 }
                 cout << estante.CodEstante << "\t" << estante.Capacidad << "\t" << prod.NombreProd << "\t\t\t\t"
