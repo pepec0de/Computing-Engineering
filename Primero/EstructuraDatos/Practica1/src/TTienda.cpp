@@ -4,7 +4,7 @@
 // Método privado para ordenar los estantes del vector. La ordenación se realizará por el código de
 // producto en orden ascendente. En caso de tener el mismo código se ordenará por la posición del
 // producto en el estante en orden ascendente.
-void TTienda::OrdenarProductos() { // Ordenacion de mayor a  menos
+void TTienda::OrdenarProductos() { // Ordenacion de mayor a menor
     for (int i = 0; i < NEstan; i++) {
         int max_index = i;
         for (int j = i+1; j < NEstan; j++) {
@@ -168,7 +168,7 @@ TEstante TTienda::ObtenerEstante(int pPos) {
 bool TTienda::AnadirEstante(TEstante pEstante) {
     bool resultado = false;
     if (BuscarEstante(pEstante.CodEstante) == -1) {
-        if (NEstan+1 == Tamano) {
+        if (NEstan == Tamano) {
             // Pedimos mas memoria si se va a acabar la capacidad del vector
             Tamano += Incremento;
             TEstante *aux = new TEstante[Tamano];
@@ -193,10 +193,10 @@ bool TTienda::AnadirEstante(TEstante pEstante) {
 bool TTienda::EliminarEstante(int pPos) {
     bool resultado = false;
     if (pPos >= 0 && pPos < NEstan) {
+        NEstan--;
         for (int i = pPos; i < NEstan; i++) {
             Estantes[i] = Estantes[i+1];
         }
-        NEstan--;
         // Reducimos memoria
         if (Tamano > NEstan) {
             Tamano = NEstan;
@@ -233,9 +233,9 @@ bool TTienda::ActualizarEstante(int pPos, TEstante pEstante) {
 //  0 si la posición es incorrecta.
 //  1 si se ha repuesto unidades hasta llegar a la capacidad máxima del estante.
 //  2 si no se ha completado el estante al completo.
-/// TODO: COMPROBAR
 int TTienda::ReponerEstante(int pPos, TProducto &pProduc) {
     int resultado = 0;
+    // Comprobamos que la posicion sea correcta
     if (strcmp(Estantes[pPos].CodProd, pProduc.CodProd) == 0) {
         if (Estantes[pPos].Capacidad <= Estantes[pPos].NoProductos+pProduc.Cantidad) {
             pProduc.Cantidad -= Estantes[pPos].Capacidad - Estantes[pPos].NoProductos;

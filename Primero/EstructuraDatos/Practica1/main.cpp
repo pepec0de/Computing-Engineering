@@ -1,31 +1,9 @@
-// FUNCIONES COMPROBADAS:
-/*
-    TAlmacen:
-    + DatosAlmacen
-    + CrearAlmacen(Cadena pNomFiche)
-    + CrearAlmacen(Cadena pNombAlmacen, Cadena pDirAlmacen, Cadena pNomFiche)
-    + AbrirAlmacen(Cadena pNomFiche)
-    + AnadirProducto(TProducto pProduc)
-    + BuscarProducto(Cadena pCodProd)
-    + ObtenerProducto(int pPos)
-
-    TTienda:
-    + DatosTienda(Cadena pNombTienda, Cadena pDirTienda)
-    + CrearTienda(Cadena pNombTienda, Cadena pDirTienda, Cadena pNomFiche)
-    + AbrirTienda(Cadena pNomFiche)
-    + GuardarTienda()
-    + CerrarTienda()
-    + BuscarEstante(int pCodEstante)
-    + ObtenerEstante(int pPos)
-    + AnadirEstante(TEstante pEstante)
-
-*/
-
 #include <iostream>
 #include <cstdlib>
 #include "include/TAlmacen.h"
 #include "include/TTienda.h"
 
+// Librerias extras para mejorar la experiencia del usuario
 #include <locale.h>
 #include <conio.h>
 
@@ -33,6 +11,9 @@ using namespace std;
 
 TAlmacen almacen;
 TTienda tienda;
+// declaramos variables globales para las direcciones para evitar problemas a la hora de salir de menus y
+// volver a listar datos
+Cadena DirAlmacen, DirTienda;
 
 // Funcion para mostrar un producto
 void MostrarProducto(TProducto prod) {
@@ -42,7 +23,7 @@ void MostrarProducto(TProducto prod) {
          << prod.Cantidad << "\t\t"
          << prod.Caducicidad.Dia << "/"
          << prod.Caducicidad.Mes << "/"
-         << prod.Caducicidad.Anyo << endl;
+         << prod.Caducicidad.Anyo;
 }
 
 void MostrarEstante(TEstante testante) {
@@ -73,7 +54,6 @@ TFecha pedirFecha() {
 // Funcion para pedir una cadena, el metodo cin no obtiene los espacios de la misma
 void pedirCadena(Cadena cad) {
     string str;
-    cin.ignore();
     getline(cin, str);
     strcpy(cad, str.c_str());
 }
@@ -161,7 +141,6 @@ int MenuTienda(Cadena NombTienda) {
 }
 
 void GestionAlmacen(Cadena nombre) {
-    Cadena Direccion;
     Cadena nFichero;
     TProducto prod;
     int opc = 0;
@@ -171,13 +150,14 @@ void GestionAlmacen(Cadena nombre) {
         switch (opc) {
         case 1: /// Crear un almacén vacío
             if (!almacen.EstaAbierto()) {
+                cin.ignore();
                 cout << "Indique el nombre del almacén: ";
                 pedirCadena(nombre);
                 cout << "Indique la dirección del almacén: ";
-                pedirCadena(Direccion);
+                pedirCadena(DirAlmacen);
                 cout << "Indique el nombre del fichero: ";
                 pedirCadena(nFichero);
-                if (almacen.CrearAlmacen(nombre, Direccion, nFichero)) {
+                if (almacen.CrearAlmacen(nombre, DirAlmacen, nFichero)) {
                     cout << "El almacén " << nombre << " se ha creado con éxito.\n";
                 } else {
                     cout << "ERROR! No se ha podido crear el almacén.\n";
@@ -189,10 +169,11 @@ void GestionAlmacen(Cadena nombre) {
             break;
         case 2: /// Abrir un fichero de almacén
             if (!almacen.EstaAbierto()) {
+                cin.ignore();
                 cout << "Indique el nombre del fichero: ";
                 pedirCadena(nFichero);
                 if (almacen.AbrirAlmacen(nFichero)) {
-                    almacen.DatosAlmacen(nombre, Direccion);
+                    almacen.DatosAlmacen(nombre, DirAlmacen);
                     cout << "Se ha abierto el almacén \"" << nombre << "\" con éxito.\n";
                 } else {
                     cout << "ERROR! No se ha podido abrir el fichero.\n";
@@ -215,13 +196,14 @@ void GestionAlmacen(Cadena nombre) {
         case 4: /// Listar productos del almacén
             if (almacen.EstaAbierto()) {
                 // Cabecera
-                cout << "Listado del almacén \"" << nombre << "\" localizado en " << Direccion << endl;
-                for (int i = 0; i < 21+(int)strlen(nombre)+16+(int)strlen(Direccion); i++) cout << "*";
+                cout << "Listado del almacén \"" << nombre << "\" localizado en " << DirAlmacen << endl;
+                for (int i = 0; i < 21+(int)strlen(nombre)+16+(int)strlen(DirAlmacen); i++) cout << "*";
                 cout << endl;
                 cout << "NÚMERO DE PRODUCTOS: " << almacen.NProductos() << endl; // DEBUG
                 cout << "CODIGO\tNOMBRE\t\t\t\t\tPRECIO\tCANTIDAD\tFECHA CADUCIDAD\n"; // DUDA: ponemos la descripcion?
                 for (int i = 0; i < almacen.NProductos(); i++) {
                     MostrarProducto(almacen.ObtenerProducto(i));
+                    cout << endl;
                 }
             } else {
                 cout << "No hay almacenes abiertos.\n";
@@ -230,35 +212,46 @@ void GestionAlmacen(Cadena nombre) {
             break;
         case 5: /// Añadir un producto
             if (almacen.EstaAbierto()) {
+                cin.ignore();
+                // NOMBRE
                 cout << "Indique el nombre del producto: ";
                 pedirCadena(prod.NombreProd);
                 while (strcmp(prod.NombreProd, "") == 0) {
                     cout << "Valor inválido. Indique el nombre del producto: ";
                     pedirCadena(prod.NombreProd);
                 }
-                // DUDA : comprobacion valor invalido?
+                // DESCRIPCION
                 cout << "Indique la descripción del producto: ";
                 pedirCadena(prod.Descripcion);
+                while (strcmp(prod.Descripcion, "") == 0) {
+                    cout << "Indique la descripción del producto: ";
+                    pedirCadena(prod.Descripcion);
+                }
+                // CODIGO
                 cout << "Indique el código del producto: ";
                 pedirCadena(prod.CodProd);
                 while (strcmp(prod.CodProd, "") == 0) {
                     cout << "Valor inválido. Indique el código del producto: ";
                     pedirCadena(prod.CodProd);
                 }
+                // PRECIO
                 cout << "Indique el precio del producto: ";
                 cin >> prod.Precio;
                 while (prod.Precio <= 0) {
                     cout << "Valor inválido. Indique el precio del producto: ";
                     cin >> prod.Precio;
                 }
+                // CANTIDAD
                 cout << "Indique la cantidad del producto: ";
                 cin >> prod.Cantidad;
                 while (prod.Cantidad < 0) {
                     cout << "Valor inválido. Indique la cantidad del producto: ";
                     cin >> prod.Cantidad;
                 }
+                // FECHA
                 cout << "Indique la fecha de caducidad: ";
                 prod.Caducicidad = pedirFecha();
+
                 if (almacen.AnadirProducto(prod)) {
                     cout << "El producto se ha añadido con éxito.\n";
                 } else {
@@ -271,6 +264,7 @@ void GestionAlmacen(Cadena nombre) {
             break;
         case 6: /// Actualizar un producto
             if (almacen.EstaAbierto()) {
+                cin.ignore();
                 cout << "Indique el código del producto a actualizar: ";
                 pedirCadena(prod.CodProd);
                 pos = almacen.BuscarProducto(prod.CodProd);
@@ -291,7 +285,6 @@ void GestionAlmacen(Cadena nombre) {
                     if (confirmar("¿Desea modificar la descripción? (S/n): ")) {
                         cout << "Indique la descripción nueva: ";
                         pedirCadena(prod.Descripcion);
-                        // DUDA comprobacion valor invalido?
                     }
                     // Código
                     if (confirmar("¿Desea modificar el código? (S/n): ")) {
@@ -346,8 +339,9 @@ void GestionAlmacen(Cadena nombre) {
                     cout << "ERROR! No se ha encontrado un producto con el código indicado.\n";
                 } else {
                     cout << "Producto encontrado.\n";
-                    cout << "CODIGO\tNOMBRE\t\t\t\t\tPRECIO\tCANTIDAD\tFECHA CADUCIDAD\n";
+                    cout << "CODIGO\tNOMBRE\t\t\t\t\tPRECIO\tCANTIDAD\tFECHA CADUCIDAD\tDESCRIPCION\n";
                     MostrarProducto(almacen.ObtenerProducto(pos));
+                    cout << "\t" << almacen.ObtenerProducto(pos).Descripcion << endl;
                 }
             } else {
                 cout << "No hay almacenes abiertos.\n";
@@ -356,6 +350,7 @@ void GestionAlmacen(Cadena nombre) {
             break;
         case 8: /// Eliminar un producto
             if (almacen.EstaAbierto()) {
+                cin.ignore();
                 cout << "Indique el código del producto a eliminar: ";
                 pedirCadena(prod.CodProd);
                 pos = almacen.BuscarProducto(prod.CodProd);
@@ -379,7 +374,6 @@ void GestionAlmacen(Cadena nombre) {
 }
 
 void GestionTienda(Cadena nombre) {
-    Cadena Direccion;
     Cadena nFichero;
     TEstante estante;
     TProducto prod;
@@ -390,13 +384,14 @@ void GestionTienda(Cadena nombre) {
         switch (opc) {
         case 1: /// Crear una tienda vacía
             if (!tienda.EstaAbierta()) {
+                cin.ignore();
                 cout << "Indique el nombre de la tienda: ";
                 pedirCadena(nombre);
                 cout << "Indique la dirección de la tienda: ";
-                pedirCadena(Direccion);
+                pedirCadena(DirTienda);
                 cout << "Indique el nombre del fichero: ";
                 pedirCadena(nFichero);
-                if (tienda.CrearTienda(nombre, Direccion, nFichero)) {
+                if (tienda.CrearTienda(nombre, DirTienda, nFichero)) {
                     cout << "la tienda \"" << nombre << "\" se ha creado con éxito.\n";
                 } else {
                     cout << "ERROR! No se ha podido crear la tienda.\n";
@@ -407,11 +402,12 @@ void GestionTienda(Cadena nombre) {
             pausa();
             break;
         case 2: /// Abrir un fichero tienda
+            cin.ignore();
             cout << "Indique el nombre del fichero: ";
             pedirCadena(nFichero);
-            // Si ya habia una tienda abierta, esta se guardara
+            // Si ya habia una tienda abierta, esta se guardara (implementacion TTienda)
             if (tienda.AbrirTienda(nFichero)) {
-                tienda.DatosTienda(nombre, Direccion);
+                tienda.DatosTienda(nombre, DirTienda);
                 cout << "Se ha abierto la tienda \"" << nombre << "\" con éxito.\n";
             } else {
                 cout << "ERROR! No se ha podido abrir el fichero.\n";
@@ -447,8 +443,8 @@ void GestionTienda(Cadena nombre) {
             if (tienda.EstaAbierta()) {
                 if (almacen.EstaAbierto()) {
                     // Cabecera
-                    cout << "Listado de la tienda \"" << nombre << "\" localizado en " << Direccion << endl;
-                    for (int i = 0; i < 22+(int)strlen(nombre)+16+(int)strlen(Direccion); i++) cout << "*";
+                    cout << "Listado de la tienda \"" << nombre << "\" localizado en " << DirTienda << endl;
+                    for (int i = 0; i < 22+(int)strlen(nombre)+16+(int)strlen(DirTienda); i++) cout << "*";
                     cout << endl;
                     cout << "NÚMERO DE ESTANTES: " << tienda.NoEstantes() << endl;
                     cout << "CODIGO POSICION CAPACIDAD CODIGO PRODUCTO NOMBRE\t\t\tPRECIO\tNoPRODUCTOS\tVALOR TOTAL\n";
@@ -464,6 +460,7 @@ void GestionTienda(Cadena nombre) {
             pausa();
             break;
         case 6: /// Añadir un estante
+            /// TODO: Solucionar BUG devuelve codigo de error
             if (tienda.EstaAbierta()) {
                 if (almacen.EstaAbierto()) {
                     if (almacen.NProductos() > 0) {
@@ -478,6 +475,7 @@ void GestionTienda(Cadena nombre) {
                         cout << "Indique la capacidad del estante: ";
                         cin >> estante.Capacidad;
                         cout << "Indique el código del producto del estante: ";
+                        cin.ignore();
                         pedirCadena(estante.CodProd);
                         pos = almacen.BuscarProducto(estante.CodProd);
                         if (pos == -1) {
@@ -640,24 +638,28 @@ void ReposicionProductos() {
             estante = tienda.ObtenerEstante(i);
             pProd = almacen.BuscarProducto(estante.CodProd);
             if (pProd != -1) {
+                // Como el producto existe lo recogemos
                 prod = almacen.ObtenerProducto(pProd);
                 estado = tienda.ReponerEstante(i, prod);
+                // Actualizamos los atributos del estante
                 estante = tienda.ObtenerEstante(i);
                 switch (estado) {
+                case 0:
+                    strcpy(cEstado, "NO");
+                    break;
                 case 1:
                     strcpy(cEstado, "COMPLETO");
                     break;
                 case 2:
                     strcpy(cEstado, "PARCIAL");
                     break;
-                default:
-                    cout << "estado = " << estado << endl;
-                    strcpy(cEstado, "NO");
                 }
-                cout << estante.CodEstante << "\t" << estante.Capacidad << "\t" << prod.NombreProd << "\t\t\t\t"
-                    << cEstado << "\t" << ((float)estante.NoProductos/estante.Capacidad)*100 << endl;
-                // TODO : actualizar producto
-
+                if (almacen.ActualizarProducto(pProd, prod)) {
+                    cout << estante.CodEstante << "\t" << estante.Capacidad << "\t" << prod.NombreProd << "\t\t\t\t"
+                        << cEstado << "\t" << ((float)estante.NoProductos/estante.Capacidad)*100 << endl;
+                } else {
+                    cout << "ERROR! No se ha podido actualizar el producto del estante en el almacén.\n";
+                }
             } else {
                 cout << "ERROR! No se ha encontrado el producto del estante en el almacén.\n";
             }
@@ -673,12 +675,13 @@ int main() {
     setlocale(LC_CTYPE, "Spanish");
 
     // Variables auxiliares
-    Cadena nAlmacen, nTienda, dir;
+    Cadena nAlmacen, nTienda;
+
+    // inicializamos a nulo
     strcpy(nAlmacen, "");
     strcpy(nTienda, "");
-    strcpy(dir, "");
-    int opc = -1;
 
+    int opc = -1;
     while (opc != 0) {
         opc = MenuPrincipal(nAlmacen, nTienda);
         switch (opc) {

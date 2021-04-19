@@ -110,8 +110,6 @@ int TAlmacen::NProductos() {
 
 // Dado un c�digo de producto, devuelve la posici�n dentro del fichero donde se encuentra. Si no
 // lo encuentra devuelve -1.
-
-//POSICION DE PRODUCTO -> NO DEL BYTE DEL FICHERO
 int TAlmacen::BuscarProducto(Cadena pCodProd) {
     int resultado = -1;
     if (EstaAbierto()) {
@@ -133,9 +131,9 @@ int TAlmacen::BuscarProducto(Cadena pCodProd) {
     return resultado;
 }
 
-// Dado la posici�n devuelve el producto del fichero situado en dicha posici�n. Debe verificar
-// previamente que la posici�n sea correcta. Si la posici�n no es correcta devolver� un producto cuyo
-// c�digo tendr� el valor �NULO�.
+// Dado la posición devuelve el producto del fichero situado en dicha posici�n. Debe verificar
+// previamente que la posición sea correcta. Si la posici�n no es correcta devolver� un producto cuyo
+// c�digo tendr� el valor "NULO".
 TProducto TAlmacen::ObtenerProducto(int pPos) {
     TProducto resultado;
     if (EstaAbierto()) {
@@ -150,11 +148,11 @@ TProducto TAlmacen::ObtenerProducto(int pPos) {
 }
 
 // Dado un producto, lo busca en el fichero y si no lo encuentra lo a�ade al final del fichero.
-// Devuelve true si se ha a�adido el producto.
+// Devuelve true si se ha añadido el producto.
 bool TAlmacen::AnadirProducto(TProducto pProduc) {
     bool resultado = false;
     if (EstaAbierto() && BuscarProducto(pProduc.CodProd) == -1) {
-        FicheProductos.seekp(0, ios::end);
+        FicheProductos.seekp(sizeof(int) + 2*sizeof(Cadena) + NProduc*sizeof(TProducto), ios::beg);
         FicheProductos.write((char*) &pProduc, sizeof(TProducto));
         NProduc++;
         FicheProductos.seekp(0, ios::beg);
@@ -171,10 +169,12 @@ bool TAlmacen::ActualizarProducto(int pPos, TProducto pProduc) {
     bool resultado = false;
     if (EstaAbierto()) {
         TProducto aux;
-        FicheProductos.seekg(pPos, ios::beg);
+        FicheProductos.seekg(sizeof(int) + 2*sizeof(Cadena) + pPos*sizeof(TProducto), ios::beg);
         FicheProductos.read((char*) &aux, sizeof(TProducto));
-        if (FicheProductos.good()) {
-            FicheProductos.seekp(pPos, ios::beg);
+        // DUDA como compruebo que la posicion sea correcta
+        // Si la posicion es incorrecta estos valores seran valores basuara
+        if (aux.Precio > 0 && aux.Cantidad > 0) {
+            FicheProductos.seekp(sizeof(int) + 2*sizeof(Cadena) + pPos*sizeof(TProducto), ios::beg);
             FicheProductos.write((char*) &pProduc, sizeof(TProducto));
             resultado = true;
         }
@@ -193,10 +193,8 @@ bool TAlmacen::EliminarProducto(int pPos) {
         FicheProductos.read((char*) &prodEliminar, sizeof(TProducto));
         if (!FicheProductos.fail()) {
             TProducto prodActual;
-            // tellg() = Estamos detras del producto a eliminar
             if (pPos < NProduc-1) { // Si el producto esta en la ultima posicion no ejecutamos el bucle ya que se queda como basura
                 for (int i = pPos; i < NProduc; i++) {
-                    /// TODO: COMPROBAR
                     // Sustituimos el producto que se quiere eliminar por el que esta justo despues de este
                     FicheProductos.seekg(sizeof(int)+ 2*sizeof(Cadena) + (i + 1)*sizeof(TProducto), ios::beg);
                     FicheProductos.read((char*) &prodActual, sizeof(TProducto)); // leemos el siguiente producto
