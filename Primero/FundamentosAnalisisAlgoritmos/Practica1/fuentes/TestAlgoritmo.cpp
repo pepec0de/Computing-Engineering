@@ -15,6 +15,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+
 using namespace std;
 
 TestAlgoritmo::TestAlgoritmo() {
@@ -22,9 +23,7 @@ TestAlgoritmo::TestAlgoritmo() {
 	nombreAlgoritmoCaso.push_back("SecuencialMedio");
 	nombreAlgoritmoCaso.push_back("SecuencialMejor");
 }
-TestAlgoritmo::~TestAlgoritmo()
-{
-}
+TestAlgoritmo::~TestAlgoritmo() {}
 
 /* Comprueba que el algoritmo funciona */
 void TestAlgoritmo::comprobarAlgoritmo()
@@ -74,18 +73,15 @@ void TestAlgoritmo::costeCasoTeorico(int numerocaso)
 		case SECUENCIALPEOR: /*Caso peor (T(n)= 6n+8)*/
 		{
 			tiempo = 6 * talla + 8;
-		}
-		break;
+		}break;
 		case SECUENCIALMEDIO:/*Caso medio (T(n)= 3n+8)*/
 		{
 			tiempo = 3 * talla + 8;
-		}
-		break;
+		}break;
 		case SECUENCIALMEJOR:/*Caso mejor (T(n)= 8)*/
 		{
 			tiempo = 8;
-		}
-		break;
+		}break;
 		}
 		f << talla << "\t" << tiempo << endl;
 		cout << "\t" << talla << "\t\t" << setw(10) << setprecision(2) << (double)tiempo << " \t\t" << endl;
@@ -121,7 +117,8 @@ void TestAlgoritmo::costeCasoTeorico(int numerocaso)
 		default: {cout << "Error caso " << endl; }break;
 		}
 	}break;
-	default: {cout << "Grafica no guardada en fichero " << endl; }break;
+	default: {cout << "Grafica no guardada en fichero " << endl;
+	}break;
 	}
 	cout << endl;
 	system("pause");
@@ -141,16 +138,17 @@ void TestAlgoritmo::compararTeorico(int metodo1, int metodo2, int metodo3)
 	system("cls");
 	cout << endl << "Busqueda Secuencial" << " Teorico";
 	cout << ". Tiempos de ejecucion " << endl << endl;
-	cout << endl;
+	cout << endl;;
 	cout << "\tTalla\t\tTiempo (oe)" << endl << endl;
 	double tiempoPeor = 0; int tiempoMedio = 0; int tiempoMejor = 0;
-	for (int talla = tallaIni; talla <= tallaFin; talla += incTalla) {
-		/* Caso peor (T(n)= 7n+9) */
-		tiempoPeor = 7 * talla + 9;
-		/*Caso medio (T(n)= (7/2)n+9)*/
-		tiempoMedio = ((7 / 2) * talla) + 9;
-		/*Caso mejor (T(n)= 9)*/
-		tiempoMejor = 9;
+	for (int talla = tallaIni; talla <= tallaFin; talla += incTalla)
+	{
+		/*Caso peor (T(n)= 6n+8)*/
+		tiempoPeor = 6 * talla + 8;
+		/*Caso medio (T(n)= 3n+8)*/
+		tiempoMedio = 3 * talla + 8;
+		/*Caso mejor (T(n)= 8)*/
+		tiempoMejor = 8;
 		/*escribir en el fichero*/
 		f << talla << "\t" << tiempoPeor << "\t" << tiempoMedio << "\t" << tiempoMejor << endl;
 		/*Visualizar en pantalla*/
@@ -166,8 +164,7 @@ void TestAlgoritmo::compararTeorico(int metodo1, int metodo2, int metodo3)
 	case 's':
 	case 'S': {
 		/* Ejecutar el fichero por lotes (comandos)*/
-		system("CmdCompararTeorico.gpl");
-		system("cls");
+		system("CmdCompararTeorico.gpl"); system("cls");
 		//system((gpl).c_str());
 		cout << endl << "Grafica guardada en el fichero " << nombreAlgoritmoCaso[metodo1] + nombreAlgoritmoCaso[metodo2] + nombreAlgoritmoCaso[metodo3] + "Teorico" << ".pdf" << endl;
 	}break;
@@ -195,7 +192,7 @@ void TestAlgoritmo::costeCasoEmpirico(int numerocaso)
 	system("cls");
 	cout << endl << "Busqueda Secuencial" << nombreAlgoritmoCaso[numerocaso] + " Empírico";
 	cout << "Tiempos de ejecucion " << endl << endl;
-	cout << "\tTalla\t\tTiempo (micro segundos)" << endl << endl;
+	cout << "\tTalla\t\tTiempo (milisegundos)" << endl << endl;
 
 	for (int talla = tallaIni; talla <= tallaFin; talla += incTalla) {
 		ConjuntoInt* conjunto = new ConjuntoInt(talla);
@@ -208,7 +205,7 @@ void TestAlgoritmo::costeCasoEmpirico(int numerocaso)
 			QueryPerformanceCounter(&t_fin);
 			segundos = time.performancecounter_diff(&t_fin, &t_ini);
 			// Pasamos a milisegundos
-			tiempo = segundos * 1000;
+			tiempo = segundos * 1000.0;
 			break;
 		case SECUENCIALMEDIO: /*Caso medio (T(n)= 3n+8)*/
 			for (int i = 0; i < NUMREPETICIONES; i++) {
@@ -221,7 +218,7 @@ void TestAlgoritmo::costeCasoEmpirico(int numerocaso)
 				conjunto->vaciar();
 			}
 			// Pasamos a milisegundos
-			tiempo = (tiempo/NUMREPETICIONES) * 1000;
+			tiempo = (tiempo/NUMREPETICIONES) * 1000.0;
 			break;
 		case SECUENCIALMEJOR: /*Caso mejor (T(n)= 8)*/
 			conjunto->GeneraVector(talla);
@@ -230,7 +227,7 @@ void TestAlgoritmo::costeCasoEmpirico(int numerocaso)
 			QueryPerformanceCounter(&t_fin);
 			segundos = time.performancecounter_diff(&t_fin, &t_ini);
 			// Pasamos a milisegundos
-			tiempo = segundos * 1000;
+			tiempo = segundos * 1000.0;
 			break;
 		}
 		delete conjunto;
@@ -292,7 +289,7 @@ void TestAlgoritmo::compararEmpirico(int metodo1, int metodo2, int metodo3)
 	cout << endl << "Busqueda Secuencial" << " Empirico";
 	cout << ". Tiempos de ejecucion " << endl << endl;
 	cout << endl;;
-	cout << "\tTalla\t\tTiempo (ms)" << endl << endl;
+	cout << "\tTalla\t\tTiempo (milisegundos)" << endl << endl;
 
 	Mtime time;
 	LARGE_INTEGER t_ini, t_fin;
@@ -308,7 +305,7 @@ void TestAlgoritmo::compararEmpirico(int metodo1, int metodo2, int metodo3)
 
 		tiempoPeor = time.performancecounter_diff(&t_fin, &t_ini);
 		// Pasamos a milisegundos
-		tiempoPeor = tiempoPeor * 1000;
+		tiempoPeor = tiempoPeor * 1000.0;
 
 		/* Caso medio(T(n) = (7 / 2)n + 9) */
 		tiempoMedio = 0;
@@ -322,7 +319,7 @@ void TestAlgoritmo::compararEmpirico(int metodo1, int metodo2, int metodo3)
 
 		tiempoMedio = tiempoMedio / NUMREPETICIONES;
 		// Pasamos a milisegundos
-		tiempoMedio = tiempoMedio * 1000;
+		tiempoMedio = tiempoMedio * 1000.0;
 
 		/* Caso mejor(T(n) = 9) */
 		QueryPerformanceCounter(&t_ini);
@@ -331,7 +328,7 @@ void TestAlgoritmo::compararEmpirico(int metodo1, int metodo2, int metodo3)
 
 		tiempoMejor = time.performancecounter_diff(&t_fin, &t_ini);
 		// Pasamos a milisegundos
-		tiempoMejor = tiempoMejor * 1000;
+		tiempoMejor = tiempoMejor * 1000.0;
 
 		f << talla << "\t" << tiempoPeor << "\t" << tiempoMedio << "\t" << tiempoMejor << endl;
 		cout << "\t" << talla << "\t\t" << setw(10) << setprecision(2) << (double)tiempoPeor << " \t" << setw(10) << setprecision(2)

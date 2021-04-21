@@ -193,7 +193,8 @@ bool TAlmacen::EliminarProducto(int pPos) {
         FicheProductos.read((char*) &prodEliminar, sizeof(TProducto));
         if (!FicheProductos.fail()) {
             TProducto prodActual;
-            if (pPos < NProduc-1) { // Si el producto esta en la ultima posicion no ejecutamos el bucle ya que se queda como basura
+            NProduc--;
+            if (pPos < NProduc) { // Si el producto esta en la ultima posicion no ejecutamos el bucle ya que se queda como basura
                 for (int i = pPos; i < NProduc; i++) {
                     // Sustituimos el producto que se quiere eliminar por el que esta justo despues de este
                     FicheProductos.seekg(sizeof(int)+ 2*sizeof(Cadena) + (i + 1)*sizeof(TProducto), ios::beg);
@@ -203,7 +204,6 @@ bool TAlmacen::EliminarProducto(int pPos) {
                 }
             }
             // Actualizamos el valor de productos
-            NProduc--;
             FicheProductos.seekp(0, ios::beg);
             FicheProductos.write((char*) &NProduc, sizeof(int));
             resultado = true;
