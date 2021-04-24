@@ -171,9 +171,8 @@ bool TAlmacen::ActualizarProducto(int pPos, TProducto pProduc) {
         TProducto aux;
         FicheProductos.seekg(sizeof(int) + 2*sizeof(Cadena) + pPos*sizeof(TProducto), ios::beg);
         FicheProductos.read((char*) &aux, sizeof(TProducto));
-        // DUDA como compruebo que la posicion sea correcta
         // Si la posicion es incorrecta estos valores seran valores basuara
-        if (aux.Precio > 0 && aux.Cantidad > 0) {
+        if (aux.Precio > 0 && aux.Cantidad >= 0) {
             FicheProductos.seekp(sizeof(int) + 2*sizeof(Cadena) + pPos*sizeof(TProducto), ios::beg);
             FicheProductos.write((char*) &pProduc, sizeof(TProducto));
             resultado = true;
@@ -191,22 +190,25 @@ bool TAlmacen::EliminarProducto(int pPos) {
         TProducto prodEliminar;
         FicheProductos.seekg(sizeof(int) + 2*sizeof(Cadena) + pPos*sizeof(TProducto), ios::beg);
         FicheProductos.read((char*) &prodEliminar, sizeof(TProducto));
-        if (!FicheProductos.fail()) {
-            TProducto prodActual;
-            NProduc--;
-            if (pPos < NProduc) { // Si el producto esta en la ultima posicion no ejecutamos el bucle ya que se queda como basura
-                for (int i = pPos; i < NProduc; i++) {
-                    // Sustituimos el producto que se quiere eliminar por el que esta justo despues de este
-                    FicheProductos.seekg(sizeof(int)+ 2*sizeof(Cadena) + (i + 1)*sizeof(TProducto), ios::beg);
-                    FicheProductos.read((char*) &prodActual, sizeof(TProducto)); // leemos el siguiente producto
-                    FicheProductos.seekp(sizeof(int)+ 2*sizeof(Cadena) + i*sizeof(TProducto), ios::beg); // escritura
-                    FicheProductos.write((char*) &prodActual, sizeof(TProducto));
+        // Si la posicion es incorrecta esos valores seran basura
+        if (prodEliminar.Cantidad > 0 && prodEliminar.Precio > 0) {
+            if (!FicheProductos.fail()) {
+                TProducto prodActual;
+                NProduc--;
+                if (pPos < NProduc) { // Si el producto esta en la ultima posicion no ejecutamos el bucle ya que se queda como basura
+                    for (int i = pPos; i < NProduc; i++) {
+                        // Sustituimos el producto que se quiere eliminar por el que esta justo despues de este
+                        FicheProductos.seekg(sizeof(int)+ 2*sizeof(Cadena) + (i + 1)*sizeof(TProducto), ios::beg);
+                        FicheProductos.read((char*) &prodActual, sizeof(TProducto)); // leemos el siguiente producto
+                        FicheProductos.seekp(sizeof(int)+ 2*sizeof(Cadena) + i*sizeof(TProducto), ios::beg); // escritura
+                        FicheProductos.write((char*) &prodActual, sizeof(TProducto));
+                    }
                 }
+                // Actualizamos el valor de productos
+                FicheProductos.seekp(0, ios::beg);
+                FicheProductos.write((char*) &NProduc, sizeof(int));
+                resultado = true;
             }
-            // Actualizamos el valor de productos
-            FicheProductos.seekp(0, ios::beg);
-            FicheProductos.write((char*) &NProduc, sizeof(int));
-            resultado = true;
         }
     }
     return resultado;

@@ -8,10 +8,8 @@ void TTienda::OrdenarProductos() { // Ordenacion de mayor a menor
     for (int i = 0; i < NEstan; i++) {
         int max_index = i;
         for (int j = i+1; j < NEstan; j++) {
-            if (strcmp(Estantes[i].CodProd, Estantes[j].CodProd) == 0) {
-                if (Estantes[i].Posicion < Estantes[j].Posicion) {
-                    max_index = j;
-                }
+            if (strcmp(Estantes[i].CodProd, Estantes[j].CodProd) == 0 && Estantes[i].Posicion < Estantes[j].Posicion) {
+                max_index = j;
             } else if (strcmp(Estantes[i].CodProd, Estantes[j].CodProd) < 0) {
                 max_index = i;
             } else {
@@ -91,7 +89,6 @@ bool TTienda::AbrirTienda(Cadena pNomFiche) {
     if (!fichero.fail()) {
         // Leemos el tamaño del archivo
         strcpy(NomFiche, pNomFiche);
-
         fichero.read((char*) Nombre, sizeof(Cadena));
         fichero.read((char*) Direccion, sizeof(Cadena));
         fichero.seekg(0, ios::end);
@@ -99,6 +96,8 @@ bool TTienda::AbrirTienda(Cadena pNomFiche) {
         NEstan = ((int)fichero.tellg() / (int)sizeof(TEstante))-1; // = 98
         Tamano = NEstan;
         // Cargamos los estantes
+        // Si ya se han cargado datos los borramos
+        if (Estantes != NULL) delete [] Estantes;
         Estantes = new TEstante[Tamano];
         fichero.seekg(sizeof(Cadena)*2, ios::beg);
         fichero.read((char*) Estantes, sizeof(TEstante)*NEstan);
@@ -175,6 +174,7 @@ bool TTienda::AnadirEstante(TEstante pEstante) {
             for (int i = 0; i < NEstan; i++) {
                 aux[i] = Estantes[i];
             }
+            delete [] Estantes;
             Estantes = aux;
             delete [] aux;
         }
@@ -189,7 +189,6 @@ bool TTienda::AnadirEstante(TEstante pEstante) {
 // Dado la posición de un estante lo borra desplazando el resto de estantes una posición hacia abajo.
 // Se debe verificar previamente que la posición sea correcta. Devuelve true si se ha eliminado el
 // estante.
-// TODO: condicional de reducir memoria
 bool TTienda::EliminarEstante(int pPos) {
     bool resultado = false;
     if (pPos >= 0 && pPos < NEstan) {
@@ -237,6 +236,7 @@ int TTienda::ReponerEstante(int pPos, TProducto &pProduc) {
     int resultado = 0;
     // Comprobamos que la posicion sea correcta
     if (strcmp(Estantes[pPos].CodProd, pProduc.CodProd) == 0) {
+        //
         if (Estantes[pPos].Capacidad <= Estantes[pPos].NoProductos+pProduc.Cantidad) {
             pProduc.Cantidad -= Estantes[pPos].Capacidad - Estantes[pPos].NoProductos;
             Estantes[pPos].NoProductos = Estantes[pPos].Capacidad;
