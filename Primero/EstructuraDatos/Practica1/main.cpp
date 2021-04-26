@@ -113,12 +113,12 @@ int MenuAlmacen(Cadena NombAlmacen) {
         cout << "6.- Actualizar un producto.\n";
         cout << "7.- Consultar un producto.\n";
         cout << "8.- Eliminar un producto.\n";
-        //cout << "9.- Rebajas de productos.\n";
+        cout << "9.- Rebajas de productos.\n";
         cout << "0.- Salir.\n";
         if (opc == 0) cout << "\n\tSeleccione una opción: ";
         else cout << "\n\tOpción incorrecta. Seleccione otra opción: ";
         cin >> opc;
-    } while(opc < 0 || opc > 8);
+    } while(opc < 0 || opc > 9);
     cout << endl;
     return opc;
 }
@@ -151,6 +151,9 @@ void GestionAlmacen(Cadena nombre) {
     TProducto prod;
     int opc = 0;
     int pos = 0;
+
+    /// MODIFICACION
+    float descuento, preciomin, precioBAK;
     do {
         opc = MenuAlmacen(nombre);
         switch (opc) {
@@ -348,8 +351,8 @@ void GestionAlmacen(Cadena nombre) {
                 } else {
                     cout << "Producto encontrado.\n";
                     cout << "CODIGO\tNOMBRE\t\t\t\t\tPRECIO\tCANTIDAD\tFECHA CADUCIDAD\tDESCRIPCION\n";
-                    MostrarProducto(almacen.ObtenerProducto(pos)); cout << endl;
-                    cout << "\t" << almacen.ObtenerProducto(pos).Descripcion << endl;
+                    MostrarProducto(almacen.ObtenerProducto(pos));
+                    cout << endl;
                 }
             } else {
                 cout << "No hay almacenes abiertos.\n";
@@ -370,6 +373,47 @@ void GestionAlmacen(Cadena nombre) {
                     } else {
                         cout << "ERROR! No se ha podido eliminar el producto.\n";
                     }
+                }
+            } else {
+                cout << "No hay almacenes abiertos.\n";
+            }
+            pausa();
+            break;
+        case 9: /// Rebajas de productos
+            if (almacen.EstaAbierto()) {
+                if (almacen.NProductos() > 0) {
+                    cout << "Indique que porcentaje de descuento desea hacer (0-100%): ";
+                    cin >> descuento;
+                    while (descuento <= 0 || descuento >= 100) {
+                        cout << "Valor inválido. Indique que porcentaje de descuento desea hacer (0-100%): ";
+                        cin >> descuento;
+                    }
+                    cout << "Indique el precio mínimo que debe tener cada producto para aplicar el descuento: ";
+                    cin >> preciomin;
+                    while (preciomin <= 0) {
+                        cout << "Valor inválido. Indique el precio mínimo que debe tener cada producto para aplicar el descuento: ";
+                        cin >> preciomin;
+                    }
+                    // Pasamos el descuento a decimal
+                    descuento = (float)descuento/100;
+
+                    // Mostramos la cabecera
+                    cout << "CODIGO\tNOMBRE\t\t\t\t\tPRECIO SIN DESCUENTO\tPRECIO CON DESCUENTO\n";
+                    for (int i = 0; i < almacen.NProductos(); i++) {
+                        prod = almacen.ObtenerProducto(i);
+                        if (prod.Precio >= preciomin) {
+                            precioBAK = prod.Precio;
+                            // Aplicamos el descuento
+                            prod.Precio = prod.Precio - (prod.Precio*descuento);
+                            if (almacen.ActualizarProducto(i, prod)) {
+                                cout << prod.CodProd << "\t" << prod.NombreProd << "\t" << precioBAK << "\t" << prod.Precio << endl;
+                            } else {
+                                cout << "ERROR! No se ha podido aplicar el descuento.\n";
+                            }
+                        }
+                    }
+                } else {
+                    cout << "No hay productos en el almacén.\n";
                 }
             } else {
                 cout << "No hay almacenes abiertos.\n";
@@ -596,14 +640,33 @@ void GestionTienda(Cadena nombre) {
         case 8: /// Consultar un estante
             if (tienda.EstaAbierta()) {
                 if (almacen.EstaAbierto()) {
-                    cout << "Indique el código del estante a consultar: ";
-                    cin >> estante.CodEstante;
-                    pos = tienda.BuscarEstante(estante.CodEstante);
-                    if (pos == -1) {
-                        cout << "ERROR! No se ha encontrado un estante con el código indicado.\n";
+                    cout << "¿Como desea consultar por código del estante o código del producto?\n";
+                    cout << "1.- Código del estante.\n2.- Código del producto.\n";
+                    cout << "\n\tSeleccione una opción: ";
+                    cin >> opc;
+                    while (opc < 1 || opc > 2) {
+                        cout << "\tOpción incorrecta. Seleccione una opción: ";
+                        cin >> opc;
+                    }
+
+                    if (opc == 1) {
+                        cout << "Indique el código del estante a consultar: ";
+                        cin >> estante.CodEstante;
                     } else {
-                        cout << "CODIGO POSICION CAPACIDAD CODIGO PRODUCTO NOMBRE\t\t\tPRECIO\tNoPRODUCTOS\tVALOR TOTAL\n";
-                        MostrarEstante(tienda.ObtenerEstante(pos));
+                        cout << "Indique el código del producto a consultar: ";
+                        pedirCadena(estante.CodProd);
+                        estante.CodEstante = tienda.BuscarProducto(estante.CodProd);
+                    }
+                    if (estante.CodEstante != -1) {
+                        pos = tienda.BuscarEstante(estante.CodEstante);
+                        if (pos == -1) {
+                            cout << "ERROR! No se ha encontrado un estante con el código indicado.\n";
+                        } else {
+                            cout << "CODIGO POSICION CAPACIDAD CODIGO PRODUCTO NOMBRE\t\t\tPRECIO\tNoPRODUCTOS\tVALOR TOTAL\n";
+                            MostrarEstante(tienda.ObtenerEstante(pos));
+                        }
+                    } else {
+                        cout << "ERROR! No se ha encontrado un estante con el código de producto indicado.\n";
                     }
                 } else {
                     cout << "No hay un almacén abierto.\n";
