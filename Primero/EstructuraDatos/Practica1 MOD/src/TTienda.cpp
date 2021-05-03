@@ -249,3 +249,16 @@ int TTienda::ReponerEstante(int pPos, TProducto &pProduc) {
     }
     return resultado;
 }
+
+/// MODIFICACION
+
+// Devuelve el código del estante cuyo código de producto coincide con el pasado por el parámetro pCodProd.
+// En caso de no existir ningún estanteque contenga el producto, el método devolverá -1
+int TTienda::BuscarProducto(Cadena pCodProd) {
+    int i = 0;
+    // Comparamos si es distinto el codigo del producto del que ahi en el estante actual
+    while (i < NEstan && strcmp(Estantes[i].CodProd, pCodProd) != 0) i++;
+    if (i == NEstan) i = -1; else i = Estantes[i].CodEstante;
+    //i = (i == NEstan) ? -1 : Estantes[i].CodEstante;
+    return i;
+}

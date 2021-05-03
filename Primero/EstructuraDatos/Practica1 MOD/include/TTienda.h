@@ -63,5 +63,11 @@ public:
     // 1 si se ha repuesto unidades hasta llegar a la capacidad máxima del estante.
     // 2 si no se ha completado el estante al completo.
     int ReponerEstante(int pPos, TProducto &pProduc);
+
+    /// MODIFICACION
+
+    // Devuelve el código del estante cuyo código de producto coincide con el pasado por el parámetro pCodProd.
+    // En caso de no existir ningún estanteque contenga el producto, el método devolverá -1
+    int BuscarProducto(Cadena pCodProd);
 };
 #endif // TTIENDA_H
