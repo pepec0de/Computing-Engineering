@@ -48,6 +48,10 @@ void TTienda::DatosTienda(Cadena pNombTienda, Cadena pDirTienda) {
     strcpy(pNombTienda, Nombre);
     strcpy(pDirTienda, Direccion);
 }
+//Devuelve el atributo del nombre del fichero de la tienda
+void TTienda::NombreFicheroTienda(Cadena NomF) {
+    strcpy(NomF, NomFiche);
+}
 
 // Crea un fichero binario vacío con el nombre pasado por parámetro e inicializa los atributos nombre y
 // dirección mediante los parámetros y a continuación lo cerrará. Devolverá true si ha podido crear el

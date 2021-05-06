@@ -1,78 +1,121 @@
-#include "TADLista.h"
+# include "../include/TADLista.h"
 
-lista::lista() {
-	n = 0;
+Lista::Lista() {
+	elementos = new TPedido[INCREMENTO];
+	if(elementos != NULL) {
+		Tama = INCREMENTO;
+		n = 0;
+	} else {
+		Tama = n = -1;
+	}
 }
-lista::lista(int e) {
-	n = 1;
-	elementos[0] = e;
-}
-void lista::insertar(int i, int e) {
-	int postabla;
-	postabla = i - 1;
-	if(n < MAX) {
-		for(int pos = n - 1; pos >= postabla; pos--)
-			elementos[pos + 1] = elementos[pos]; //Desplazamiento
 
-		elementos[postabla] = e;
+Lista::~Lista() {
+	if(elementos != NULL)
+		delete [] elementos;
+	elementos = NULL;
+	Tama = n = 0;
+}
+
+void Lista::insertar(int i, TPedido e) {
+	int pos;
+	if(n == Tama) {
+		TPedido *NuevaZona = new TPedido[Tama + INCREMENTO];
+		if(NuevaZona != NULL) {
+			for(int i = 0; i < n; i++)
+				NuevaZona[i] = elementos[i];
+			Tama += INCREMENTO;
+			delete [] elementos;
+			elementos = NuevaZona;
+		}
+	}
+	if(n < Tama) {
+		for(pos = n - 1; pos >= i - 1; pos--)
+			elementos[pos + 1] = elementos[pos]; // Desplazamiento
+		elementos[i - 1] = e;
 		n++;
 	}
 }
-void lista::eliminar(int i) {
-	int postabla;
-	postabla = i - 1;
-	while(postabla < n - 1) {
-		elementos[postabla] = elementos[postabla + 1];
-//Desplazamiento
-		postabla++;
-	}
-	n--;
-}
-void lista::modificar(int i, int e) {
+
+void Lista::modificar(int i, TPedido e) {
 	elementos[i - 1] = e;
 }
-int lista::observar(int i) {
+
+TPedido Lista::observar(int i) {
 	return(elementos[i - 1]);
 }
-bool lista::esvacia() {
+
+bool Lista::esvacia() {
 	return (n == 0);
 }
-int lista::posicion(int e) {
-	int i = 0;
-	while((elementos[i] != e) && (i < n))
+
+void Lista::eliminar(int i) {
+	while(i < n) {
+		elementos[i - 1] = elementos[i]; // Desplazamiento
 		i++;
-	if(elementos[i] == e) return(i + 1);
-	else return (-1);
+	}
+	n--;
+	if(Tama - n >= INCREMENTO && Tama > INCREMENTO) {
+		TPedido *NuevaZona = new TPedido[Tama - INCREMENTO];
+		if(NuevaZona != NULL) {
+			Tama -= INCREMENTO;
+			for(int i = 0; i < Tama; i++)
+				NuevaZona[i] = elementos[i];
+			delete [] elementos;
+			elementos = NuevaZona;
+		};
+	};
 }
-int lista::longitud() {
+
+int Lista::posicion(TPedido e) {
+	int i = 0;
+	while( !(strcmp(elementos[i].CodProd, e.CodProd) && strcmp(elementos[i].Nomtienda, e.Nomtienda) && elementos[i].CantidadPed == e.CantidadPed) && i < n) i++;
+	return (i == n ? -1 : i + 1);
+}
+
+int Lista::longitud() {
 	return n;
 }
-void lista::anadirIzq(int e) {
+
+Lista::Lista(TPedido e) {
+	elementos = new TPedido[INCREMENTO];
+	if(elementos != NULL) {
+		Tama = INCREMENTO;
+		n = 1;
+		elementos[0] = e;
+	} else {
+		Tama = n = -1;
+	}
+}
+
+void Lista::anadirIzq(TPedido e) {
 	insertar(1, e);
 }
-void lista::anadirDch(int e) {
+
+void Lista::anadirDch(TPedido e) {
 	insertar(n + 1, e);
 }
 
-void lista::eliminarIzq() {
-	for(int i = 0; i < n - 1; i++)
-		elementos[i] = elementos[i + 1];
-	n--;
+void Lista::eliminarIzq() {
+	eliminar(1);
 }
-void lista::eliminarDch() {
-	n--;
+
+void Lista::eliminarDch() {
+	eliminar(n);
 }
-int lista::observarIzq() {
+
+TPedido Lista::observarIzq() {
 	return(observar(1));
 }
-int lista::observarDch() {
+TPedido Lista::observarDch() {
 	return(observar(n));
 }
-void lista::concatenar(lista l) {
+
+void Lista::concatenar(Lista l) {
 	int lon = l.longitud();
-	for(int i = 1; i <= lon; i++)
-		insertar(n + 1, l.observar(i));
+	for(int i = 1; i <= lon; i++) insertar(n + 1, l.observar(i));
 }
-bool lista::pertenece(int e) {
-	return (posicion(e) == -1 ? false : true);
+
+bool Lista::pertenece(TPedido e) {
+	return (posicion(e) != -1);
 }
