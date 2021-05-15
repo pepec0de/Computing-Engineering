@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1620035198 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\main.cpp
+1621082137 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\main.cpp
 	<iostream>
 	<cstdlib>
 	"include/TAlmacen.h"
@@ -7,20 +7,34 @@
 	<locale.h>
 	<conio.h>
 
-1619291525 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\src\talmacen.cpp
+1621082478 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\src\talmacen.cpp
 	"../include/TAlmacen.h"
 
-1617657077 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\include\talmacen.h
+1620121671 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\include\talmacen.h
 	"TTipos.h"
+	"TADCola.h"
+	"TADLista.h"
 
-1616884596 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\include\ttipos.h
+1620039172 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\include\ttipos.h
 	<string.h>
 	<iostream>
 	<fstream>
 
-1620035021 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\src\ttienda.cpp
+1620118910 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\src\ttienda.cpp
 	"../include/TTienda.h"
 
-1620035028 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\include\ttienda.h
+1620118564 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\include\ttienda.h
+	"TTipos.h"
+
+1620294094 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\src\tadcola.cpp
+	"../include/TADCola.h"
+
+1620123978 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\include\tadcola.h
+	"TTipos.h"
+
+1620293313 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\src\tadlista.cpp
+	"../include/TADLista.h"
+
+1620292150 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\include\tadlista.h
 	"TTipos.h"
 

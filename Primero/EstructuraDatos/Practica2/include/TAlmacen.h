@@ -14,8 +14,8 @@ class TAlmacen {
     int NProduc; //Número de productos que hay en el almacén. Si el almacén está cerrado
     //deberá tener el valor -1.
 
-    cola Pedidos; //Estructura de tipo cola que almacena los pedidos
-    lista Envios; //Estructura de tipo lista que almacena los pedidos a enviar
+    Cola Pedidos; //Estructura de tipo cola que almacena los pedidos
+    Lista Envios; //Estructura de tipo lista que almacena los pedidos a enviar
 
 public:
     TAlmacen(); //Constructor que debe inicializar los atributos de la clase.
@@ -54,6 +54,8 @@ public:
     //Dado la posición de un producto en el fichero lo borra. Devuelve true si se ha podido borrar. Se
     //debe verificar que la posición sea correcta.
     bool EliminarProducto(int pPos);
+
+    /// ADD PRACTICA 2
     //Método que carga la lista de envíos a partir del nombre del fichero que se le pasa por parámetro.
     //El fichero tiene una sucesión de elementos de tipo TPedido
     bool CargarListaEnvios(Cadena Nomf);
@@ -61,7 +63,7 @@ public:
     //El fichero tiene una sucesión de elementos de tipo TPedido
     bool CargarColaPedidos(Cadena Nomf);
     //Añadirá un nuevo pedido a la cola de pedidos
-    void AñadirPedido (TPedido p);
+    void AnadirPedido (TPedido p);
     //Método que atiende los pedidos del producto en cuestión pendientes de suministrar con la cantidad
     //comprada por el almacén, los incorpora a la lista de Envíos, eliminando de la cola de pedidos los
     //pedidos atendidos.

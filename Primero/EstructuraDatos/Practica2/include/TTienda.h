@@ -23,6 +23,10 @@ public:
     ~TTienda(); //Destructor que cerrará la tienda en caso de que el usuario no lo haya hecho.
     //Devuelve los atributos nombre y dirección por parámetro.
     void DatosTienda(Cadena pNombTienda, Cadena pDirTienda);
+
+    //Devuelve el atributo del nombre del fichero de la tienda
+    void NombreFicheroTienda(Cadena NomF);
+
     //Crea un fichero binario vacío con el nombre pasado por parámetro e inicializa los atributos nombre y
     //dirección mediante los parámetros y a continuación lo cerrará. Devolverá true si ha podido crear el
     //fichero.
@@ -63,5 +67,7 @@ public:
     // 1 si se ha repuesto unidades hasta llegar a la capacidad máxima del estante.
     // 2 si no se ha completado el estante al completo.
     int ReponerEstante(int pPos, TProducto &pProduc);
+
+
 };
 #endif // TTIENDA_H

@@ -1,32 +1,33 @@
 #ifndef TADLISTA_H
 #define TADLISTA_H
 
-# define MAX 30
-# include <iostream>
-using namespace std;
+#define INCREMENTO 4
+#include "TTipos.h"
 
-class lista {
-    int elementos[MAX];//elementos de la lista
+class Lista {
+    TPedido *elementos; //elementos de la lista
     int n;//nº de elementos que tiene la lista
+    int Tama;  // Capacidad de la tabla
 
 public:
-    lista();
-    lista(int e);
+    Lista();
+    ~Lista();
+    Lista(TPedido e);
     bool esvacia();
     int longitud();
-    void anadirIzq(int e);
-    void anadirDch(int e);
+    void anadirIzq(TPedido e);
+    void anadirDch(TPedido e);
     void eliminarIzq();
     void eliminarDch();
-    int observarIzq();
-    int observarDch();
-    void concatenar(lista l);
-    bool pertenece(int e);
-    void insertar(int i, int e);
+    TPedido observarIzq();
+    TPedido observarDch();
+    void concatenar(Lista l);
+    bool pertenece(TPedido e);
+    void insertar(int i, TPedido e);
     void eliminar(int i);
-    void modificar(int i, int e);
-    int observar(int i);
-    int posicion(int e);
+    void modificar(int i, TPedido e);
+    TPedido observar(int i);
+    int posicion(TPedido e);
 };
 
 #endif // TADLISTA_H

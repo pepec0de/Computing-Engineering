@@ -1,18 +1,22 @@
 #ifndef TADCOLA_H
 #define TADCOLA_H
 
-# define MAX 30
-# include <iostream>
-#include <string>
+#include "TTipos.h"
+#define INCREMENTO 4
+
 using namespace std;
-class cola {
-	int elementos[MAX]; //elementos de la cola
-	int inicio, fin;//principio y fin de la cola
+class Cola {
+	TPedido *elementos; //elementos de la cola
+	int inicio, fin; //principio y fin de la cola
+	int Tama; //Capacidad de la tabla
+	int ne; //No. de elementos
+
 public:
-	cola(); // constructor de la clase
-	void encolar(int e);
+	Cola(); // constructor de la clase
+	~Cola();
+	void encolar(TPedido e);
 	void desencolar();
-	int primero();
+	TPedido primero();
 	bool esvacia();
 	int longitud() ;
 };
