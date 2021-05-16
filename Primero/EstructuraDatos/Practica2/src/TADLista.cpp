@@ -69,6 +69,7 @@ void Lista::eliminar(int i) {
 
 int Lista::posicion(TPedido e) {
 	int i = 0;
+	// TODO: DUDA Comparar de otra manera?
 	while( !(strcmp(elementos[i].CodProd, e.CodProd) == 0 && strcmp(elementos[i].Nomtienda, e.Nomtienda) == 0 && elementos[i].CantidadPed == e.CantidadPed) && i < n) i++;
 	return (i == n ? -1 : i + 1);
 }
