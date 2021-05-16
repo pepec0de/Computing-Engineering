@@ -83,6 +83,7 @@ void GestionPedidos(TAlmacen& almacen) {
     Cadena nFichero;
     TPedido pedido;
     TProducto prod;
+    int pos;
     do {
         opc = MenuPedidos();
         switch (opc) {
@@ -117,7 +118,8 @@ void GestionPedidos(TAlmacen& almacen) {
                     cin >> pedido.CantidadPed;
 
                     // TODO: DUDA: Esto esta bien?
-                    prod = almacen.ObtenerProducto(almacen.BuscarProducto(pedido.CodProd));
+                    pos = almacen.BuscarProducto(pedido.CodProd);
+                    prod = almacen.ObtenerProducto(pos);
                     // Comprobamos que el no productos pedido sea menor o igual al que hay en el almacen
                     if (prod.Cantidad >= pedido.CantidadPed) {
                         prod.Cantidad -= pedido.CantidadPed;
@@ -127,7 +129,12 @@ void GestionPedidos(TAlmacen& almacen) {
                         prod.Cantidad = 0;
                         cout << "No se ha podido satisfacer su demanda. Se ha establecido de cantidad pedida: " << pedido.CantidadPed << " productos.\n";
                     }
-                    almacen.AnadirPedido(pedido);
+                    if (almacen.ActualizarProducto(pos, prod)) {
+                        almacen.AnadirPedido(pedido);
+                        cout << "Se ha añadido el pedido con éxito.\n";
+                    } else {
+                        cout << "No se ha podido añadir el pedido.\n";
+                    }
                 } else {
                     cout << "No hay productos en el almacén.\n";
                 }
@@ -147,7 +154,7 @@ void GestionPedidos(TAlmacen& almacen) {
 
                 cout << "Indique la cantidad a comprar: ";
                 cin >> pedido.CantidadPed;
-                while (pedido.CantidadPed <= 0) {
+                while (pedido.CantidadPed < 0) {
                     cout << "Valor inválido. Indique la cantidad a comprar: ";
                     cin >> pedido.CantidadPed;
                 }

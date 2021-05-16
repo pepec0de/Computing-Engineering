@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1621125362 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\main.cpp
+1621164932 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\main.cpp
 	<iostream>
 	<cstdlib>
 	"include/TAlmacen.h"
@@ -7,7 +7,7 @@
 	<locale.h>
 	<conio.h>
 
-1621124981 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\src\talmacen.cpp
+1621167098 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\src\talmacen.cpp
 	"../include/TAlmacen.h"
 
 1620121671 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\include\talmacen.h
@@ -32,7 +32,7 @@
 1620123978 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\include\tadcola.h
 	"TTipos.h"
 
-1621107731 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\src\tadlista.cpp
+1621125614 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\src\tadlista.cpp
 	"../include/TADLista.h"
 
 1620292150 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\include\tadlista.h
