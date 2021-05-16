@@ -274,17 +274,69 @@ void TAlmacen::AnadirPedido(TPedido p) {
 //la cantidad que se puede suministrar.
 //Si el producto comprado excede de la cantidad pendiente de servir en los pedidos, la cantidad
 //sobrante, entra en el Almacén.
+// TODO: DUDA Esta bien?
 bool TAlmacen::AtenderPedidos(Cadena CodProd, int cantidadcomprada) {
-	bool result = false;
-	TPedido pedido;
+	bool exito = false;
+    // Buscamos el codigo en Pedidos -> Pasamos los datos a Envios ->
+    int pos = 0;
+    Cola copiaPedidos = Pedidos;
 
-	return result;
+    // Primero comprobamos que el codigo del producto dado se encuentre en Pedidos
+    while (!copiaPedidos.esvacia() && strcmp(copiaPedidos.primero().CodProd, CodProd) != 0) {
+            copiaPedidos.desencolar();
+            pos++;
+    }
+    if (pos == Pedidos.longitud()) {
+        exito = false;
+    } else {
+        TPedido pedido = copiaPedidos.primero();
+        TPedido envio = pedido;
+        if (pedido.CantidadPed > cantidadcomprada) {
+            // Añadimos a envios
+            envio.CantidadPed = cantidadcomprada;
+            Envios.anadirDch(envio);
+
+            // Modificamos pedidos
+            pedido.CantidadPed -= cantidadcomprada;
+
+            copiaPedidos = Pedidos;
+            while (!Pedidos.esvacia()) Pedidos.desencolar();
+            for (int i = 0; i < copiaPedidos.longitud()-1; i++) {
+                if (i != pos) {
+                    Pedidos.encolar(copiaPedidos.primero());
+                } else {
+                    Pedidos.encolar(pedido);
+                }
+                copiaPedidos.desencolar();
+            }
+        } else if (pedido.CantidadPed <= cantidadcomprada) {
+            // Añadimos a envios y actualizamos producto en almacen
+            if (pedido.CantidadPed < cantidadcomprada) {
+                TProducto prod;
+                int pos = BuscarProducto(pedido.CodProd);
+                prod = ObtenerProducto(pos);
+                prod.Cantidad += cantidadcomprada-pedido.CantidadPed;
+                ActualizarProducto(pos, prod);
+            }
+            envio.CantidadPed = cantidadcomprada;
+            Envios.anadirDch(envio);
+            // Borramos el pedido de Pedidos
+            // Vaciamos pedidos
+            copiaPedidos = Pedidos;
+            while (!Pedidos.esvacia()) Pedidos.desencolar();
+            for (int i = 0; i < copiaPedidos.longitud()-1; i++) {
+                if (i != pos) Pedidos.encolar(copiaPedidos.primero());
+                copiaPedidos.desencolar();
+            }
+        }
+        exito = true;
+    }
+	return exito;
 }
 
 //Muestra el contenido completo, con todos los datos de los productos leídos del almacén, de la cola
 //si CodProd es '' o muestra los pedidos del Codprod pasado con todos sus datos del almacén.
 //pasado por parámetro
-/// REFERENCIA
 void TAlmacen::ListarPedidosCompleto(Cadena CodProd) {
     if (Pedidos.longitud() > 0) {
         TPedido pedido;
@@ -302,7 +354,7 @@ void TAlmacen::ListarPedidosCompleto(Cadena CodProd) {
                     printf("%s\t\t%-15s %d\t%s\t%5.2f  %2d %8d/%02d/%d\t%s\n", pedido.Nomtienda, pedido.CodProd, pedido.CantidadPed,
                         prod.NombreProd, prod.Precio, prod.Cantidad, prod.Caducicidad.Dia, prod.Caducicidad.Mes, prod.Caducicidad.Anyo, prod.Descripcion);
                 } else {
-                    cout << "ERROR! No se ha encontrado un producto con el código: " << pedido.CodProd << ".\n";
+                    cout << "ERROR! No se ha encontrado un producto con el codigo: " << pedido.CodProd << ".\n";
                 }
                 copiaPedidos.desencolar();
             }
@@ -320,7 +372,7 @@ void TAlmacen::ListarPedidosCompleto(Cadena CodProd) {
                     printf("%s\t\t%-15s %d\t%s\t%5.2f  %2d %8d/%02d/%d\t%s\n", pedido.Nomtienda, pedido.CodProd, pedido.CantidadPed,
                         prod.NombreProd, prod.Precio, prod.Cantidad, prod.Caducicidad.Dia, prod.Caducicidad.Mes, prod.Caducicidad.Anyo, prod.Descripcion);
                 } else {
-                    cout << "ERROR! No se ha encontrado un producto en el almacén con el código: " << pedido.CodProd << ".\n";
+                    cout << "ERROR! No se ha encontrado un producto en el almacén con el codigo: " << pedido.CodProd << ".\n";
                 }
             } else {
                 cout << "No se ha encontrado el código de producto dado en los pedidos.\n";
@@ -334,7 +386,7 @@ void TAlmacen::ListarPedidosCompleto(Cadena CodProd) {
 //Muestra la cantidad pendiente de cada tipo de producto si CodProd es '' o del producto concreto
 //que se pase por parámetro
 
-/// TODO: DUDA Hay que calcular la cantidad pendiente que falta en el almacen para satisfacer la demanda
+// TODO: DUDA Hay que calcular la cantidad pendiente que falta en el almacen para satisfacer la demanda
 void TAlmacen::ListarCantidadesPendientes(Cadena CodProd) {
 	Cola copiaPedidos = Pedidos;
 	if(strcmp(CodProd, "") == 0) {
@@ -345,13 +397,13 @@ void TAlmacen::ListarCantidadesPendientes(Cadena CodProd) {
 			copiaPedidos.desencolar();
 		}
 	} else {
-		bool encontrado = false;
+	    bool encontrado = false;
 		while(!copiaPedidos.esvacia() && !encontrado) {
 			if(strcmp(copiaPedidos.primero().CodProd, CodProd) == 0) {
 				cout << "CODIGO PRODUCTO CANTIDAD PEDIDA NOMBRE DE LA TIENDA\n";
 				cout << copiaPedidos.primero().CodProd << "\t" << copiaPedidos.primero().CantidadPed
 					 << "\t" << copiaPedidos.primero().Nomtienda << endl;
-				encontrado = true;
+                // TODO: DUDA : se puede? -encontrado : break;
 			} else {
 				copiaPedidos.desencolar();
 			}
@@ -364,7 +416,7 @@ void TAlmacen::ListarCantidadesPendientes(Cadena CodProd) {
 bool TAlmacen::InsertarEnvios(TPedido p) {
     // TODO : Comprobar funcion
 	bool encontrado = false;
-	for (int i = 0; i < Envios.longitud() && !encontrado; i++) {
+	for (int i = 1; i <= Envios.longitud() && !encontrado; i++) {
         if (strcmp(Envios.observar(i).Nomtienda, p.Nomtienda) == 1) {
             // p.Nomtienda es alfabeticamente mayor que primero().Nomtienda
             Envios.insertar(i, p);
@@ -378,7 +430,12 @@ bool TAlmacen::InsertarEnvios(TPedido p) {
 //parámetro mostrando por pantalla los envíos que van en el camión
 bool TAlmacen::SalidaCamionTienda(Cadena NomTienda) {
 	bool result = false;
-
+    ListarListaEnvios(NomTienda);
+    for (int i = 1; i <= Envios.longitud(); i++) {
+        if (strcmp(Envios.observar(i).Nomtienda, NomTienda) == 0) Envios.eliminar(i);
+    }
+    // TODO: DUDA: no entiendo como manejar el bool aqui
+    result = true;
 	return result;
 }
 

@@ -82,7 +82,6 @@ void GestionPedidos(TAlmacen& almacen) {
     int opc = 0;
     Cadena nFichero;
     TPedido pedido;
-    bool error = false;
     TProducto prod;
     do {
         opc = MenuPedidos();
@@ -109,28 +108,16 @@ void GestionPedidos(TAlmacen& almacen) {
 
                     cout << "Indique el código del producto: ";
                     pedirCadena(pedido.CodProd);
-                    pos = almacen.BuscarProducto(pedido.CodProd);
-                    if (pos == -1) {
-                        error = true;
-                    } else if (almacen.ObtenerProducto(pos).Cantidad == 0) {
-                        error = true;
-                    }
-                    while (error) {
-                        error = false;
-                        cout << "Producto no encontrado (o no hay stock) en el almacén. Indique otro código de producto: ";
+                    while (almacen.BuscarProducto(pedido.CodProd) == -1) {
+                        cout << "No se ha encontrado el código indicado en el almacén. Indique otro código de producto: ";
                         pedirCadena(pedido.CodProd);
-                        pos = almacen.BuscarProducto(pedido.CodProd);
-                        if (pos == -1) {
-                            error = true;
-                        } else if (almacen.ObtenerProducto(pos).Cantidad == 0) {
-                            error = true;
-                        }
                     }
 
                     cout << "Indique la cantidad pedida: ";
                     cin >> pedido.CantidadPed;
 
-                    prod = almacen.ObtenerProducto(pos);
+                    // TODO: DUDA: Esto esta bien?
+                    prod = almacen.ObtenerProducto(almacen.BuscarProducto(pedido.CodProd));
                     // Comprobamos que el no productos pedido sea menor o igual al que hay en el almacen
                     if (prod.Cantidad >= pedido.CantidadPed) {
                         prod.Cantidad -= pedido.CantidadPed;
@@ -150,35 +137,92 @@ void GestionPedidos(TAlmacen& almacen) {
             pausa();
             break;
         case 3: /// Atender pedidos
+            if (almacen.EstaAbierto()) {
+                cout << "Indique el código del producto a comprar: ";
+                pedirCadena(pedido.CodProd);
+                while (almacen.BuscarProducto(pedido.CodProd) == -1) {
+                    cout << "No se ha encontrado el código indicado en el almacén. Indique otro código de producto a comprar: ";
+                    pedirCadena(pedido.CodProd);
+                }
+
+                cout << "Indique la cantidad a comprar: ";
+                cin >> pedido.CantidadPed;
+                while (pedido.CantidadPed <= 0) {
+                    cout << "Valor inválido. Indique la cantidad a comprar: ";
+                    cin >> pedido.CantidadPed;
+                }
+
+                if (almacen.AtenderPedidos(pedido.CodProd, pedido.CantidadPed)) {
+                    cout << "Se han atendido los pedidos con éxito.\n";
+                } else {
+                    cout << "No se han podido atender los pedidos.\n";
+                }
+            } else {
+                cout << "No hay almacenes abiertos.\n";
+            }
             pausa();
             break;
         case 4: /// Listar pedidos completos de todos los productos
             if (almacen.EstaAbierto()) {
-                    // DUDA: if (almacen.NProductos() > 0) {
-                        almacen.ListarPedidosCompleto();
+                    // TODO: DUDA: if (almacen.NProductos() > 0) {
+                        almacen.ListarPedidosCompleto("");
             } else {
                 cout << "No hay almacenes abiertos.\n";
             }
             pausa();
             break;
         case 5: /// Listar pedidos de un producto
+            if (almacen.EstaAbierto()) {
+                cout << "Indique el código del producto a listar: ";
+                pedirCadena(pedido.CodProd);
+                while (strcmp(pedido.CodProd, "") == 0) {
+                    cout << "Indique el código del producto a listar: ";
+                    pedirCadena(pedido.CodProd);
+                }
+                almacen.ListarPedidosCompleto(pedido.CodProd);
+            } else {
+                cout << "No hay almacenes abiertos.\n";
+            }
             pausa();
             break;
         case 6: /// Listar todas las cantidades pendientes
             if (almacen.EstaAbierto()) {
-                    // DUDA: if (almacen.NProductos() > 0) {
-                        almacen.ListarCantidadesPendientes();
+                    // TODO: DUDA: if (almacen.NProductos() > 0) {
+                        almacen.ListarCantidadesPendientes("");
             } else {
                 cout << "No hay almacenes abiertos.\n";
             }
             pausa();
             break;
         case 7: /// Listar cantidades pendientes de un producto
+            if (almacen.EstaAbierto()) {
+                cout << "Indique el código del producto a listar: ";
+                pedirCadena(pedido.CodProd);
+                while (strcmp(pedido.CodProd, "") == 0) {
+                    cout << "Valor inválido. Indique el código del producto a listar: ";
+                    pedirCadena(pedido.CodProd);
+                }
+                almacen.ListarCantidadesPendientes(pedido.CodProd);
+            } else {
+                cout << "No hay almacenes abiertos.\n";
+            }
             pausa();
             break;
         case 8: /// Guardar pedidos a fichero
-            if (almacen.SalvarColaPedidos()) {
-
+            if (almacen.EstaAbierto()) {
+                cout << "Indique el nombre del fichero de los pedidos: ";
+                pedirCadena(nFichero);
+                while (strcmp(nFichero, "") == 0) {
+                    cout << "Valor inválido. Indique el nombre del fichero de los pedidos: ";
+                    pedirCadena(nFichero);
+                }
+                if (almacen.SalvarColaPedidos(nFichero)) {
+                    cout << "Se han guardado los pedidos en el fichero: " << nFichero << ".\n";
+                } else {
+                    cout << "No se ha podido guardar el fichero.\n";
+                }
+            } else {
+                cout << "No hay almacenes abiertos.\n";
             }
             pausa();
             break;
@@ -206,27 +250,106 @@ int MenuEnvios() {
     return opc;
 }
 
-void GestionEnvios() {
+void GestionEnvios(TAlmacen& almacen) {
     int opc = 0;
+    Cadena nFichero;
+    TPedido pedido;
     do {
         opc = MenuEnvios();
         switch (opc) {
         case 1: /// Cargar envíos de fichero
+            // TODO: DUDA: No existe ninguna manera de comprobar que los Pedidos/Envios se hayan cargado
+            if (almacen.EstaAbierto()) {
+                cout << "Indique el nombre del fichero: ";
+                pedirCadena(nFichero);
+                if (almacen.CargarListaEnvios(nFichero)) {
+                    cout << "Se ha cargado el fichero de envíos.\n";
+                } else {
+                    cout << "ERROR! No se ha podido cargar el fichero de pedidos.\n";
+                }
+            } else {
+                cout << "No hay almacenes abiertos.\n";
+            }
             pausa();
             break;
         case 2: /// Insertar un nuevo envío
+            if (almacen.EstaAbierto()) {
+                if (almacen.NProductos() > 0) {
+                    cout << "Indique el nombre de la tienda: ";
+                    pedirCadena(pedido.Nomtienda);
+
+                    cout << "Indique el código del producto: ";
+                    pedirCadena(pedido.CodProd);
+                    while (almacen.BuscarProducto(pedido.CodProd) == -1) {
+                        cout << "No se ha encontrado el código indicado en el almacén. Indique otro código de producto: ";
+                        pedirCadena(pedido.CodProd);
+                    }
+
+                    cout << "Indique la cantidad pedida: ";
+                    cin >> pedido.CantidadPed;
+
+                    almacen.InsertarEnvios(pedido);
+                } else {
+                    cout << "No hay productos en el almacén.\n";
+                }
+            } else {
+                cout << "No hay almacenes abiertos.\n";
+            }
             pausa();
             break;
         case 3: /// Reparto de envíos a tienda
+            if (almacen.EstaAbierto()) {
+                cout << "Indique el nombre de la tienda a la que repartir: ";
+                pedirCadena(pedido.Nomtienda);
+                while (strcmp(pedido.Nomtienda, "") == 0) {
+                    cout << "Valor inválido. Indique el nombre de la tienda a la que repartir: ";
+                    pedirCadena(pedido.Nomtienda);
+                }
+                if (almacen.SalidaCamionTienda(pedido.Nomtienda)) {
+                    cout << "Se han repartido los pedidos.\n";
+                } else {
+                    cout << "No se han podido repartir los pedidos.\n";
+                }
+            } else {
+                cout << "No hay almacenes abiertos.\n";
+            }
             pausa();
             break;
         case 4: /// Listar todos los envíos
+            if (almacen.EstaAbierto()) {
+                almacen.ListarListaEnvios("");
+            } else {
+                cout << "No hay almacenes abiertos.\n";
+            }
             pausa();
             break;
         case 5: /// Listar los envíos a una tienda
+            if (almacen.EstaAbierto()) {
+                cout << "Indique el nombre de la tienda a listar: ";
+                pedirCadena(pedido.Nomtienda);
+                while (strcmp(pedido.Nomtienda, "") == 0) {
+                    cout << "Valor inválido. Indique el nombre de la tienda a listar: ";
+                    pedirCadena(pedido.Nomtienda);
+                }
+                almacen.ListarListaEnvios(pedido.Nomtienda);
+            } else {
+                cout << "No hay almacenes abiertos.\n";
+            }
             pausa();
             break;
         case 6: /// Guardar envíos a fichero
+            // TODO: DUDA: Comprobar si el almacen esta abierto?
+            cout << "Indique el nombre del fichero de envios: ";
+            pedirCadena(nFichero);
+            while (strcmp(nFichero, "") == 0) {
+                cout << "Valor inválido. Indique el nombre del fichero de envios: ";
+                pedirCadena(nFichero);
+            }
+            if (almacen.SalvarListaEnvios(nFichero)) {
+                cout << "Se han guardado los envios con éxito.\n";
+            } else {
+                cout << "No se han podido guardar los envios.\n";
+            }
             pausa();
             break;
         }
@@ -490,10 +613,10 @@ void GestionAlmacen(Cadena nombre, TAlmacen& almacen) {
             pausa();
             break;
         case 9: /// Gestión de pedidos
-            GestionPedidos();
+            GestionPedidos(almacen);
             break;
         case 10: /// Gestión de envíos
-            GestionEnvios();
+            GestionEnvios(almacen);
             break;
         }
     } while (opc != 0);
@@ -873,7 +996,7 @@ int MenuPrincipal(Cadena NombAlmacen, Cadena NombTienda) {
     return opc;
 }
 
-int main1() {
+int main() {
     system("title Práctica 1");
     setlocale(LC_CTYPE, "Spanish");
 
@@ -903,7 +1026,7 @@ int main1() {
     return 0;
 }
 
-int main() {
+int main1() {
     system("title Práctica 1");
     setlocale(LC_CTYPE, "Spanish");
 
