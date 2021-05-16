@@ -113,7 +113,7 @@ void menuTeoricos() {
 }
 
 /* Programa principal */
-int main() {
+int Principal() {
 	//** ESCRIBIR PARA COMPLETAR LA PRACTICA **//
 	setlocale(LC_CTYPE, "Spanish");
 
