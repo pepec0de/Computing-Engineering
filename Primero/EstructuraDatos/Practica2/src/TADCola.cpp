@@ -11,6 +11,7 @@ Cola::Cola() {
 	}
 }
 Cola::~Cola() {
+    cout << "DESTRUCTOR COLA\n";
 	if(elementos != NULL)
 		delete [] elementos;
 	elementos = NULL;
@@ -67,7 +68,7 @@ void Cola::desencolar() {
 			}
 			Tama -= INCREMENTO;
 			inicio = 0;
-			fin = Tama;
+			fin = 0; // Tama fin = Tama
 			delete [] elementos;
 			elementos = NuevaZona;
 		}

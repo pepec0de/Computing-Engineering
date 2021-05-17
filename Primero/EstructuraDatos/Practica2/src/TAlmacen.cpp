@@ -274,70 +274,51 @@ void TAlmacen::AnadirPedido(TPedido p) {
 //la cantidad que se puede suministrar.
 //Si el producto comprado excede de la cantidad pendiente de servir en los pedidos, la cantidad
 //sobrante, entra en el Almacén.
-// TODO: DUDA Esta bien?
+// TODO: COMPROBAR SI FUNCIONA
 bool TAlmacen::AtenderPedidos(Cadena CodProd, int cantidadcomprada) {
 	bool exito = false;
-	// Buscamos el codigo en Pedidos -> Pasamos los datos a Envios ->
-	int posProdPed = 0;
-	Cola copiaPedidos = Pedidos;
+    // Comprobar que el producto se encuentre en el almacén
+    int pos = BuscarProducto(CodProd);
+    if (pos != -1) {
+        // Añadimos la cantidad comprada al almacén
+        TProducto prod = ObtenerProducto(pos);
+        prod.Cantidad += cantidadcomprada;
 
-	// Primero comprobamos que el codigo del producto dado se encuentre en Pedidos
-	while(!copiaPedidos.esvacia() && strcmp(copiaPedidos.primero().CodProd, CodProd) != 0) {
-		copiaPedidos.desencolar();
-		posProdPed++;
-	}
-	if(posProdPed == Pedidos.longitud()) {
-		exito = false;
-	} else {
-		TPedido pedido = copiaPedidos.primero();
-		// Vamos a comprobar que el producto se encuentre en el almacén
-		int pos = BuscarProducto(pedido.CodProd);
-		if (pos != -1) {
-            // Añadimos la cantidad comprada al almacén
-            TProducto prod = ObtenerProducto(pos);
-            prod.Cantidad += cantidadcomprada;
+        // Buscamos el pedido en la cola de Pedidos y vemos si lo podemos atender
+        TPedido pedido;
+        for (int i = 0; i < Pedidos.longitud(); i++) {
+            bool encolarPedido = false;
+            pedido = Pedidos.primero();
+            if (strcmp(pedido.CodProd, CodProd) == 0) {
+                TPedido envio = pedido;
+                if(pedido.CantidadPed > prod.Cantidad) {
+                    // Añadimos a envios
+                    envio.CantidadPed = prod.Cantidad;
+                    Envios.anadirDch(envio);
 
-            TPedido envio = pedido;
-            if(pedido.CantidadPed > prod.Cantidad) {
-                // Añadimos a envios
-                envio.CantidadPed = prod.Cantidad;
-                Envios.anadirDch(envio);
+                    // Modificamos pedidos
+                    pedido.CantidadPed -= prod.Cantidad;
+                    prod.Cantidad = 0;
 
-                // Modificamos pedidos
-                pedido.CantidadPed -= prod.Cantidad;
-                prod.Cantidad = 0;
+                    // El pedido en la cola se cambiara al final del bucle for
+                    encolarPedido = true;
+                } else if(pedido.CantidadPed <= prod.Cantidad) {
+                    // Restamos la cantidad en el almacén
+                    prod.Cantidad -= pedido.CantidadPed;
 
-                copiaPedidos = Pedidos;
-                while(!Pedidos.esvacia()) Pedidos.desencolar();
-                for(int i = 0; i < copiaPedidos.longitud() - 1; i++) {
-                    if(i != posProdPed) {
-                        Pedidos.encolar(copiaPedidos.primero());
-                    } else {
-                        Pedidos.encolar(pedido);
-                    }
-                    copiaPedidos.desencolar();
-                }
-            } else if(pedido.CantidadPed <= prod.Cantidad) {
-                // Restamos la cantidad en el almacén
-                prod.Cantidad -= pedido.CantidadPed;
-
-                envio.CantidadPed = pedido.CantidadPed;
-                Envios.anadirDch(envio);
-                // Borramos el pedido de Pedidos
-                copiaPedidos = Pedidos;
-                // Vaciamos Pedidos
-                while(!Pedidos.esvacia()) Pedidos.desencolar();
-                // Buscamos, para no encolarlo
-                for(int i = 0; i < copiaPedidos.longitud() - 1; i++) {
-                    if(i != posProdPed) Pedidos.encolar(copiaPedidos.primero());
-                    copiaPedidos.desencolar();
+                    envio.CantidadPed = pedido.CantidadPed;
+                    Envios.anadirDch(envio);
+                    // Borramos el pedido de Pedidos
+                    encolarPedido = false;
                 }
             }
-            exito = ActualizarProducto(pos, prod);
-		} else {
-            cout << "ERROR! No se ha encontrado en el almacén el producto con el codigo: " << pedido.CodProd << ".\n";
-		}
-	}
+            Pedidos.desencolar();
+            if (encolarPedido) Pedidos.encolar(pedido);
+        }
+        exito = ActualizarProducto(pos, prod);
+    } else {
+        cout << "ERROR! No se ha encontrado en el almacén el producto con el codigo: " << CodProd << ".\n";
+    }
 	return exito;
 }
 
@@ -349,27 +330,28 @@ void TAlmacen::ListarPedidosCompleto(Cadena CodProd) {
 		TPedido pedido;
 		TProducto prod;
 		int pos;
-		Cola copiaPedidos = Pedidos;
 		if(strcmp(CodProd, "") == 0) {
 			// Cabecera
 			cout << "NOMBRE TIENDA\tCODIGO PRODUCTO CANTIDAD PEDIDA\tNOMBRE\t\tPRECIO CANTIDAD FECHA CADUCIDAD\tDESCRIPCION\n";
-			while(!copiaPedidos.esvacia()) {
-				pedido = copiaPedidos.primero();
+			for (int i = 0; i < Pedidos.longitud(); i++) {
+				pedido = Pedidos.primero();
 				pos = BuscarProducto(pedido.CodProd);
 				if(pos != -1) {
 					prod = ObtenerProducto(pos);
 					printf("%s\t\t%-15s %d\t%s\t%5.2f  %2d %8d/%02d/%d\t%s\n", pedido.Nomtienda, pedido.CodProd, pedido.CantidadPed,
-						   prod.NombreProd, prod.Precio, prod.Cantidad, prod.Caducicidad.Dia, prod.Caducicidad.Mes, prod.Caducicidad.Anyo, prod.Descripcion);
+						prod.NombreProd, prod.Precio, prod.Cantidad, prod.Caducicidad.Dia, prod.Caducicidad.Mes, prod.Caducicidad.Anyo, prod.Descripcion);
 				} else {
-					cout << "ERROR! No se ha encontrado en el almacén el producto con el codigo: " << pedido.CodProd << ".\n";
+				    printf("%s\t\t%-15s %d\t%s\t%5.2f  %2d %8d/%02d/%d\t      %s\n", pedido.Nomtienda, pedido.CodProd, pedido.CantidadPed, "??????????????", 0.0, 0, 0, 0, 0, "??????????????");
+					//cout << "ERROR! No se ha encontrado en el almacén el producto con el codigo: " << pedido.CodProd << ".\n";
 				}
-				copiaPedidos.desencolar();
+				Pedidos.desencolar();
+				Pedidos.encolar(pedido);
 			}
 		} else {
 			// Muestro el codigo producto dado
-			pedido = copiaPedidos.primero();
 			bool encontrado = false;
-			while(!copiaPedidos.esvacia()) {
+			for (int i = 0; i < Pedidos.longitud(); i++) {
+                pedido = Pedidos.primero();
 				if(strcmp(pedido.CodProd, CodProd) == 0) {
                     pos = BuscarProducto(CodProd);
 					if(pos != -1) {
@@ -380,11 +362,11 @@ void TAlmacen::ListarPedidosCompleto(Cadena CodProd) {
 						printf("%s\t\t %d\t%s\t%5.2f  %2d %8d/%02d/%d\t%s\n", pedido.Nomtienda, pedido.CantidadPed, prod.NombreProd,
                             prod.Precio, prod.Cantidad, prod.Caducicidad.Dia, prod.Caducicidad.Mes, prod.Caducicidad.Anyo, prod.Descripcion);
 					} else {
-						cout << "ERROR! No se ha encontrado en el almacén el producto con el codigo: " << CodProd << ".\n";
+						printf("%s\t\t %d\t%s\t%5.2f  %2d %8d/%02d/%d\t      %s\n", pedido.Nomtienda, pedido.CantidadPed, "??????????????", 0.0, 0, 0, 0, 0, "??????????????");
 					}
 				}
-				copiaPedidos.desencolar();
-				pedido = copiaPedidos.primero();
+				Pedidos.desencolar();
+				Pedidos.encolar(pedido);
 			}
 			if(!encontrado) cout << "\nERROR! No se ha encontrado el código de producto dado en los pedidos.\n";
 		}
@@ -396,45 +378,64 @@ void TAlmacen::ListarPedidosCompleto(Cadena CodProd) {
 //Muestra la cantidad pendiente de cada tipo de producto si CodProd es '' o del producto concreto
 //que se pase por parámetro
 
-// TODO: DUDA Hay que calcular la cantidad pendiente que falta en el almacen para completar la cantidad pedida?
+// TODO: COMPROBAR SI FUNCIONA
+/*
+    Por cada pedido de la cola ¿cuantas tiendas han pedido? PONER LA SUMA TOTAL
+*/
 void TAlmacen::ListarCantidadesPendientes(Cadena CodProd) {
 	if (Pedidos.longitud() > 0) {
-	    Cola copiaPedidos = Pedidos;
-	    TPedido pedido;
-	    int pos;
+	    Cola copiaPedidos;
+	    // Copiamos la cola
+	    for (int i = 0; i < Pedidos.longitud(); i++) {
+            TPedido p = Pedidos.primero();
+            copiaPedidos.encolar(p);
+            Pedidos.desencolar();
+            Pedidos.encolar(p);
+	    }
+
+	    TPedido pedido, pedidoCurr;
+	    int total;
         if(strcmp(CodProd, "") == 0) {
-            cout << "NOMBRE TIENDA\tCODIGO PRODUCTO CANTIDAD PENDIENTE\n";
-            while(!copiaPedidos.esvacia()) {
-                pedido = copiaPedidos.primero();
-                copiaPedidos.desencolar();
-                pos = BuscarProducto(pedido.CodProd);
-                if (pos != -1) {
-                    printf("%s\t\t%-15s %d\n", pedido.Nomtienda, pedido.CodProd, pedido.CantidadPed - ObtenerProducto(pos).Cantidad);
-                } else {
-                    cout << "ERROR! No se ha encontrado en el almacén el producto con el codigo: " << pedido.CodProd << ".\n";
+            cout << "CODIGO PRODUCTO CANTIDAD PENDIENTE\n";
+            for (int i = 0; i < Pedidos.longitud(); i++) {
+                pedido = Pedidos.primero();
+                total = 0;
+                for (int j = 0; j < copiaPedidos.longitud(); j++) {
+                    pedidoCurr = copiaPedidos.primero();
+                    if (strcmp(pedido.Nomtienda, pedidoCurr.Nomtienda) == 0) {
+                        total += pedidoCurr.CantidadPed;
+                    }
+                    copiaPedidos.desencolar();
+                    copiaPedidos.encolar(pedidoCurr);
                 }
+                printf("%s\t %d\n", pedido.CodProd, total);
+                Pedidos.desencolar();
+                Pedidos.encolar(pedido);
             }
         } else {
             bool encontrado = false;
-            int cantidadpendiente;
-            while(!copiaPedidos.esvacia()) {
-                pedido = copiaPedidos.primero();
-                copiaPedidos.desencolar();
-                if (strcmp(pedido.CodProd, CodProd) == 0) {
-                    pos = BuscarProducto(CodProd);
-                    if (pos != -1) {
-                        cantidadpendiente = pedido.CantidadPed - ObtenerProducto(pos).Cantidad;
-                        if (cantidadpendiente > 0) {
-                            if (!encontrado) cout << "NOMBRE TIENDA\tCANTIDAD PENDIENTE\n";
-                            encontrado = true;
-                            printf("%s\t%d\n", pedido.Nomtienda, cantidadpendiente);
+            int i = 0;
+            while(i < Pedidos.longitud() && !encontrado) {
+                pedido = Pedidos.primero();
+                if (strcmp(CodProd, pedido.CodProd) == 0) {
+                    if (!encontrado) cout << "CANTIDAD PENDIENTE\n";
+                    encontrado = true;
+                    total = 0;
+                    for (int j = 0; j < copiaPedidos.longitud(); j++) {
+                        pedidoCurr = copiaPedidos.primero();
+                        if (strcmp(pedido.Nomtienda, pedidoCurr.Nomtienda) == 0) {
+                            total += pedidoCurr.CantidadPed;
                         }
-                    } else {
-                        cout << "ERROR! No se ha encontrado en el almacén el producto con el codigo: " << CodProd << ".\n";
+                        copiaPedidos.desencolar();
+                        copiaPedidos.encolar(pedidoCurr);
                     }
+                    printf("%s\t %d\n", pedido.CodProd, total);
+                    Pedidos.desencolar();
+                    Pedidos.encolar(pedido);
                 }
+                i++;
             }
-            if(!encontrado) cout << "No se ha encontrado ningún producto con cantidades pendientes.\n";
+            if(!encontrado) cout << "No se ha encontrado ningún producto con ese código con cantidades pendientes.\n";
         }
 	} else {
         cout << "No hay pedidos.\n";
@@ -444,14 +445,16 @@ void TAlmacen::ListarCantidadesPendientes(Cadena CodProd) {
 //Se encarga de meter en la lista de envíos, de forma ordenada, por nombre del fichero de tienda, el
 //pedido a enviar
 bool TAlmacen::InsertarEnvios(TPedido p) {
-	// TODO : Comprobar funcion
+	// TODO : COMPROBAR SI FUNCIONA
 	bool encontrado = false;
-	for(int i = 1; i <= Envios.longitud() && !encontrado; i++) {
+    int i = 1;
+    while (i <= Envios.longitud() && !encontrado) {
 		if(strcmp(Envios.observar(i).Nomtienda, p.Nomtienda) == 1) {
 			// p.Nomtienda es alfabeticamente mayor que primero().Nomtienda
 			Envios.insertar(i, p);
 			encontrado = true;
 		}
+        i++;
 	}
 	return encontrado;
 }
@@ -462,10 +465,11 @@ bool TAlmacen::SalidaCamionTienda(Cadena NomTienda) {
 	bool result = false;
 	ListarListaEnvios(NomTienda);
 	for(int i = 1; i <= Envios.longitud(); i++) {
-		if(strcmp(Envios.observar(i).Nomtienda, NomTienda) == 0) Envios.eliminar(i);
+		if(strcmp(Envios.observar(i).Nomtienda, NomTienda) == 0) {
+            result = true;
+            Envios.eliminar(i);
+		}
 	}
-	// TODO: DUDA: no entiendo como manejar el bool aqui
-	result = true;
 	return result;
 }
 
@@ -486,7 +490,7 @@ void TAlmacen::ListarListaEnvios(Cadena Nomtienda) {
 					printf("%s\t\t%-15s %d\t%s\t%5.2f  %2d %8d/%02d/%d\t%s\n", pedido.Nomtienda, pedido.CodProd, pedido.CantidadPed,
 						   prod.NombreProd, prod.Precio, prod.Cantidad, prod.Caducicidad.Dia, prod.Caducicidad.Mes, prod.Caducicidad.Anyo, prod.Descripcion);
 				} else {
-					cout << "ERROR! No se ha encontrado en el almacén el producto con el codigo: " << pedido.CodProd << ".\n";
+					printf("%s\t\t%-15s %d\t%s\t%5.2f  %2d %8d/%02d/%d\t      %s\n", pedido.Nomtienda, pedido.CodProd, pedido.CantidadPed, "??????????????", 0.0, 0, 0, 0, 0, "??????????????");
 				}
 			}
 		} else {
@@ -503,7 +507,7 @@ void TAlmacen::ListarListaEnvios(Cadena Nomtienda) {
 						printf("%-15s %d\t%s\t%5.2f  %2d %8d/%02d/%d\t%s\n", pedido.CodProd, pedido.CantidadPed, prod.NombreProd,
                             prod.Precio, prod.Cantidad, prod.Caducicidad.Dia, prod.Caducicidad.Mes, prod.Caducicidad.Anyo, prod.Descripcion);
 					} else {
-						cout << "ERROR! No se ha encontrado en el almacén el producto con el codigo: " << pedido.CodProd << ".\n";
+						printf("%-15s %d\t%s\t%5.2f  %2d %8d/%02d/%d\t      %s\n", pedido.CodProd, pedido.CantidadPed, "??????????????", 0.0, 0, 0, 0, 0, "??????????????");
 					}
 				}
 			}
@@ -519,9 +523,11 @@ bool TAlmacen::SalvarColaPedidos(Cadena Nomf) {
 	fichero.open(Nomf, ios::binary);
 	if(!fichero.fail()) {
 		TPedido pedido;
-		while(!Pedidos.esvacia()) {
+		for (int i = 0; i < Pedidos.longitud(); i++) {
 			pedido = Pedidos.primero();
 			fichero.write((char*) &pedido, sizeof(TPedido));
+			Pedidos.desencolar();
+			Pedidos.encolar(pedido);
 		}
 		result = true;
 	}
