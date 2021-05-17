@@ -285,16 +285,16 @@ bool TAlmacen::AtenderPedidos(Cadena CodProd, int cantidadcomprada) {
         prod.Cantidad += cantidadcomprada;
 
         // Buscamos el pedido en la cola de Pedidos y vemos si lo podemos atender
-        TPedido pedido;
+        TPedido pedido, envio;
         for (int i = 0; i < Pedidos.longitud(); i++) {
-            bool encolarPedido = false;
+            bool encolarPedido = true;
             pedido = Pedidos.primero();
             if (strcmp(pedido.CodProd, CodProd) == 0) {
-                TPedido envio = pedido;
+                envio = pedido;
                 if(pedido.CantidadPed > prod.Cantidad) {
                     // Añadimos a envios
                     envio.CantidadPed = prod.Cantidad;
-                    Envios.anadirDch(envio);
+                    if (prod.Cantidad != 0) InsertarEnvios(envio);
 
                     // Modificamos pedidos
                     pedido.CantidadPed -= prod.Cantidad;
@@ -307,7 +307,7 @@ bool TAlmacen::AtenderPedidos(Cadena CodProd, int cantidadcomprada) {
                     prod.Cantidad -= pedido.CantidadPed;
 
                     envio.CantidadPed = pedido.CantidadPed;
-                    Envios.anadirDch(envio);
+                    InsertarEnvios(envio);
                     // Borramos el pedido de Pedidos
                     encolarPedido = false;
                 }

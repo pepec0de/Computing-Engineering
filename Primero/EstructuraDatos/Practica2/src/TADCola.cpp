@@ -11,7 +11,6 @@ Cola::Cola() {
 	}
 }
 Cola::~Cola() {
-    cout << "DESTRUCTOR COLA\n";
 	if(elementos != NULL)
 		delete [] elementos;
 	elementos = NULL;

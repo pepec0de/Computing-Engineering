@@ -282,17 +282,14 @@ void GestionEnvios(TAlmacen &almacen) {
 	int opc = 0;
 	Cadena nFichero;
 	TPedido pedido;
-	bool cargado = false;
 	do {
 		opc = MenuEnvios();
 		switch(opc) {
 		case 1: /// Cargar envíos de fichero
-			// TODO: USAR CARGADO PARA COMPROBAR LA CARGA DE FICHEROS
 			if(almacen.EstaAbierto()) {
 				cout << "Indique el nombre del fichero: ";
 				pedirCadena(nFichero);
-				cargado = almacen.CargarListaEnvios(nFichero);
-				if(cargado) {
+				if(almacen.CargarListaEnvios(nFichero)) {
 					cout << "Se ha cargado el fichero de envíos.\n";
 				} else {
 					cout << "ERROR! No se ha podido cargar el fichero de pedidos.\n";
