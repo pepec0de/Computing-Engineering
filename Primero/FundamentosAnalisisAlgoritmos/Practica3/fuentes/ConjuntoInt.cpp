@@ -37,3 +37,7 @@ void ConjuntoInt::escribe() {
  for (int i= 0; i<tamano; i++)
      cout << datos[i] << (i<tamano-1? ", ": "\n");
 }
+
+int ConjuntoInt::generaKey() {
+	return datos[rand() % tamano]; // devuelve el valor del  array en una posición aleatoria entre 1 y el tamaño del array
+}

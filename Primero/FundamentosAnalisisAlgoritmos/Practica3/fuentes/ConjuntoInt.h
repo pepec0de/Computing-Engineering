@@ -18,6 +18,7 @@ public:
 	void GeneraVector (int tam);
 	int* getDatos();
 	void escribe ();
+	int generaKey();
 };
 
 #endif

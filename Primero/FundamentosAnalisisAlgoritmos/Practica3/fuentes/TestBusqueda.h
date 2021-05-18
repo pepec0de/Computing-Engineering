@@ -13,10 +13,13 @@
 //** ESCRIBIR PARA COMPLETAR LA PRACTICA **//
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <iomanip>
 #include "AlgoritmosBusqueda.h"
 #include "Mtime.h"
 #include "Constantes.h"
 #include "ConjuntoInt.h"
+#include "Graficas.h"
 
 class TestBusqueda
 {
@@ -30,6 +33,8 @@ public:
 	double buscaEnArrayDeInt(int v[], int size, int key, int metodo, int& pos);
 	void comprobarMetodosBusqueda();
 	void casoMedio(int metodo);
+	void comparar(int metodo1, int metodo2);
+	void compararTodos();
 };
 
 #endif

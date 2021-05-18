@@ -28,7 +28,19 @@ void Graficas::generarGraficaMEDIO(string nombre_metodo,int orden)
 	} else if (orden == NlogN) {
 		f << "xlog(x) = a*x * log(x) + b*x +c\n";
 		f << "fit xlog(x) \"" << nombre_metodo << ".dat \" using 1:2 via a, b, c\n";
-		f << "plot \"" << nombre_metodo << ".dat" << "\" using 1:2 title \"" << nombre_metodo << "\", xlog(x)\n";
+		f << "plot \"" << nombre_metodo << ".dat\" using 1:2 title \"" << nombre_metodo << "\", xlog(x)\n";
+	} else if (orden == N) {
+		f << "N(x) = a*x +b\n";
+		f << "fit N(x) \"" << nombre_metodo << ".dat\" using 1:2 via a, b\n";
+		f << "plot \"" << nombre_metodo << ".dat\" using 1:2 title \"" << nombre_metodo << "\", N(x)\n";
+	} else if (orden == logN) {
+		f << "LOG(x) = a + b*(log(x)/log(2))\n";
+		f << "fit LOG(x) \"" << nombre_metodo << ".dat\" using 1:2 via a\n";
+		f << "plot \"" << nombre_metodo << ".dat\" using 1:2 title \"" << nombre_metodo << "\", LOG(x)\n";
+	} else if (orden == loglogN) {
+		f << "LOGLOG(x) = a + b*(log(log(x)/log(2)))/log(2)\n";
+		f << "fit LOGLOG(x) \"" << nombre_metodo << ".dat\" using 1:2 via a\n";
+		f << "plot \"" << nombre_metodo << ".dat\" using 1:2 title \"" << nombre_metodo << "\", LOGLOG(x)\n";
 	}
 	f << "set terminal pdf\n"
 		<< "set output \"" << nombre_metodo << ".pdf" << "\"\n"
