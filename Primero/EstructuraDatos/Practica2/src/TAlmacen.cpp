@@ -380,7 +380,7 @@ void TAlmacen::ListarPedidosCompleto(Cadena CodProd) {
 // TODO: COMPROBAR SI FUNCIONA
 void TAlmacen::ListarCantidadesPendientes(Cadena CodProd) {
 	if (Pedidos.longitud() > 0) {
-	    Cola copiaPedidos;
+	    Cola copiaPedidos, encontrados;
 	    // Copiamos la cola
 	    for (int i = 0; i < Pedidos.longitud(); i++) {
             TPedido p = Pedidos.primero();
@@ -395,16 +395,30 @@ void TAlmacen::ListarCantidadesPendientes(Cadena CodProd) {
             cout << "CODIGO PRODUCTO CANTIDAD PENDIENTE\n";
             for (int i = 0; i < Pedidos.longitud(); i++) {
                 pedido = Pedidos.primero();
-                total = 0;
-                for (int j = i+1; j < copiaPedidos.longitud(); j++) {
-                    pedidoCurr = copiaPedidos.primero();
-                    if (strcmp(pedido.Nomtienda, pedidoCurr.Nomtienda) == 0) {
-                        total += pedidoCurr.CantidadPed;
+                total = pedido.CantidadPed;
+                // TODO: Corregir
+                bool encontrado = false;
+                for (int k = 0; k < encontrados.longitud(); k++) {
+                    if (strcmp(encontrados.primero().CodProd, pedido.CodProd) == 0) {
+                        encontrado = true;
                     }
-                    copiaPedidos.desencolar();
-                    copiaPedidos.encolar(pedidoCurr);
+                    encontrados.encolar(encontrados.primero());
+                    encontrados.desencolar();
                 }
-                printf("%s\t %d\n", pedido.CodProd, total);
+                encontrados.encolar(pedido);
+                if (!encontrado) {
+                    for (int j = 0; j < copiaPedidos.longitud(); j++) {
+                        pedidoCurr = copiaPedidos.primero();
+                        if (j > i && !encontrado) {
+                            if (strcmp(pedido.Nomtienda, pedidoCurr.Nomtienda) == 0) {
+                                total += pedidoCurr.CantidadPed;
+                            }
+                        }
+                        copiaPedidos.desencolar();
+                        copiaPedidos.encolar(pedidoCurr);
+                    }
+                    printf("%s\t %d\n", pedido.CodProd, total);
+                }
                 Pedidos.desencolar();
                 Pedidos.encolar(pedido);
             }
@@ -417,10 +431,12 @@ void TAlmacen::ListarCantidadesPendientes(Cadena CodProd) {
                     if (!encontrado) cout << "CANTIDAD PENDIENTE\n";
                     encontrado = true;
                     total = 0;
-                    for (int j = i+1; j < copiaPedidos.longitud(); j++) {
+                    for (int j = 0; j < copiaPedidos.longitud(); j++) {
                         pedidoCurr = copiaPedidos.primero();
-                        if (strcmp(pedido.Nomtienda, pedidoCurr.Nomtienda) == 0) {
-                            total += pedidoCurr.CantidadPed;
+                        if (j > i) {
+                            if (strcmp(pedido.Nomtienda, pedidoCurr.Nomtienda) == 0) {
+                                total += pedidoCurr.CantidadPed;
+                            }
                         }
                         copiaPedidos.desencolar();
                         copiaPedidos.encolar(pedidoCurr);
