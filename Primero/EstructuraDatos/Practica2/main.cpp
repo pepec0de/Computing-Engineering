@@ -333,9 +333,9 @@ void GestionEnvios(TAlmacen &almacen) {
 					pedirCadena(pedido.Nomtienda);
 				}
 				if(almacen.SalidaCamionTienda(pedido.Nomtienda)) {
-					cout << "Se han repartido los pedidos.\n";
+					cout << "Se han repartido los envíos.\n";
 				} else {
-					cout << "No se han repartido pedidos.\n";
+					cout << "No se han repartido envíos.\n";
 				}
 			} else {
 				cout << "No hay almacenes abiertos.\n";
@@ -1023,7 +1023,7 @@ int MenuPrincipal(Cadena NombAlmacen, Cadena NombTienda) {
 }
 
 int main() {
-	system("title Práctica 1");
+	system("title Práctica 2");
 	setlocale(LC_CTYPE, "Spanish");
 
 	TAlmacen almacen;
@@ -1049,18 +1049,5 @@ int main() {
 			break;
 		}
 	}
-	return 0;
-}
-
-int main1() {
-	system("title Práctica 1");
-	setlocale(LC_CTYPE, "Spanish");
-
-	TAlmacen almacen;
-	almacen.AbrirAlmacen("Almacen.dat");
-	if(almacen.CargarColaPedidos("Pedidos.dat")) cout << "Exito\n";
-	else cout << "Fallo\n";
-
-	almacen.ListarPedidosCompleto("");
 	return 0;
 }

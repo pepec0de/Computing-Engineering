@@ -377,11 +377,7 @@ void TAlmacen::ListarPedidosCompleto(Cadena CodProd) {
 
 //Muestra la cantidad pendiente de cada tipo de producto si CodProd es '' o del producto concreto
 //que se pase por parámetro
-
 // TODO: COMPROBAR SI FUNCIONA
-/*
-    Por cada pedido de la cola ¿cuantas tiendas han pedido? PONER LA SUMA TOTAL
-*/
 void TAlmacen::ListarCantidadesPendientes(Cadena CodProd) {
 	if (Pedidos.longitud() > 0) {
 	    Cola copiaPedidos;
@@ -400,7 +396,7 @@ void TAlmacen::ListarCantidadesPendientes(Cadena CodProd) {
             for (int i = 0; i < Pedidos.longitud(); i++) {
                 pedido = Pedidos.primero();
                 total = 0;
-                for (int j = 0; j < copiaPedidos.longitud(); j++) {
+                for (int j = i+1; j < copiaPedidos.longitud(); j++) {
                     pedidoCurr = copiaPedidos.primero();
                     if (strcmp(pedido.Nomtienda, pedidoCurr.Nomtienda) == 0) {
                         total += pedidoCurr.CantidadPed;
@@ -421,7 +417,7 @@ void TAlmacen::ListarCantidadesPendientes(Cadena CodProd) {
                     if (!encontrado) cout << "CANTIDAD PENDIENTE\n";
                     encontrado = true;
                     total = 0;
-                    for (int j = 0; j < copiaPedidos.longitud(); j++) {
+                    for (int j = i+1; j < copiaPedidos.longitud(); j++) {
                         pedidoCurr = copiaPedidos.primero();
                         if (strcmp(pedido.Nomtienda, pedidoCurr.Nomtienda) == 0) {
                             total += pedidoCurr.CantidadPed;
