@@ -274,7 +274,7 @@ void TAlmacen::AnadirPedido(TPedido p) {
 //la cantidad que se puede suministrar.
 //Si el producto comprado excede de la cantidad pendiente de servir en los pedidos, la cantidad
 //sobrante, entra en el Almacén.
-// TODO: COMPROBAR SI FUNCIONA
+// TODO: Solucionar error de que los envios no se añaden a Envios.
 bool TAlmacen::AtenderPedidos(Cadena CodProd, int cantidadcomprada) {
 	bool exito = false;
     // Comprobar que el producto se encuentre en el almacén
@@ -377,10 +377,12 @@ void TAlmacen::ListarPedidosCompleto(Cadena CodProd) {
 
 //Muestra la cantidad pendiente de cada tipo de producto si CodProd es '' o del producto concreto
 //que se pase por parámetro
-// TODO: COMPROBAR SI FUNCIONA
 void TAlmacen::ListarCantidadesPendientes(Cadena CodProd) {
 	if (Pedidos.longitud() > 0) {
-	    Cola copiaPedidos, encontrados;
+	    Cola copiaPedidos;
+	    // Para no mostrar un codigo que ya ha sido contado
+	    bool encontrado = false;
+
 	    // Copiamos la cola
 	    for (int i = 0; i < Pedidos.longitud(); i++) {
             TPedido p = Pedidos.primero();
@@ -392,27 +394,28 @@ void TAlmacen::ListarCantidadesPendientes(Cadena CodProd) {
 	    TPedido pedido, pedidoCurr;
 	    int total;
         if(strcmp(CodProd, "") == 0) {
+            Cola encontrados;
             cout << "CODIGO PRODUCTO CANTIDAD PENDIENTE\n";
             for (int i = 0; i < Pedidos.longitud(); i++) {
+                encontrado = false;
                 pedido = Pedidos.primero();
-                total = pedido.CantidadPed;
-                // TODO: Corregir
-                bool encontrado = false;
-                for (int k = 0; k < encontrados.longitud(); k++) {
-                    if (strcmp(encontrados.primero().CodProd, pedido.CodProd) == 0) {
+                int j = 0;
+                while(j < encontrados.longitud() && !encontrado) {
+                    pedidoCurr = encontrados.primero();
+                    if (strcmp(pedido.CodProd, pedidoCurr.CodProd) == 0) {
                         encontrado = true;
                     }
-                    encontrados.encolar(encontrados.primero());
+                    j++;
                     encontrados.desencolar();
+                    encontrados.encolar(pedidoCurr);
                 }
-                encontrados.encolar(pedido);
                 if (!encontrado) {
-                    for (int j = 0; j < copiaPedidos.longitud(); j++) {
+                    encontrados.encolar(pedido);
+                    total = pedido.CantidadPed;
+                    for (int k = 0; k < copiaPedidos.longitud(); k++) {
                         pedidoCurr = copiaPedidos.primero();
-                        if (j > i && !encontrado) {
-                            if (strcmp(pedido.Nomtienda, pedidoCurr.Nomtienda) == 0) {
-                                total += pedidoCurr.CantidadPed;
-                            }
+                        if (j > i && strcmp(pedido.CodProd, pedidoCurr.CodProd) == 0) {
+                            total += pedidoCurr.CantidadPed;
                         }
                         copiaPedidos.desencolar();
                         copiaPedidos.encolar(pedidoCurr);
@@ -423,20 +426,17 @@ void TAlmacen::ListarCantidadesPendientes(Cadena CodProd) {
                 Pedidos.encolar(pedido);
             }
         } else {
-            bool encontrado = false;
             int i = 0;
             while(i < Pedidos.longitud() && !encontrado) {
                 pedido = Pedidos.primero();
                 if (strcmp(CodProd, pedido.CodProd) == 0) {
                     if (!encontrado) cout << "CANTIDAD PENDIENTE\n";
                     encontrado = true;
-                    total = 0;
+                    total = pedido.CantidadPed;
                     for (int j = 0; j < copiaPedidos.longitud(); j++) {
                         pedidoCurr = copiaPedidos.primero();
-                        if (j > i) {
-                            if (strcmp(pedido.Nomtienda, pedidoCurr.Nomtienda) == 0) {
-                                total += pedidoCurr.CantidadPed;
-                            }
+                        if (j > i && strcmp(pedido.Nomtienda, pedidoCurr.Nomtienda) == 0) {
+                            total += pedidoCurr.CantidadPed;
                         }
                         copiaPedidos.desencolar();
                         copiaPedidos.encolar(pedidoCurr);
