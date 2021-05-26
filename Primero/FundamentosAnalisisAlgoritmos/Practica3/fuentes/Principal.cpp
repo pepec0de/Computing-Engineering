@@ -21,6 +21,7 @@ void menuOrdenacionCasoMedio() {
 		cin >> opc;
 	} while (opc < 0 || opc > 3);
 	cout << endl << endl;
+	TestOrdenacion testOrdenacion;
 	testOrdenacion.casoMedio(opc - 1);
 }
 
@@ -45,6 +46,7 @@ void menuOrdenacionComparar() {
 			cin >> met2;
 		} while (met2 < 0 || met2 > 3 && met1 == met2);
 		if (met2 != 0) {
+			TestOrdenacion testOrdenacion;
 			testOrdenacion.comparar(met1-1, met2-1);
 		}
 	}
@@ -64,6 +66,7 @@ void menuOrdenacionTeoricos() {
 		cin >> opc;
 	} while (opc < 0 || opc > 3);
 	cout << endl << endl;
+	TestOrdenacion testOrdenacion;
 	testOrdenacion.casosTeoricos(opc-1);
 }
 
@@ -176,7 +179,7 @@ void menuBusqueda() {
 		menuBusquedaComparar();
 		break;
 	case 4:
-		testBusqueda.compararTodos();
+		testBusqueda.comparar();
 		break;
 	}
 }

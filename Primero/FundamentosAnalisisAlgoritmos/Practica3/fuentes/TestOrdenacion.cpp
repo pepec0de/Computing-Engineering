@@ -181,6 +181,7 @@ void TestOrdenacion::comparar(int metodo1, int metodo2) {
 
 
 void TestOrdenacion::compararTodos() {
+	// TODO: Hacerlo igual que TestBusqueda
 	Graficas g;
 	g.generarGraficaCMP(nombreAlgoritmo);
 }

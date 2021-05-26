@@ -21,25 +21,24 @@ void Graficas::generarGraficaMEDIO(string nombre_metodo,int orden)
 		<< "set xlabel \"Talla (n)\"\n"
 		<< "set ylabel \"Tiempo (ms)\"\n";
 	if (orden == CUADRADO) {
-		f << "Cuadrado(x) = a*x*x +b*x + c\n"
-			<< "fit Cuadrado(x) \"" << nombre_metodo << ".dat"
-			<< "\" using 1:2 via a, b, c\n"
-		<< "plot \"" << nombre_metodo << ".dat" << "\" using 1:2 title \"" << nombre_metodo << "\", Cuadrado(x)\n";
+		f << "Cuadrado(x) = a*x*x +b*x + c\n";
+		f << "fit Cuadrado(x) \"" << nombre_metodo << ".dat\" using 1:2 via a, b, c\n";
+		f << "plot \"" << nombre_metodo << ".dat" << "\" using 1:2 title \"" << nombre_metodo << "\", Cuadrado(x)\n";
 	} else if (orden == NlogN) {
-		f << "xlog(x) = a*x * log(x) + b*x +c\n";
-		f << "fit xlog(x) \"" << nombre_metodo << ".dat \" using 1:2 via a, b, c\n";
-		f << "plot \"" << nombre_metodo << ".dat\" using 1:2 title \"" << nombre_metodo << "\", xlog(x)\n";
+		f << "NlogN(x) = a*x*(log(x)/log(2)) + b*x +c\n";
+		f << "fit xlog(x) \"" << nombre_metodo << ".dat\" using 1:2 via a, b, c\n";
+		f << "plot \"" << nombre_metodo << ".dat\" using 1:2 title \"" << nombre_metodo << "\", NlogN(x)\n";
 	} else if (orden == N) {
 		f << "N(x) = a*x +b\n";
 		f << "fit N(x) \"" << nombre_metodo << ".dat\" using 1:2 via a, b\n";
 		f << "plot \"" << nombre_metodo << ".dat\" using 1:2 title \"" << nombre_metodo << "\", N(x)\n";
 	} else if (orden == logN) {
 		f << "LOG(x) = a + b*(log(x)/log(2))\n";
-		f << "fit LOG(x) \"" << nombre_metodo << ".dat\" using 1:2 via a\n";
+		f << "fit LOG(x) \"" << nombre_metodo << ".dat\" using 1:2 via a, b\n";
 		f << "plot \"" << nombre_metodo << ".dat\" using 1:2 title \"" << nombre_metodo << "\", LOG(x)\n";
 	} else if (orden == loglogN) {
 		f << "LOGLOG(x) = a + b*(log(log(x)/log(2)))/log(2)\n";
-		f << "fit LOGLOG(x) \"" << nombre_metodo << ".dat\" using 1:2 via a\n";
+		f << "fit LOGLOG(x) \"" << nombre_metodo << ".dat\" using 1:2 via a, b\n";
 		f << "plot \"" << nombre_metodo << ".dat\" using 1:2 title \"" << nombre_metodo << "\", LOGLOG(x)\n";
 	}
 	f << "set terminal pdf\n"
@@ -86,10 +85,10 @@ void  Graficas::generarGraficaCMP(vector<string> pNombreAlgoritmo) {
 	for (int i = 0; i < pNombreAlgoritmo.size(); i++) {
 		nombre += pNombreAlgoritmo[i];
 	}
-	string titulo = nombre;
+	string titulo = nombre; // SecuencialBinarioItInterit
 	nombre += ".gpl";
 	ofstream f(nombre);
-	f << "# ESTE ES UN SCRIPT DE GNUPLOT PARA COMPARACION DE 2 METODOS\n"
+	f << "# ESTE ES UN SCRIPT DE GNUPLOT PARA COMPARACION DE TODOS LOS METODOS\n"
 		<< "set title \"Comparacion de tiempos: " << titulo << "\"\n"
 		<< "set key top left vertical inside\n"
 		<< "set grid\n"
@@ -97,7 +96,7 @@ void  Graficas::generarGraficaCMP(vector<string> pNombreAlgoritmo) {
 		<< "set ylabel \"Tiempo (ms)\"\n"
 		<< "plot ";
 		for (int i = 0; i < pNombreAlgoritmo.size(); i++) {
-			f << "\"" << pNombreAlgoritmo[i] << ".dat\" using 1:2 with lines title \"" << pNombreAlgoritmo[i] << "\"" << (i < pNombreAlgoritmo.size() - 1 ? ", " : "\n");
+			f << "\"" << titulo << ".dat\" using 1:" << i+2 << " with lines title \"" << pNombreAlgoritmo[i] << "\"" << (i < pNombreAlgoritmo.size() - 1 ? ", " : "\n");
 		}
 		f << "set terminal pdf\n"
 		<< "set output \"" << titulo << ".pdf" << "\"\n"

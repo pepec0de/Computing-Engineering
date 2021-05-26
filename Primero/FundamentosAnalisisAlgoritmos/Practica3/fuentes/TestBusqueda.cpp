@@ -46,6 +46,11 @@ void TestBusqueda::comprobarMetodosBusqueda() {
 	for (int metodo = 0; metodo < nombreAlgoritmo.size(); metodo++) {
 		v->GeneraVector(talla);
 		cout << "\n\nVector para el metodo " << nombreAlgoritmo[metodo] << ":\n\n";
+		// Ordenamos si lo necesita el metodo
+		if (metodo == BINARIAIT || metodo == INTERIT) {
+			AlgoritmosOrdenacion ordena;
+			ordena.ordenaInsercion(v->getDatos(), talla);
+		}
 		v->escribe();
 		int key;
 		cout << "Introduce la clave: ";
@@ -69,20 +74,26 @@ void TestBusqueda::casoMedio(int metodo) {
 	cout << endl << "Tiempo promedio de búsqueda por " << nombreAlgoritmo[metodo] << endl;
 	cout << "Tiempos de ejecucion " << endl << endl;
 	cout << "\tTalla\t\tTiempo (ms)" << endl << endl;
-	double tiempo = 0;
+	double tiempo = 0.0;
 	int pos;
-	ConjuntoInt* conjunto;
+	ConjuntoInt *conjunto;
 	for (int talla = tallaIni; talla <= tallaFin; talla += incTalla) {
-
+		conjunto = new ConjuntoInt(talla);
+		tiempo = 0;
 		for (int i = 0; i < NUMREPETICIONES; i++) {
-			conjunto = new ConjuntoInt(talla);
 			conjunto->GeneraVector(talla);
+			// Ordenamos si lo necesita el metodo
+			if (metodo == BINARIAIT || metodo == INTERIT) {
+				AlgoritmosOrdenacion ordena;
+				ordena.ordenaInsercion(conjunto->getDatos(), talla);
+			}
 			tiempo += buscaEnArrayDeInt(conjunto->getDatos(), talla, conjunto->generaKey(), metodo, pos);
-			delete conjunto;
+			conjunto->vaciar();
 		}
 		tiempo = tiempo / NUMREPETICIONES;
 		f << talla << "\t" << tiempo << endl;
 		cout << "\t" << talla << "\t\t" << setw(10) << setprecision(2) << (double)tiempo << endl;
+		delete conjunto;
 	}
 	f.close();
 	cout << endl << "Datos guardados en el fichero " << nombreAlgoritmo[metodo] << ".dat " << endl;
@@ -96,7 +107,7 @@ void TestBusqueda::casoMedio(int metodo) {
 	case 'S': {
 		/* Ejecutar el fichero por lotes (comandos)*/
 		Graficas g;
-		int orden;
+		int orden = -1;
 		switch (metodo) {
 		case SECUENCIALIT:
 			orden = N;
@@ -126,10 +137,11 @@ void TestBusqueda::comparar(int metodo1, int metodo2) {
 	cout << "\t\t\t" << nombreAlgoritmo[metodo1] << "\t\t\t" << nombreAlgoritmo[metodo2] << endl;
 	cout << "\tTalla\t\tTiempo (ms)\t\tTiempo (ms)" << endl << endl;
 
-	double tiempo1 = 0, tiempo2 = 0;
+	double tiempo1, tiempo2;
 	int pos;
 	ConjuntoInt* conjunto;
 	for (int talla = tallaIni; talla <= tallaFin; talla += incTalla) {
+		tiempo1 = tiempo2 = 0;
 		for (int i = 0; i < NUMREPETICIONES; i++) {
 			conjunto = new ConjuntoInt(talla);
 			conjunto->GeneraVector(talla);
@@ -167,6 +179,65 @@ void TestBusqueda::comparar(int metodo1, int metodo2) {
 	system("cls");
 }
 
-void TestBusqueda::compararTodos() {
+void TestBusqueda::comparar() {
+	// TODO: comentar mas codigo
+	string nombre = "";
+	for (string str : nombreAlgoritmo) {
+		nombre += str;
+	}
+	ofstream f(nombre + ".dat");
+	cout << endl << "Comparación de los algoritmos de búsqueda: " << nombre << endl;
+	cout << "Tiempos de ejecucion promedio" << endl << endl;
+	cout << "\t\t\t" << nombre << endl;
+	cout << "\tTalla\t\tTiempo (ms)\t\tTiempo (ms)" << endl << endl;
 
+	vector<double> tiempos; 
+	for (string str : nombreAlgoritmo) {
+		tiempos.push_back(0);
+	}
+	int pos;
+	ConjuntoInt* conjunto;
+	for (int talla = tallaIni; talla <= tallaFin; talla += incTalla) {
+		for (int i = 0; i < nombreAlgoritmo.size(); i++) {
+			tiempos[i] = 0.0;
+		}
+
+		for (int i = 0; i < NUMREPETICIONES; i++) {
+			conjunto = new ConjuntoInt(talla);
+			for (int j = 0; j < nombreAlgoritmo.size(); j++) {
+				conjunto->GeneraVector(talla);
+				tiempos[j] += buscaEnArrayDeInt(conjunto->getDatos(), talla, conjunto->generaKey(), j, pos);
+				conjunto->vaciar();
+			}
+			delete conjunto;
+		}
+		f << talla << "\t";
+		cout << "\t" << talla << "\t";
+		for (int i = 0; i < tiempos.size(); i++) {
+			tiempos[i] /= NUMREPETICIONES;
+			f << tiempos[i] << "\t";
+			cout << "\t" << setw(10) << setprecision(2) << (double)tiempos[i];
+		}
+		f << endl;
+		cout << endl;
+	}
+	f.close();
+	cout << endl << "Datos guardados en los ficheros: " << nombre << ".dat\n";
+
+	// Generar grafica
+	char opc;
+	cout << endl << "Generar grafica de resultados? (s/n): ";
+	cin >> opc;
+	switch (opc) {
+	case 's':
+	case 'S': {
+		// Ejecutar el fichero por lotes (comandos)
+		Graficas g;
+		g.generarGraficaCMP(nombreAlgoritmo);
+	}break;
+	default:
+		cout << "\nGrafica no generada.\n";
+	}
+	cout << endl;
+	system("cls");
 }

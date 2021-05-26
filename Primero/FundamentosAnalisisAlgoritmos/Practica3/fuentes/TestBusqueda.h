@@ -20,6 +20,7 @@
 #include "Constantes.h"
 #include "ConjuntoInt.h"
 #include "Graficas.h"
+#include "AlgoritmosOrdenacion.h"
 
 class TestBusqueda
 {
@@ -34,7 +35,7 @@ public:
 	void comprobarMetodosBusqueda();
 	void casoMedio(int metodo);
 	void comparar(int metodo1, int metodo2);
-	void compararTodos();
+	void comparar();
 };
 
 #endif
