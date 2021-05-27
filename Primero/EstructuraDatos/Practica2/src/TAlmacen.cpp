@@ -274,7 +274,6 @@ void TAlmacen::AnadirPedido(TPedido p) {
 //la cantidad que se puede suministrar.
 //Si el producto comprado excede de la cantidad pendiente de servir en los pedidos, la cantidad
 //sobrante, entra en el Almacén.
-// TODO: Solucionar error de que los envios no se añaden a Envios.
 bool TAlmacen::AtenderPedidos(Cadena CodProd, int cantidadcomprada) {
 	bool exito = false;
     // Comprobar que el producto se encuentre en el almacén
@@ -380,19 +379,20 @@ void TAlmacen::ListarPedidosCompleto(Cadena CodProd) {
 void TAlmacen::ListarCantidadesPendientes(Cadena CodProd) {
 	if (Pedidos.longitud() > 0) {
 	    Cola copiaPedidos;
-	    // Para no mostrar un codigo que ya ha sido contado
+
+	    // Para no contar un codigo que ya ha sido contado
 	    bool encontrado = false;
+
+        TPedido pedido, pedidoCurr;
+	    int total;
 
 	    // Copiamos la cola
 	    for (int i = 0; i < Pedidos.longitud(); i++) {
-            TPedido p = Pedidos.primero();
-            copiaPedidos.encolar(p);
+            pedido = Pedidos.primero();
+            copiaPedidos.encolar(pedido);
             Pedidos.desencolar();
-            Pedidos.encolar(p);
+            Pedidos.encolar(pedido);
 	    }
-
-	    TPedido pedido, pedidoCurr;
-	    int total;
         if(strcmp(CodProd, "") == 0) {
             Cola encontrados;
             cout << "CODIGO PRODUCTO CANTIDAD PENDIENTE\n";
@@ -414,7 +414,7 @@ void TAlmacen::ListarCantidadesPendientes(Cadena CodProd) {
                     total = pedido.CantidadPed;
                     for (int k = 0; k < copiaPedidos.longitud(); k++) {
                         pedidoCurr = copiaPedidos.primero();
-                        if (j > i && strcmp(pedido.CodProd, pedidoCurr.CodProd) == 0) {
+                        if (k > i && strcmp(pedido.CodProd, pedidoCurr.CodProd) == 0) {
                             total += pedidoCurr.CantidadPed;
                         }
                         copiaPedidos.desencolar();
@@ -457,18 +457,23 @@ void TAlmacen::ListarCantidadesPendientes(Cadena CodProd) {
 //Se encarga de meter en la lista de envíos, de forma ordenada, por nombre del fichero de tienda, el
 //pedido a enviar
 bool TAlmacen::InsertarEnvios(TPedido p) {
-	// TODO : COMPROBAR SI FUNCIONA
-	bool encontrado = false;
-    int i = 1;
-    while (i <= Envios.longitud() && !encontrado) {
-		if(strcmp(Envios.observar(i).Nomtienda, p.Nomtienda) == 1) {
-			// p.Nomtienda es alfabeticamente mayor que primero().Nomtienda
-			Envios.insertar(i, p);
-			encontrado = true;
-		}
-        i++;
+	if (Envios.longitud() == 0) {
+        Envios.anadirIzq(p);
+        return true;
+	} else {
+	    bool encontrado = false;
+        int i = 1;
+        while (i <= Envios.longitud() && !encontrado) {
+            if(strcmp(Envios.observar(i).Nomtienda, p.Nomtienda) == 1) {
+                // p.Nomtienda es alfabeticamente mayor que primero().Nomtienda
+                Envios.insertar(i, p);
+                encontrado = true;
+            }
+            i++;
+        }
+        return encontrado;
 	}
-	return encontrado;
+	return false;
 }
 
 //Se encarga de sacar de la lista los envíos que tienen por destino la tienda que se le pasa por
@@ -493,7 +498,7 @@ void TAlmacen::ListarListaEnvios(Cadena Nomtienda) {
 		TPedido pedido;
 		int pos;
 		if(strcmp(Nomtienda, "") == 0) {
-			cout << "NOMBRE TIENDA\tCODIGO PRODUCTO CANTIDAD PEDIDA\tNOMBRE\t\tPRECIO CANTIDAD FECHA CADUCIDAD\tDESCRIPCION\n";
+			cout << "NOMBRE TIENDA\tCODIGO PRODUCTO CANTIDAD ENVIADA\tNOMBRE\t\tPRECIO CANTIDAD FECHA CADUCIDAD\tDESCRIPCION\n";
 			for(int i = 1; i <= Envios.longitud(); i++) {
 				pedido = Envios.observar(i);
 				pos = BuscarProducto(pedido.CodProd);
@@ -513,7 +518,7 @@ void TAlmacen::ListarListaEnvios(Cadena Nomtienda) {
 					pos = BuscarProducto(pedido.CodProd);
 					if(pos != -1) {
                         // Cabecera
-                        if (!encontrado) cout << "CODIGO PRODUCTO CANTIDAD PEDIDA\tNOMBRE\t\tPRECIO CANTIDAD FECHA CADUCIDAD\tDESCRIPCION\n";
+                        if (!encontrado) cout << "CODIGO PRODUCTO CANTIDAD ENVIADA\tNOMBRE\t\tPRECIO CANTIDAD FECHA CADUCIDAD\tDESCRIPCION\n";
                         encontrado = true;
 						prod = ObtenerProducto(pos);
 						printf("%-15s %d\t%s\t%5.2f  %2d %8d/%02d/%d\t%s\n", pedido.CodProd, pedido.CantidadPed, prod.NombreProd,
@@ -525,6 +530,8 @@ void TAlmacen::ListarListaEnvios(Cadena Nomtienda) {
 			}
 			if(!encontrado) cout << "No se ha encontrado ningún envios a la tienda dada.\n";
 		}
+	} else {
+        cout << "No hay envíos.\n";
 	}
 }
 

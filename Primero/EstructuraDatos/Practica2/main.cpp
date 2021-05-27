@@ -9,6 +9,8 @@
 
 using namespace std;
 
+// TODO: DUDA: Para manejar los datos de Pedidos y envios no tiene porque estar cargado un fichero correcto?
+
 // Funcion para mostrar un producto
 void MostrarProducto(TProducto prod) {
 	printf("%s\t %-30s\t %5.2f  %8d %15d/%02d/%d\t %s\n", prod.CodProd, prod.NombreProd, prod.Precio,
@@ -118,12 +120,12 @@ void GestionPedidos(TAlmacen &almacen) {
 
 					cout << "Indique la cantidad pedida: ";
 					cin >> pedido.CantidadPed;
-                    while (pedido.CantidadPed >= 0) {
+                    while (pedido.CantidadPed <= 0) {
                         cout << "Valor inválido. Indique la cantidad pedida: ";
                         cin >> pedido.CantidadPed;
                     }
 
-					// TODO: COMPROBAR SI FUNCIONA
+					// TODO: DUDA: Esta bien?
 					pos = almacen.BuscarProducto(pedido.CodProd);
 					prod = almacen.ObtenerProducto(pos);
 					// Comprobamos que el no productos pedido sea menor o igual al que hay en el almacen
@@ -148,15 +150,19 @@ void GestionPedidos(TAlmacen &almacen) {
 					}
 
 					if(almacen.ActualizarProducto(pos, prod)) {
-                        if (almacen.InsertarEnvios(envio)) cout << "Se ha añadido el pedido con éxito.\n";
-						if (encolarPedido) {
+                        if (envio.CantidadPed > 0) {
+                            if (almacen.InsertarEnvios(envio)) cout << "Se ha añadido el pedido con éxito.\n"; else cout << "ERROR! No se añadio el envio.\n";
+                        } else {
+                            cout << "No se ha añadido el envío. Cantidad a enviar: " << envio.CantidadPed << endl;
+                        }
+                        if (encolarPedido) {
                             almacen.AnadirPedido(pedido);
                             cout << "Atendido: parcialmente.\n";
-						} else {
+                        } else {
                             cout << "Atendido: completamente.\n";
-						}
+                        }
 					} else {
-						cout << "No se ha podido añadir el pedido.\n";
+						cout << "No se ha podido actualizar el producto en la base de datos del almacén.\n";
 					}
 				} else {
 					cout << "No hay productos en el almacén.\n";
@@ -406,7 +412,7 @@ int MenuAlmacen(Cadena NombAlmacen) {
 	return opc;
 }
 
-void GestionAlmacen(Cadena nombre, TAlmacen& almacen) {
+void GestionAlmacen(Cadena nombre, TAlmacen &almacen) {
 	Cadena nFichero, direccion;
 	TProducto prod;
 	int opc = 0;
@@ -608,8 +614,7 @@ void GestionAlmacen(Cadena nombre, TAlmacen& almacen) {
 					cout << "ERROR! No se ha encontrado un producto con el código indicado.\n";
 				} else {
 					cout << "Producto encontrado.\n";
-					//cout << "CODIGO\tNOMBRE\t\t\t\t\tPRECIO\tCANTIDAD\tFECHA CADUCIDAD\tDESCRIPCION\n";
-					printf("%s\t %-30s\t %s  %s\t %s\t %s\n", "CODIGO", "NOMBRE", "PRECIO", "CANTIDAD", "FECHA CADUCIDAD", "DESCRIPCION");
+                    printf("%s\t %-30s\t %s  %s\t %s\t %s\n", "CODIGO", "NOMBRE", "PRECIO", "CANTIDAD", "FECHA CADUCIDAD", "DESCRIPCION");
 					MostrarProducto(almacen.ObtenerProducto(pos));
 					cout << endl;
 				}
@@ -671,7 +676,7 @@ int MenuTienda(Cadena NombTienda) {
 	return opc;
 }
 
-void GestionTienda(Cadena nombre, TAlmacen& almacen, TTienda& tienda) {
+void GestionTienda(Cadena nombre, TAlmacen &almacen, TTienda &tienda) {
 	Cadena nFichero, direccion;
 	int opc = 0;
 	// Variables aux
@@ -958,7 +963,7 @@ void GestionTienda(Cadena nombre, TAlmacen& almacen, TTienda& tienda) {
 	} while(opc != 0);
 }
 
-void ReposicionProductos(TAlmacen& almacen, TTienda& tienda) {
+void ReposicionProductos(TAlmacen &almacen, TTienda &tienda) {
 	if(almacen.EstaAbierto() && tienda.EstaAbierta()) {
 		TEstante estante;
 		TProducto prod;
