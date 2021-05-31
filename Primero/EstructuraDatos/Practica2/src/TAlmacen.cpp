@@ -263,7 +263,39 @@ bool TAlmacen::CargarColaPedidos(Cadena Nomf) {
 
 //Añadirá un nuevo pedido a la cola de pedidos
 void TAlmacen::AnadirPedido(TPedido p) {
-	Pedidos.encolar(p);
+	// TODO: Implementar aqui lo que hay en main.cpp
+	int pos = BuscarProducto(p.CodProd);
+	TProducto prod = ObtenerProducto(pos);
+    // Comprobamos que el no productos pedido sea menor o igual al que hay en el almacen
+    TPedido envio = p;
+    bool encolarPedido;
+    if(p.CantidadPed > prod.Cantidad) {
+        // Añadimos a envios
+        envio.CantidadPed = prod.Cantidad;
+
+        // Modificamos pedidos
+        p.CantidadPed -= prod.Cantidad;
+        prod.Cantidad = 0;
+
+        encolarPedido = true;
+    } else if(p.CantidadPed <= prod.Cantidad) {
+        // Restamos la cantidad en el almacén
+        prod.Cantidad -= p.CantidadPed;
+
+        envio.CantidadPed = p.CantidadPed;
+
+        // Borramos el pedido de Pedidos
+        encolarPedido = false;
+    }
+
+    if(ActualizarProducto(pos, prod)) {
+        if (envio.CantidadPed > 0) {
+            InsertarEnvios(envio);
+        }
+        if (encolarPedido) {
+            Pedidos.encolar(p);
+        }
+    }
 }
 
 //Método que atiende los pedidos del producto en cuestión pendientes de suministrar con la cantidad
@@ -315,8 +347,6 @@ bool TAlmacen::AtenderPedidos(Cadena CodProd, int cantidadcomprada) {
             if (encolarPedido) Pedidos.encolar(pedido);
         }
         exito = ActualizarProducto(pos, prod);
-    } else {
-        cout << "ERROR! No se ha encontrado en el almacén el producto con el codigo: " << CodProd << ".\n";
     }
 	return exito;
 }

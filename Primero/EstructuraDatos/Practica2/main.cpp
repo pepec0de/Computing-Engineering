@@ -9,7 +9,7 @@
 
 using namespace std;
 
-// TODO: DUDA: Para manejar los datos de Pedidos y envios no tiene porque estar cargado un fichero correcto?
+// TODO: DUDA: Para manejar los datos de Pedidos y envios no tiene porque estar cargado un fichero ?
 
 // Funcion para mostrar un producto
 void MostrarProducto(TProducto prod) {
@@ -84,10 +84,7 @@ void GestionPedidos(TAlmacen &almacen) {
 	int opc = 0;
 	Cadena nFichero;
 	TPedido pedido;
-	TProducto prod;
 	int pos;
-	TPedido envio;
-	bool encolarPedido = false;
 	do {
 		opc = MenuPedidos();
 		switch(opc) {
@@ -110,11 +107,15 @@ void GestionPedidos(TAlmacen &almacen) {
 				if(almacen.NProductos() > 0) {
 					cout << "Indique el nombre de la tienda: ";
 					pedirCadena(pedido.Nomtienda);
+                    while(strcmp(pedido.Nomtienda, "") == 0) {
+						cout << "Valor inválido. Indique otro nombre de tienda: ";
+						pedirCadena(pedido.Nomtienda);
+					}
 
 					cout << "Indique el código del producto: ";
 					pedirCadena(pedido.CodProd);
-					while(almacen.BuscarProducto(pedido.CodProd) == -1) {
-						cout << "No se ha encontrado el código indicado en el almacén. Indique otro código de producto: ";
+					while(strcmp(pedido.CodProd, "") == 0) {
+						cout << "Valor inválido. Indique otro código de producto: ";
 						pedirCadena(pedido.CodProd);
 					}
 
@@ -125,44 +126,11 @@ void GestionPedidos(TAlmacen &almacen) {
                         cin >> pedido.CantidadPed;
                     }
 
-					// TODO: DUDA: Esta bien?
 					pos = almacen.BuscarProducto(pedido.CodProd);
-					prod = almacen.ObtenerProducto(pos);
-					// Comprobamos que el no productos pedido sea menor o igual al que hay en el almacen
-					envio = pedido;
-					if(pedido.CantidadPed > prod.Cantidad) {
-						// Añadimos a envios
-						envio.CantidadPed = prod.Cantidad;
-
-						// Modificamos pedidos
-						pedido.CantidadPed -= prod.Cantidad;
-						prod.Cantidad = 0;
-
-						encolarPedido = true;
-					} else if(pedido.CantidadPed <= prod.Cantidad) {
-						// Restamos la cantidad en el almacén
-						prod.Cantidad -= pedido.CantidadPed;
-
-						envio.CantidadPed = pedido.CantidadPed;
-
-						// Borramos el pedido de Pedidos
-						encolarPedido = false;
-					}
-
-					if(almacen.ActualizarProducto(pos, prod)) {
-                        if (envio.CantidadPed > 0) {
-                            if (almacen.InsertarEnvios(envio)) cout << "Se ha añadido el pedido con éxito.\n"; else cout << "ERROR! No se añadio el envio.\n";
-                        } else {
-                            cout << "No se ha añadido el envío. Cantidad a enviar: " << envio.CantidadPed << endl;
-                        }
-                        if (encolarPedido) {
-                            almacen.AnadirPedido(pedido);
-                            cout << "Atendido: parcialmente.\n";
-                        } else {
-                            cout << "Atendido: completamente.\n";
-                        }
+					if (pos != -1) {
+                        almacen.AnadirPedido(pedido);
 					} else {
-						cout << "No se ha podido actualizar el producto en la base de datos del almacén.\n";
+                        cout << "No se ha encontrado el código de producto " << pedido.CodProd << " en el almacén.\n";
 					}
 				} else {
 					cout << "No hay productos en el almacén.\n";

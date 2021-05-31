@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1622110272 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\main.cpp
+1622456262 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\main.cpp
 	<iostream>
 	<cstdlib>
 	"include/TAlmacen.h"
@@ -7,7 +7,7 @@
 	<locale.h>
 	<conio.h>
 
-1622109758 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\src\talmacen.cpp
+1622456371 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\src\talmacen.cpp
 	"../include/TAlmacen.h"
 
 1620121671 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\include\talmacen.h
