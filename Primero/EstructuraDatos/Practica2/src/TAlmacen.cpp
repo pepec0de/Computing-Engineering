@@ -263,7 +263,6 @@ bool TAlmacen::CargarColaPedidos(Cadena Nomf) {
 
 //Añadirá un nuevo pedido a la cola de pedidos
 void TAlmacen::AnadirPedido(TPedido p) {
-	// TODO: Implementar aqui lo que hay en main.cpp
 	int pos = BuscarProducto(p.CodProd);
 	TProducto prod = ObtenerProducto(pos);
     // Comprobamos que el no productos pedido sea menor o igual al que hay en el almacen

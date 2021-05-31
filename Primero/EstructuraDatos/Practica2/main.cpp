@@ -9,8 +9,6 @@
 
 using namespace std;
 
-// TODO: DUDA: Para manejar los datos de Pedidos y envios no tiene porque estar cargado un fichero ?
-
 // Funcion para mostrar un producto
 void MostrarProducto(TProducto prod) {
 	printf("%s\t %-30s\t %5.2f  %8d %15d/%02d/%d\t %s\n", prod.CodProd, prod.NombreProd, prod.Precio,
