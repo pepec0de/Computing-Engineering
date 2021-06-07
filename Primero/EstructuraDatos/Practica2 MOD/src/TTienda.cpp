@@ -1,8 +1,5 @@
 #include "../include/TTienda.h"
 
-/// ERRORES
-/* NO compruebo si algun new ha devuelto NULL */
-
 // Metodo privado
 // Método privado para ordenar los estantes del vector. La ordenación se realizará por el código de
 // producto en orden ascendente. En caso de tener el mismo código se ordenará por la posición del
@@ -51,6 +48,10 @@ void TTienda::DatosTienda(Cadena pNombTienda, Cadena pDirTienda) {
     strcpy(pNombTienda, Nombre);
     strcpy(pDirTienda, Direccion);
 }
+//Devuelve el atributo del nombre del fichero de la tienda
+void TTienda::NombreFicheroTienda(Cadena NomF) {
+    strcpy(NomF, NomFiche);
+}
 
 // Crea un fichero binario vacío con el nombre pasado por parámetro e inicializa los atributos nombre y
 // dirección mediante los parámetros y a continuación lo cerrará. Devolverá true si ha podido crear el
@@ -68,10 +69,11 @@ bool TTienda::CrearTienda(Cadena pNombTienda, Cadena pDirTienda, Cadena pNomFich
         NEstan = 0;
         Tamano = Incremento;
         Estantes = new TEstante[Tamano];
-
-        fichero.write((char*) Nombre, sizeof(Cadena));
-        fichero.write((char*) Direccion, sizeof(Cadena));
-        resultado = true;
+        if (Estantes != NULL) {
+            fichero.write((char*) Nombre, sizeof(Cadena));
+            fichero.write((char*) Direccion, sizeof(Cadena));
+            resultado = true;
+        }
     }
     fichero.close();
     return resultado;
@@ -102,9 +104,11 @@ bool TTienda::AbrirTienda(Cadena pNomFiche) {
         // Si ya se han cargado datos los borramos
         if (Estantes != NULL) delete [] Estantes;
         Estantes = new TEstante[Tamano];
-        fichero.seekg(sizeof(Cadena)*2, ios::beg);
-        fichero.read((char*) Estantes, sizeof(TEstante)*NEstan);
-        resultado = true;
+        if (Estantes != NULL) {
+            fichero.seekg(sizeof(Cadena)*2, ios::beg);
+            fichero.read((char*) Estantes, sizeof(TEstante)*NEstan);
+            resultado = true;
+        }
     }
     fichero.close();
     return resultado;

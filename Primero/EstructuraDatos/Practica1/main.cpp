@@ -9,12 +9,6 @@
 
 using namespace std;
 
-TAlmacen almacen;
-TTienda tienda;
-// declaramos variables globales para las direcciones para evitar problemas a la hora de salir de menus y
-// volver a listar datos
-Cadena DirAlmacen, DirTienda;
-
 // Funcion para mostrar un producto
 void MostrarProducto(TProducto prod) {
     cout << prod.CodProd << "\t"
@@ -27,21 +21,15 @@ void MostrarProducto(TProducto prod) {
          << prod.Descripcion << endl;
 }
 
-void MostrarEstante(TEstante testante) {
-    int pos = almacen.BuscarProducto(testante.CodProd);
-    if (pos != -1) {
-        TProducto prod = almacen.ObtenerProducto(pos);
-        cout << testante.CodEstante << "\t"
-             << testante.Posicion << "\t"
-             << testante.Capacidad << "\t\t"
-             << testante.CodProd << "\t\t"
-             << prod.NombreProd << "\t\t\t\t"
-             << prod.Precio << "\t"
-             << testante.NoProductos << "\t"
-             << prod.Precio*testante.NoProductos << endl;
-    } else {
-        cout << "ERROR! No se ha encontrado el producto con el código: " << testante.CodProd << endl;
-    }
+void MostrarEstante(TEstante testante, TProducto prod) {
+    cout << testante.CodEstante << "\t"
+         << testante.Posicion << "\t"
+         << testante.Capacidad << "\t\t"
+         << testante.CodProd << "\t\t"
+         << prod.NombreProd << "\t\t\t\t"
+         << prod.Precio << "\t"
+         << testante.NoProductos << "\t"
+         << prod.Precio * testante.NoProductos << endl;
 }
 
 // Funcion para pedir una fecha
@@ -145,11 +133,12 @@ int MenuTienda(Cadena NombTienda) {
     return opc;
 }
 
-void GestionAlmacen(Cadena nombre) {
-    Cadena nFichero;
+void GestionAlmacen(TAlmacen &almacen, Cadena nombre) {
+    Cadena nFichero, DirAlmacen;
     TProducto prod;
     int opc = 0;
     int pos = 0;
+    almacen.DatosAlmacen(nombre, DirAlmacen);
     do {
         opc = MenuAlmacen(nombre);
         switch (opc) {
@@ -379,8 +368,8 @@ void GestionAlmacen(Cadena nombre) {
     } while (opc != 0);
 }
 
-void GestionTienda(Cadena nombre) {
-    Cadena nFichero;
+void GestionTienda(TAlmacen &almacen, TTienda &tienda, Cadena nombre) {
+    Cadena nFichero, DirTienda;
     int opc = 0;
     // Variables aux
     TEstante estante;
@@ -456,7 +445,11 @@ void GestionTienda(Cadena nombre) {
                         //cout << "NÚMERO DE ESTANTES: " << tienda.NoEstantes() << endl;
                         cout << "CODIGO POSICION CAPACIDAD CODIGO PRODUCTO NOMBRE\t\t\tPRECIO\tNoPRODUCTOS\tVALOR TOTAL\n";
                         for (int i = 0; i < tienda.NoEstantes(); i++) {
-                            MostrarEstante(tienda.ObtenerEstante(i));
+                            pos = almacen.BuscarProducto(tienda.ObtenerEstante(i).CodProd);
+                            if (pos != -1) {
+                                prod = almacen.ObtenerProducto(pos);
+                                MostrarEstante(tienda.ObtenerEstante(i), prod);
+                            }
                         }
                     } else {
                         cout << "No hay estantes en el almacén.\n";
@@ -546,7 +539,13 @@ void GestionTienda(Cadena nombre) {
                         cout << "Estante encontrado.\n";
                         cout << "CODIGO POSICION CAPACIDAD CODIGO PRODUCTO NOMBRE\t\t\tPRECIO\tNoPRODUCTOS\tVALOR TOTAL\n";
                         estante = tienda.ObtenerEstante(pos);
-                        MostrarEstante(estante);
+                        pos = almacen.BuscarProducto(estante.CodProd);
+                        if (pos != -1) {
+                            prod = almacen.ObtenerProducto(pos);
+                            MostrarEstante(estante, prod);
+                        }
+                        pos = tienda.BuscarEstante(estante.CodEstante);
+
                         if (confirmar("¿Desea actualizar el número de productos? (S/n): ")) {
                             // Recogemos el producto
                             prod = almacen.ObtenerProducto(almacen.BuscarProducto(estante.CodProd));
@@ -628,6 +627,7 @@ void GestionTienda(Cadena nombre) {
                             // Devolver los productos al almacen
                             pos = almacen.BuscarProducto(estante.CodProd);
                             prod = almacen.ObtenerProducto(pos);
+                            /// ERROR : SE DEBE SUMAR LAS CANTIDADES AL ALMACEN
                             prod.Cantidad -= estante.NoProductos;
                             if (almacen.ActualizarProducto(pos, prod)) {
                                 cout << "Se ha eliminado el estante con éxito.\n";
@@ -648,7 +648,7 @@ void GestionTienda(Cadena nombre) {
     } while(opc != 0);
 }
 
-void ReposicionProductos() {
+void ReposicionProductos(TAlmacen &almacen, TTienda &tienda) {
     if (almacen.EstaAbierto() && tienda.EstaAbierta()) {
         TEstante estante;
         TProducto prod;
@@ -696,6 +696,9 @@ int main() {
     system("title Práctica 1");
     setlocale(LC_CTYPE, "Spanish");
 
+    TAlmacen almacen;
+    TTienda tienda;
+
     // Variables auxiliares
     Cadena nAlmacen, nTienda;
 
@@ -708,13 +711,13 @@ int main() {
         opc = MenuPrincipal(nAlmacen, nTienda);
         switch (opc) {
         case 1: /// Gestión del Almacenes
-            GestionAlmacen(nAlmacen);
+            GestionAlmacen(almacen, nAlmacen);
             break;
         case 2: /// Gestión de la Tienda
-            GestionTienda(nTienda);
+            GestionTienda(almacen, tienda, nTienda);
             break;
         case 3: /// Reposición de Productos en Tienda
-            ReposicionProductos();
+            ReposicionProductos(almacen, tienda);
             break;
         }
     }

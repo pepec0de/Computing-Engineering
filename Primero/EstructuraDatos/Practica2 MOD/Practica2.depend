@@ -1,0 +1,79 @@
+# depslib dependency file v1.0
+1622460037 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\main.cpp
+	<iostream>
+	<cstdlib>
+	"include/TAlmacen.h"
+	"include/TTienda.h"
+	<locale.h>
+	<conio.h>
+
+1622460037 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\src\talmacen.cpp
+	"../include/TAlmacen.h"
+
+1620121671 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\include\talmacen.h
+	"TTipos.h"
+	"TADCola.h"
+	"TADLista.h"
+
+1620039172 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\include\ttipos.h
+	<string.h>
+	<iostream>
+	<fstream>
+
+1622996910 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\src\ttienda.cpp
+	"../include/TTienda.h"
+
+1620118564 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\include\ttienda.h
+	"TTipos.h"
+
+1621274969 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\src\tadcola.cpp
+	"../include/TADCola.h"
+
+1620123978 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\include\tadcola.h
+	"TTipos.h"
+
+1621244533 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\src\tadlista.cpp
+	"../include/TADLista.h"
+
+1620292150 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2\include\tadlista.h
+	"TTipos.h"
+
+1623063973 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2 mod\main.cpp
+	<iostream>
+	<cstdlib>
+	"include/TAlmacen.h"
+	"include/TTienda.h"
+	<locale.h>
+	<conio.h>
+
+1623061750 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2 mod\include\talmacen.h
+	"TTipos.h"
+	"TADCola.h"
+	"TADLista.h"
+
+1620039172 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2 mod\include\ttipos.h
+	<string.h>
+	<iostream>
+	<fstream>
+
+1620123978 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2 mod\include\tadcola.h
+	"TTipos.h"
+
+1620292150 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2 mod\include\tadlista.h
+	"TTipos.h"
+
+1620118564 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2 mod\include\ttienda.h
+	"TTipos.h"
+
+1621274969 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2 mod\src\tadcola.cpp
+	"../include/TADCola.h"
+
+1621244533 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2 mod\src\tadlista.cpp
+	"../include/TADLista.h"
+
+1623063667 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2 mod\src\talmacen.cpp
+	"../include/TAlmacen.h"
+
+1623060740 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica2 mod\src\ttienda.cpp
+	"../include/TTienda.h"
+

@@ -7,7 +7,7 @@
 	<locale.h>
 	<conio.h>
 
-1619291525 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\src\talmacen.cpp
+1622539132 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\src\talmacen.cpp
 	"../include/TAlmacen.h"
 
 1617657077 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\include\talmacen.h
@@ -18,7 +18,7 @@
 	<iostream>
 	<fstream>
 
-1620035021 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\src\ttienda.cpp
+1622538304 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\src\ttienda.cpp
 	"../include/TTienda.h"
 
 1620035028 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\include\ttienda.h

@@ -15,15 +15,6 @@ public:
 	int primero();
 	bool esvacia();
 	int longitud() ;
-
-    friend ostream& operator<< (ostream& os, TADCola const & cola ) {
-	    string msg = "[";
-	    for (int i = 0; i < cola.longitud(); i++) {
-            msg += to_string(cola.primero()) + ", ";
-	    }
-	    msg += "]";
-        return os << msg << endl;
-    }
 };
 
 #endif // TADCOLA_H

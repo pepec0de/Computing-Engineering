@@ -1,8 +1,7 @@
 # depslib dependency file v1.0
-1619782230 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\main.cpp
+1621078424 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\main.cpp
 	<iostream>
 	"TADLista.h"
-	<fstream>
 	"TADCola.h"
 	"TADPila.h"
 
@@ -15,7 +14,7 @@
 1619707616 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\src\tadcola.cpp
 	"TADCola.h"
 
-1619906391 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\include\tadcola.h
+1621078381 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\include\tadcola.h
 	<iostream>
 	<string>
 

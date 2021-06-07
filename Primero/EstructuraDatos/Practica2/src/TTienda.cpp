@@ -69,10 +69,11 @@ bool TTienda::CrearTienda(Cadena pNombTienda, Cadena pDirTienda, Cadena pNomFich
         NEstan = 0;
         Tamano = Incremento;
         Estantes = new TEstante[Tamano];
-
-        fichero.write((char*) Nombre, sizeof(Cadena));
-        fichero.write((char*) Direccion, sizeof(Cadena));
-        resultado = true;
+        if (Estantes != NULL) {
+            fichero.write((char*) Nombre, sizeof(Cadena));
+            fichero.write((char*) Direccion, sizeof(Cadena));
+            resultado = true;
+        }
     }
     fichero.close();
     return resultado;
