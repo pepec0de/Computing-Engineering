@@ -94,7 +94,7 @@ void AlgoritmosOrdenacion::Junio21(int a[], int pri, int ult) {
 		pri++;
 		contAsig += 9;
 	}
-	cout << "OE TOTALES = " << contAsig << endl;
+	//cout << "OE TOTALES = " << contAsig << endl;
 }
 
 int AlgoritmosOrdenacion::PosMax(int a[], int pri, int ult, int &contAsig) {

@@ -260,7 +260,6 @@ void TestOrdenacion::casosTeoricos(int metodo) {
 	cout << "\tTalla\tTiempo Caso Peor\tTiempo Caso Medio\tTiempo caso Mejor" << endl << endl;
 
 	double tiempoPeor = 0; int tiempoMedio = 0; int tiempoMejor = 0;
-	int sum;
 	switch (metodo) {
 	case BURBUJA:
 		for (int talla = tallaIni; talla <= tallaFin; talla += incTalla) {
@@ -316,17 +315,17 @@ void TestOrdenacion::casosTeoricos(int metodo) {
 	case JUNIO21:
 		for (int talla = tallaIni; talla <= tallaFin; talla += incTalla) {
 			// Caso mejor: vector inversamente ordenado
-			tiempoMejor = 9 * ((double)talla / 2);
+			tiempoMejor = 9 * (talla / 2);
 			for (int i = 0; i <= (talla / 2) - 1; i++) {
 				tiempoMejor += 28;
-				tiempoMejor += 12 * ((double)talla - 2 - 2 * (double)i);
+				tiempoMejor += 12 * (talla - 2 - 2 *i);
 			}
 
 			// Caso medio: vector mitad ordenados mitad desordenadas
-			tiempoMedio = 9 * ((double)talla / 2);
+			tiempoMedio = 9 * (talla / 2);
 			for (int i = 0; i <= (talla / 2) - 1; i++) {
 				tiempoMedio += 28;
-				tiempoMedio += 12 * ((double)talla - 2 - 2 * (double)i);
+				tiempoMedio += 12 * (talla - 2 - 2 *i);
 				tiempoMedio += (talla - 2 * i - 1) / 2;
 			}
 			tiempoMedio += talla - 1;
