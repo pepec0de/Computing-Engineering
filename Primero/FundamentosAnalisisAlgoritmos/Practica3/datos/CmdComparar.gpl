@@ -1,0 +1,11 @@
+# ESTE ES UN SCRIPT DE GNUPLOT PARA COMPARACION DE 2 METODOS
+set title "Comparacion de tiempos: Insercion y Seleccion"
+set key top left vertical inside
+set grid
+set xlabel "Talla (n)"
+set ylabel "Tiempo (ms)"
+plot "Insercion.dat" using 1:2 with lines title "Insercion", "Seleccion.dat" using 1:2 with lines title "Seleccion"
+set terminal pdf
+set output "InsercionSeleccion.pdf"
+replot
+pause 5 "Pulsa Enter para continuar..."

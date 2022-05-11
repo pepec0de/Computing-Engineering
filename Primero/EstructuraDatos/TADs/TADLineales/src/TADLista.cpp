@@ -19,8 +19,7 @@ void lista::insertar(int i, int e) {
 	}
 }
 void lista::eliminar(int i) {
-	int postabla;
-	postabla = i - 1;
+	int postabla = i - 1;
 	while(postabla < n - 1) {
 		elementos[postabla] = elementos[postabla + 1];
 //Desplazamiento

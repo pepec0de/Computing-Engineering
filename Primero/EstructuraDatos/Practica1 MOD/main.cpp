@@ -754,9 +754,38 @@ void ReposicionProductos() {
     pausa();
 }
 
+void modificar(char n[]) {
+    n[0] = 'a';
+}
+
+void modificar(int &n) {
+    n = 10;
+}
 int main() {
     system("title Práctica 1");
     setlocale(LC_CTYPE, "Spanish");
+
+    int hola[10];
+    cout << hola << endl;
+
+    int *punt = new int[5];
+    for (int i = 0; i < 5; i++) punt[i] = i;
+    cout << punt << endl;
+    cout << *punt << endl;
+    cout << punt[1] << endl;
+
+    int *temp = new int[5+4];
+    for (int i = 0; i < 5; i++) temp[i] = punt[i];
+
+    punt = temp;
+    for (int i = 0; i < 5; i++) cout << punt[i] << ", ";
+    cout << endl;
+    delete [] temp;
+
+    for (int i = 0; i < 5; i++) cout << punt[i] << ", ";
+    cout << endl;
+
+    return 0;
 
     // Variables auxiliares
     Cadena nAlmacen, nTienda;

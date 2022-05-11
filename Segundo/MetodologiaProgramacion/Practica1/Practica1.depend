@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1635845408 source:c:\users\pepe\documents\programas\dev\computing-engineering\segundo\metodologiaprogramacion\practica1\main.cpp
+	<iostream>
+	"Fecha.hpp"
+
+1635844036 source:c:\users\pepe\documents\programas\dev\computing-engineering\segundo\metodologiaprogramacion\practica1\src\fecha.cpp
+	"Fecha.hpp"
+
+1635846089 c:\users\pepe\documents\programas\dev\computing-engineering\segundo\metodologiaprogramacion\practica1\include\fecha.hpp
+	<iostream>
+	<iomanip>
+

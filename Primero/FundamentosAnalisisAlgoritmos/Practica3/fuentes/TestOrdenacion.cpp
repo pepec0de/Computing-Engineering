@@ -180,10 +180,69 @@ void TestOrdenacion::comparar(int metodo1, int metodo2) {
 }
 
 
-void TestOrdenacion::compararTodos() {
-	// TODO: Hacerlo igual que TestBusqueda
-	Graficas g;
-	g.generarGraficaCMP(nombreAlgoritmo);
+void TestOrdenacion::comparar() {
+	// Concatenamos los nombres de los algoritmos
+	string nombre = "";
+	for (string str : nombreAlgoritmo) {
+		nombre += str;
+	}
+	ofstream f(nombre + ".dat");
+	cout << endl << "Comparación de los algoritmos de ordenación: " << nombre << endl;
+	cout << "Tiempos de ejecucion promedio" << endl << endl;
+	cout << "\t\t\t" << nombre << endl;
+	cout << "\tTalla\t\tTiempo (ms)\t\tTiempo (ms)" << endl << endl;
+
+	vector<double> tiempos;
+	for (string str : nombreAlgoritmo) {
+		tiempos.push_back(0);
+	}
+	int pos;
+	ConjuntoInt* conjunto;
+	// Iteracion por cada talla
+	for (int talla = tallaIni; talla <= tallaFin; talla += incTalla) {
+		for (int i = 0; i < nombreAlgoritmo.size(); i++) {
+			tiempos[i] = 0.0;
+		}
+
+		for (int i = 0; i < NUMREPETICIONES; i++) {
+			conjunto = new ConjuntoInt(talla);
+			// Acumulamos los tiempos en el vector tiempos
+			for (int j = 0; j < nombreAlgoritmo.size(); j++) {
+				conjunto->GeneraVector(talla);
+				tiempos[j] += ordenarArrayDeInt(conjunto->getDatos(), talla, j);
+				conjunto->vaciar();
+			}
+			delete conjunto;
+		}
+		f << talla << "\t";
+		cout << "\t" << talla << "\t";
+		for (int i = 0; i < tiempos.size(); i++) {
+			tiempos[i] /= NUMREPETICIONES;
+			f << tiempos[i] << "\t";
+			cout << "\t" << setw(10) << setprecision(2) << (double)tiempos[i];
+		}
+		f << endl;
+		cout << endl;
+	}
+	f.close();
+	cout << endl << "Datos guardados en los ficheros: " << nombre << ".dat\n";
+
+	// Generar grafica
+	char opc;
+	cout << endl << "Generar grafica de resultados? (s/n): ";
+	cin >> opc;
+	switch (opc) {
+	case 's':
+	case 'S': {
+		// Ejecutar el fichero por lotes (comandos)
+		Graficas g;
+		g.generarGraficaCMP(nombreAlgoritmo);
+	}break;
+	default:
+		cout << "\nGrafica no generada.\n";
+	}
+	cout << endl;
+	system("cls");
 }
 
 void TestOrdenacion::casosTeoricos(int metodo) {

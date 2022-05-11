@@ -10,7 +10,7 @@
 #include "TestBusqueda.h"
 //** ESCRIBIR PARA COMPLETAR LA PRACTICA **//
 TestBusqueda::TestBusqueda() {
-	nombreAlgoritmo.push_back("Secuencial");
+	nombreAlgoritmo.push_back("SecuencialIterativa");
 	nombreAlgoritmo.push_back("BinariaIterativa");
 	nombreAlgoritmo.push_back("InterpolacionIterativa");
 } 
@@ -180,7 +180,7 @@ void TestBusqueda::comparar(int metodo1, int metodo2) {
 }
 
 void TestBusqueda::comparar() {
-	// TODO: comentar mas codigo
+	// Concatenamos los nombres de los algoritmos
 	string nombre = "";
 	for (string str : nombreAlgoritmo) {
 		nombre += str;
@@ -197,6 +197,7 @@ void TestBusqueda::comparar() {
 	}
 	int pos;
 	ConjuntoInt* conjunto;
+	// Iteracion por cada talla
 	for (int talla = tallaIni; talla <= tallaFin; talla += incTalla) {
 		for (int i = 0; i < nombreAlgoritmo.size(); i++) {
 			tiempos[i] = 0.0;
@@ -204,6 +205,7 @@ void TestBusqueda::comparar() {
 
 		for (int i = 0; i < NUMREPETICIONES; i++) {
 			conjunto = new ConjuntoInt(talla);
+			// Acumulamos los tiempos en el vector tiempos
 			for (int j = 0; j < nombreAlgoritmo.size(); j++) {
 				conjunto->GeneraVector(talla);
 				tiempos[j] += buscaEnArrayDeInt(conjunto->getDatos(), talla, conjunto->generaKey(), j, pos);
@@ -239,5 +241,68 @@ void TestBusqueda::comparar() {
 		cout << "\nGrafica no generada.\n";
 	}
 	cout << endl;
+	system("cls");
+}
+
+void TestBusqueda::casosTeoricos(int metodo) {
+	ofstream f(nombreAlgoritmo[metodo] + "Teorico.dat");
+	cout << endl << "Tiempo en operacion elementales segun diferentes casos del algoritmo: " << nombreAlgoritmo[metodo] << endl;
+	cout << "Operaciones elementales (OE)" << endl << endl;
+	cout << "\tTalla\tTiempo Caso Peor\tTiempo Caso Medio\tTiempo caso Mejor" << endl << endl;
+
+	double tiempoPeor = 0; int tiempoMedio = 0; int tiempoMejor = 0;
+	switch (metodo) {
+	case SECUENCIALIT:
+		for (int talla = tallaIni; talla <= tallaFin; talla += incTalla) {
+			// Caso mejor T(n) = 7 
+			tiempoMejor = 7;
+
+			// Caso medio T(n) = 7 + 3*n
+			tiempoMedio = 7 + 3 * talla;
+
+			// Caso peor T(n) = 7 + 6*n
+			tiempoPeor = 7 + 6*talla;
+
+			// Mostrar datos
+			cout << "\t" << talla << "\t\t" << setw(10) << setprecision(2) << (double)tiempoPeor << " \t" << setw(10) << setprecision(2) << (double)tiempoMedio << " \t" << setw(10) << setprecision(2) << (double)tiempoMejor << " \t\t" << endl;
+			// escribimos en el fichero
+			f << talla << "\t" << tiempoPeor << "\t" << tiempoMedio << "\t" << tiempoMejor << endl;
+		}
+		break;
+	case BINARIAIT:
+		for (int talla = tallaIni; talla <= tallaFin; talla += incTalla) {
+			// Caso mejor T(n) = 14
+			tiempoMejor = 14;
+
+			// Caso medio T(n) = 5 + 3*(n/2 +1) +4*n +n/2
+			tiempoMedio = 5 + 3 * (talla / 2 + 1) + 4 * talla + talla / 2;
+
+			// Caso peor T(n) = 8 + 12*n
+			tiempoPeor = 8 + 12 * talla;
+
+			// Mostrar datos
+			cout << "\t" << talla << "\t\t" << setw(10) << setprecision(2) << (double)tiempoPeor << " \t" << setw(10) << setprecision(2) << (double)tiempoMedio << " \t" << setw(10) << setprecision(2) << (double)tiempoMejor << " \t\t" << endl;
+			// escribimos en el fichero
+			f << talla << "\t" << tiempoPeor << "\t" << tiempoMedio << "\t" << tiempoMejor << endl;
+		}
+		break;
+	}
+	f.close();
+	cout << endl << "Datos guardados en el fichero " << nombreAlgoritmo[metodo] << "Teorico.dat " << endl;
+
+	/* Generar grafica */
+	char opc;
+	cout << endl << "Generar grafica de resultados? (s/n): ";
+	cin >> opc;
+	switch (opc) {
+	case 's':
+	case 'S': {
+		/* Ejecutar el fichero por lotes (comandos)*/
+		Graficas g;
+		g.generarGraficaTeorico(nombreAlgoritmo[metodo]);
+	}break;
+	default:
+		cout << "\nGrafica no generada.\n";
+	}
 	system("cls");
 }

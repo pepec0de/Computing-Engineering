@@ -1,10 +1,10 @@
 /* 
  * La clase TestOrdenacion contiene los metodos para:
- * 1. Comprobar que los métodos de ordenacion de la clase Ordenacion funcionan adecuadamente.
- * 2. Calcular la eficiencia para el caso medio de un método de ordenación,
- *    guardando los datos y permitiendo imprimir la gráfica correspondiente 
- * 3. Comparar el coste temporal de dos de los métodos de ordenación 
- *    burbuja, inserción, y selección, guardando los datos y permitiendo imprimir la gráfica correspondiente.
+ * 1. Comprobar que los mï¿½todos de ordenacion de la clase Ordenacion funcionan adecuadamente.
+ * 2. Calcular la eficiencia para el caso medio de un mï¿½todo de ordenaciï¿½n,
+ *    guardando los datos y permitiendo imprimir la grï¿½fica correspondiente 
+ * 3. Comparar el coste temporal de dos de los mï¿½todos de ordenaciï¿½n 
+ *    burbuja, inserciï¿½n, y selecciï¿½n, guardando los datos y permitiendo imprimir la grï¿½fica correspondiente.
  */
 #include "AlgoritmosOrdenacion.h"
 #include "TestOrdenacion.h"
@@ -25,11 +25,11 @@ TestOrdenacion::TestOrdenacion()
 TestOrdenacion::~TestOrdenacion(){}
 
 /*
- * Ordena un array de enteros según el método indicado
+ * Ordena un array de enteros segï¿½n el mï¿½todo indicado
  * param v: el array de enteros a ordenar
- * param size: tamaño del array de enteros a ordenar
+ * param size: tamaï¿½o del array de enteros a ordenar
  * param metodo: Metodo de ordenacion a utilizar
- * return Tiempo empleado en la ordenación (en milisegundos)
+ * return Tiempo empleado en la ordenaciï¿½n (en milisegundos)
  */
 double TestOrdenacion::ordenarArrayDeInt(int v[],int size,int metodo) 
 {
@@ -37,7 +37,7 @@ double TestOrdenacion::ordenarArrayDeInt(int v[],int size,int metodo)
 	Mtime t;
 	LARGE_INTEGER t_inicial, t_final;
 	QueryPerformanceCounter(&t_inicial);
-	/* Invoca al método de ordenación elegido */
+	/* Invoca al mï¿½todo de ordenaciï¿½n elegido */
 	switch (metodo){
 		case BURBUJA: estrategia.ordenaBurbuja(v, size);
 			break;
@@ -78,7 +78,7 @@ void TestOrdenacion::comprobarMetodosOrdenacion()
     
 /*
  * Calcula el caso medio de un metodo de ordenacion.
- * Permite las opciones de crear el fichero de datos y la gráfica correspondiente.
+ * Permite las opciones de crear el fichero de datos y la grï¿½fica correspondiente.
  * param metodo: metodo de ordenacion a estudiar.
  */
 void TestOrdenacion::casoMedio(int metodo)
@@ -108,7 +108,7 @@ void TestOrdenacion::casoMedio(int metodo)
 
 	/* Generar grafica */
 	char opc;
-	cout << endl << "Generar gráfica de resultados? (s/n): ";
+	cout << endl << "Generar grï¿½fica de resultados? (s/n): ";
 	cin >> opc;
 	switch (opc) {
 	case 's':
@@ -118,7 +118,7 @@ void TestOrdenacion::casoMedio(int metodo)
 		g.generarGraficaMEDIO(nombreAlgoritmo[metodo], CUADRADO);
 	}break;
 	default:
-		cout << "\nGráfica no generada.\n";
+		cout << "\nGrï¿½fica no generada.\n";
 	}
 	cout << endl;
 	system("cls");
@@ -126,7 +126,7 @@ void TestOrdenacion::casoMedio(int metodo)
 
 /*
  * Compara dos metodos de ordenacion. 
- * Genera el fichero de datos y permite las opcion de crear la gráfica correspondiente.
+ * Genera el fichero de datos y permite las opcion de crear la grï¿½fica correspondiente.
  * param metodo1: Primer metodo de ordenacion a comparar
  * param metodo2: Segundo metodo de ordenacion a comparar
  */
@@ -134,7 +134,7 @@ void TestOrdenacion::comparar(int metodo1, int metodo2) {
 	 //** ESCRIBIR PARA COMPLETAR LA PRACTICA **//	
 	ofstream f1(nombreAlgoritmo[metodo1] + ".dat");
 	ofstream f2(nombreAlgoritmo[metodo2] + ".dat");
-	cout << endl << "Comparación de los algoritmos de ordenación: " << nombreAlgoritmo[metodo1] << " y " << nombreAlgoritmo[metodo2] << endl;
+	cout << endl << "Comparaciï¿½n de los algoritmos de ordenaciï¿½n: " << nombreAlgoritmo[metodo1] << " y " << nombreAlgoritmo[metodo2] << endl;
 	cout << "Tiempos de ejecucion promedio" << endl << endl;
 	cout << "\t\t\t" << nombreAlgoritmo[metodo1] << "\t\t\t" << nombreAlgoritmo[metodo2] << endl;
 	cout << "\tTalla\t\tTiempo (ms)\t\tTiempo (ms)"<< endl << endl;

@@ -36,6 +36,7 @@ public:
 	void casoMedio(int metodo);
 	void comparar(int metodo1, int metodo2);
 	void comparar();
+	void casosTeoricos(int metodo);
 };
 
 #endif

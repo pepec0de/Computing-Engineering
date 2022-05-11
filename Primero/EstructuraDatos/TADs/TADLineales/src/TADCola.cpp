@@ -1,7 +1,6 @@
 #include "TADCola.h"
 
 TADCola::TADCola() {
-	inicio = 0;
 	fin = -1;
 }
 
@@ -15,12 +14,12 @@ int TADCola::longitud() {
 	return fin + 1;
 }
 void TADCola::desencolar() {
-	for(int i = inicio; i < fin; i++)
+	for(int i = 0; i < fin; i++)
 		elementos[i] = elementos[i + 1]; //Desplazamiento
 	fin--;
 }
 int TADCola::primero() {
-	return(elementos[inicio]);
+	return(elementos[0]);
 }
 bool TADCola::esvacia() {
 	return (fin == -1);

@@ -56,7 +56,7 @@ public:
 	void casoMedio(int metodo);
 
 	// Modificado por mi
-	void compararTodos();
+	void comparar();
 
 	void casosTeoricos(int metodo);
 };

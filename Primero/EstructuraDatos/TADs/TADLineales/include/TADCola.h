@@ -7,7 +7,7 @@
 using namespace std;
 class TADCola {
 	int elementos[MAX]; //elementos de la cola
-	int inicio, fin;//principio y fin de la cola
+	int fin;//principio y fin de la cola
 public:
 	TADCola(); // constructor de la clase
 	void encolar(int e);

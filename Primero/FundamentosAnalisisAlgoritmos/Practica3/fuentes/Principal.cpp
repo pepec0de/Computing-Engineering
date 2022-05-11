@@ -4,9 +4,6 @@
 
 using namespace std;
 
-TestOrdenacion testOrdenacion;
-TestBusqueda testBusqueda;
-
 void menuOrdenacionCasoMedio() {
 	int opc = 0;
 	do {
@@ -66,8 +63,11 @@ void menuOrdenacionTeoricos() {
 		cin >> opc;
 	} while (opc < 0 || opc > 3);
 	cout << endl << endl;
-	TestOrdenacion testOrdenacion;
-	testOrdenacion.casosTeoricos(opc-1);
+
+	if (opc != 0) {
+		TestOrdenacion testOrdenacion;
+		testOrdenacion.casosTeoricos(opc-1);
+	}
 }
 
 void menuOrdenacion() {
@@ -79,14 +79,15 @@ void menuOrdenacion() {
 		cout << "\t\t2.- Obtener el caso medio de un método de ordenación.\n";
 		cout << "\t\t3.- Comparar dos métodos.\n";
 		cout << "\t\t4.- Comparar todos.\n";
-		//cout << "\t\t5.- Tiempos teoricos.\n";
+		cout << "\t\t5.- Tiempos teoricos.\n";
 		cout << "\t\t0.- Volver al menú principal.\n";
 		cout << "\t\t----------\n";
 		if (opc == 0) cout << "\t\tElige opción: "; else cout << "\t\tOpción incorrecta. Elige opción: ";
 		cin >> opc;
-	} while (opc < 0 || opc > 4);
+	} while (opc < 0 || opc > 5);
 	cout << endl << endl;
-	
+
+	TestOrdenacion testOrdenacion;
 	switch (opc) {
 	case 1:
 		testOrdenacion.comprobarMetodosOrdenacion();
@@ -98,7 +99,7 @@ void menuOrdenacion() {
 		menuOrdenacionComparar();
 		break;
 	case 4:
-		testOrdenacion.compararTodos();
+		testOrdenacion.comparar();
 		break;
 	case 5:
 		menuOrdenacionTeoricos();
@@ -120,14 +121,18 @@ void menuBusquedaCasoMedio() {
 		cin >> opc;
 	} while (opc < 0 || opc > 3);
 	cout << endl << endl;
-	testBusqueda.casoMedio(opc-1);
+
+	if (opc != 0) {
+		TestBusqueda testBusqueda;
+		testBusqueda.casoMedio(opc - 1);
+	}
 }
 
 void menuBusquedaComparar() {
 	int met1 = 0;
 	do {
 		system("cls");
-		cout << "\t*** COMPARACIÓN DE DOS MÉTODOS DE ORDENACIÓN ***\n\n";
+		cout << "\t*** COMPARACIÓN DE DOS MÉTODOS DE BÚSQUEDA ***\n\n";
 		cout << "Selecciona los métodos a comparar\n";
 		cout << "\t\t1.- SECUENCIAL ITERATIVA.\n";
 		cout << "\t\t2.- BINARIA ITERATIVA.\n";
@@ -144,12 +149,31 @@ void menuBusquedaComparar() {
 			cin >> met2;
 		} while (met2 < 0 || met2 > 3 && met1 == met2);
 		if (met2 != 0) {
+			TestBusqueda testBusqueda;
 			testBusqueda.comparar(met1-1, met2-1);
 		}
 	}
 }
 
-void menuBusquedaTeoricos() {}
+void menuBusquedaTeoricos() {
+	int opc = 0;
+	do {
+		system("cls");
+		cout << "\t*** MÉTODO A ESTUDIAR PARA TIEMPOS TEORICOS ***\n\n";
+		cout << "\t\t1.- SECUENCIAL ITERATIVO.\n";
+		cout << "\t\t2.- BINARIO ITERATIVO.\n";
+		cout << "\t\t0.- Salir.\n";
+		cout << "\t\t----------\n";
+		if (opc == 0) cout << "\t\tElige opción: "; else cout << "\t\tOpción incorrecta. Elige opción: ";
+		cin >> opc;
+	} while (opc < 0 || opc > 2);
+	cout << endl << endl;
+
+	if (opc != 0) {
+		TestBusqueda testBusqueda;
+		testBusqueda.casosTeoricos(opc - 1);
+	}
+}
 
 void menuBusqueda() {
 	int opc = 0;
@@ -160,14 +184,15 @@ void menuBusqueda() {
 		cout << "\t\t2.- Obtener el caso medio de un método de búsqueda.\n";
 		cout << "\t\t3.- Comparar dos métodos.\n";
 		cout << "\t\t4.- Comparar todos.\n";
-		//cout << "\t\t5.- Tiempos teoricos.\n";
+		cout << "\t\t5.- Casos teoricos.\n";
 		cout << "\t\t0.- Volver al menú principal.\n";
 		cout << "\t\t----------\n";
 		if (opc == 0) cout << "\t\tElige opción: "; else cout << "\t\tOpción incorrecta. Elige opción: ";
 		cin >> opc;
-	} while (opc < 0 || opc > 4);
+	} while (opc < 0 || opc > 5);
 	cout << endl << endl;
 	
+	TestBusqueda testBusqueda;
 	switch (opc) {
 	case 1:
 		testBusqueda.comprobarMetodosBusqueda();
@@ -180,6 +205,9 @@ void menuBusqueda() {
 		break;
 	case 4:
 		testBusqueda.comparar();
+		break;
+	case 5:
+		menuBusquedaTeoricos();
 		break;
 	}
 }

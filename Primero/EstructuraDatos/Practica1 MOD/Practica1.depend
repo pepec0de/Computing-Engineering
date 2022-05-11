@@ -24,3 +24,28 @@
 1619430499 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1\include\ttienda.h
 	"TTipos.h"
 
+1619291525 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1 mod\src\talmacen.cpp
+	"../include/TAlmacen.h"
+
+1617657077 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1 mod\include\talmacen.h
+	"TTipos.h"
+
+1616884596 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1 mod\include\ttipos.h
+	<string.h>
+	<iostream>
+	<fstream>
+
+1649434274 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1 mod\src\ttienda.cpp
+	"../include/TTienda.h"
+
+1619430499 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1 mod\include\ttienda.h
+	"TTipos.h"
+
+1650037154 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\practica1 mod\main.cpp
+	<iostream>
+	<cstdlib>
+	"include/TAlmacen.h"
+	"include/TTienda.h"
+	<locale.h>
+	<conio.h>
+

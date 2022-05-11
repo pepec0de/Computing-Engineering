@@ -1,20 +1,20 @@
 # depslib dependency file v1.0
-1621078424 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\main.cpp
-	<iostream>
+1650470693 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\main.cpp
 	"TADLista.h"
 	"TADCola.h"
 	"TADPila.h"
+	"BinaryTree.hpp"
 
-1619707982 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\src\tadlista.cpp
+1624215628 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\src\tadlista.cpp
 	"TADLista.h"
 
 1619374712 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\include\tadlista.h
 	<iostream>
 
-1619707616 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\src\tadcola.cpp
+1630620208 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\src\tadcola.cpp
 	"TADCola.h"
 
-1621078381 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\include\tadcola.h
+1630620228 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\include\tadcola.h
 	<iostream>
 	<string>
 
@@ -23,4 +23,18 @@
 
 1619781563 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\include\tadpila.h
 	<iostream>
+
+1630621591 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\src\tadlistaenlazada.cpp
+	"TADListaEnlazada.hpp"
+
+1630620219 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\include\tadlistaenlazada.hpp
+	<iostream>
+
+1632419038 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\src\binarytree.cpp
+	"BinaryTree.hpp"
+
+1632411656 c:\users\pepe\documents\programas\dev\computing-engineering\primero\estructuradatos\tads\tadlineales\include\binarytree.hpp
+	<iostream>
+	<string>
+	<sstream>
 

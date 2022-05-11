@@ -34,12 +34,16 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/BinaryTree.hpp" />
 		<Unit filename="include/TADCola.h" />
 		<Unit filename="include/TADLista.h" />
+		<Unit filename="include/TADListaEnlazada.hpp" />
 		<Unit filename="include/TADPila.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/BinaryTree.cpp" />
 		<Unit filename="src/TADCola.cpp" />
 		<Unit filename="src/TADLista.cpp" />
+		<Unit filename="src/TADListaEnlazada.cpp" />
 		<Unit filename="src/TADPila.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
