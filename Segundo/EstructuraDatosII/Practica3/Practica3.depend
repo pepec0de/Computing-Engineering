@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1651736954 source:c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion3\practica3\main.cpp
+	<cstdlib>
+	<iostream>
+	"cartelera.h"
+
+1651737182 c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion3\practica3\include\cartelera.h
+	<map>
+	<utility>
+	<string>
+
+1651738676 source:c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion3\practica3\src\cartelera.cpp
+	"cartelera.h"
+	<iostream>
+
