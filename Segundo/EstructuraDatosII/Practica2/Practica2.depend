@@ -1,0 +1,43 @@
+# depslib dependency file v1.0
+1651082703 source:c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion2\practica2\main.cpp
+	<iostream>
+	<cstdlib>
+	<queue>
+	"arbin.h"
+	"abb.h"
+	<math.h>
+
+1648458098 source:c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion2\practica2\src\abb.cpp
+
+1648458009 source:c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion2\practica2\src\arbin.cpp
+
+1648458117 source:c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion2\practica2\src\excep_abb.cpp
+
+1648458362 source:c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion2\practica2\src\excep_arbin.cpp
+
+1331892184 c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion2\practica2\include\excep_arbin.h
+	"excepcion.h"
+
+1331037254 c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion2\practica2\include\excepcion.h
+	<string>
+	<stdexcept>
+
+1648458188 source:c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion2\practica2\src\excepcion.cpp
+
+1648458199 source:c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion2\practica2\src\nodob.cpp
+
+1363091698 c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion2\practica2\include\arbin.h
+	"nodoB.h"
+	"excep_arbin.h"
+
+1144350656 c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion2\practica2\include\nodob.h
+	<stdlib.h>
+
+1331888804 c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion2\practica2\include\abb.h
+	"nodoB.h"
+	"excep_abb.h"
+	"arbin.h"
+
+1651080209 c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion2\practica2\include\excep_abb.h
+	"excepcion.h"
+
