@@ -1,0 +1,18 @@
+# depslib dependency file v1.0
+1647941826 source:c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion1\practica1\main.cpp
+	<iostream>
+	"Multiconjunto.hpp"
+
+1648406573 source:c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion1\practica1\src\multiconjunto.cpp
+	"Multiconjunto.hpp"
+
+1648406740 c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion1\practica1\include\multiconjunto.hpp
+	"Persona.hpp"
+
+1647548035 source:c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion1\practica1\src\persona.cpp
+	"Persona.hpp"
+
+1648406610 c:\users\pepe\documents\universidad\uwu\asignaturas\segundo\estructura de datos ii\practicas\sesion1\practica1\include\persona.hpp
+	<iostream>
+	<string>
+
