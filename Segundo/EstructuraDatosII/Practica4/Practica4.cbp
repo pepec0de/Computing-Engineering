@@ -15,10 +15,10 @@
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
-					<Add library="C:/Users/Pepe/Documents/Universidad/UWU/Asignaturas/Segundo/Estructura de Datos II/Practicas/Sesion4/Practica4/arista.o" />
-					<Add library="C:/Users/Pepe/Documents/Universidad/UWU/Asignaturas/Segundo/Estructura de Datos II/Practicas/Sesion4/Practica4/conjunto.o" />
-					<Add library="C:/Users/Pepe/Documents/Universidad/UWU/Asignaturas/Segundo/Estructura de Datos II/Practicas/Sesion4/Practica4/grafo.o" />
-					<Add library="C:/Users/Pepe/Documents/Universidad/UWU/Asignaturas/Segundo/Estructura de Datos II/Practicas/Sesion4/Practica4/vertice.o" />
+					<Add library="C:/Users/Pepe/Documents/Programas/Dev/Computing-Engineering/Segundo/EstructuraDatosII/Practica4/arista.o" />
+					<Add library="C:/Users/Pepe/Documents/Programas/Dev/Computing-Engineering/Segundo/EstructuraDatosII/Practica4/conjunto.o" />
+					<Add library="C:/Users/Pepe/Documents/Programas/Dev/Computing-Engineering/Segundo/EstructuraDatosII/Practica4/grafo.o" />
+					<Add library="C:/Users/Pepe/Documents/Programas/Dev/Computing-Engineering/Segundo/EstructuraDatosII/Practica4/vertice.o" />
 				</Linker>
 			</Target>
 			<Target title="Release">

@@ -3,6 +3,7 @@
 #include "grafo.h"
 #include "conjunto.h"
 #include <queue>
+#include <stack>
 #include <sstream>
 #include <map>
 
@@ -93,43 +94,84 @@ bool caminoEntreDos(const Grafo<T, U>& G, const T& vo, const T& vd) {
 //Ejercicio 4
 /// RECURSIVO
 // Consideramos que el grafo es dirigido
+
 template <typename T>
 void caminosAcotados(const Grafo<T, float>& G, const T& u, float maxCoste) {
+	queue<T> aux;
+	cout << endl;
+	caminosAcotados(G, u, maxCoste, aux);
+	cout << endl;
+}
+
+template <typename T>
+void caminosAcotados(const Grafo<T, float>& G, const T& u, float maxCoste, queue<T> aux) {
 	Conjunto<Vertice<T>> adyacentes = G.adyacentes(u);
 	Conjunto<Arista<T, float>> aristas;
+	float coste;
+
+	aux.push(u);
+	if(aux.size() > 1) {
+		for (int i = 0; i < aux.size(); i++) {
+			cout << aux.front() << " - ";
+			aux.push(aux.front());
+			aux.pop();
+		}cout << endl;
+	}
+
 	while(!adyacentes.esVacio()) {
 		T currVert = adyacentes.quitar().getObj();
-		// Tomamos etiqueta de la arista
-		float camino;
+
+		// Tomamos el coste de la arista
 		aristas = G.aristas();
 		while (!aristas.esVacio()) {
 			Arista<T, float> currArista = aristas.quitar();
 			if (currArista.getOrigen() == u && currArista.getDestino() == currVert) {
-				camino = currArista.getEtiqueta();
+				coste = maxCoste - currArista.getEtiqueta();
+				break;
 			}
 		}
-		if (maxCoste - camino >= 0) {
-			cout << endl << u << " - ";
-			caminosAcotados(G, currVert, maxCoste-camino);
+		//---------------------------
+
+		if(coste >= 0) {
+			caminosAcotados(G, currVert, coste, aux);
+		} else {
+			// borramos el ultimo elemento
+			aux.pop();
+			break;
 		}
 	}
 }
 
-//template <typename T>
-//bool posibleCamino(const Grafo<T, float>& G, const T& u, float maxCoste) {
-//	if (maxCoste < 0)
-//		return false;
-//
-//	Conjunto<Vertice<T>> adyacentes = G.adyecentes(u);
-//}
-
 
 //Ejercicio 5
 template <typename T, typename U>
-T outConectado(const Grafo<T, U>& G)
-{
-}
+T outConectado(const Grafo<T, U>& G) {
+	map<T, int> nSalidasVertices;
+	Conjunto<Vertice<T>> cv = G.vertices();
+	T w;
+	while (!cv.esVacio()) {
+		w = cv.quitar().getObj();
+		nSalidasVertices[w] = G.adyacentes(w).cardinalidad();
+	}
 
+	cv = G.vertices();
+	Conjunto<Vertice<T>> adys;
+	while (!cv.esVacio()) {
+		adys = G.adyacentes(cv.quitar().getObj());
+		while (!adys.esVacio()) {
+			w = adys.quitar().getObj();
+			nSalidasVertices[w]--;
+		}
+	}
+	cv = G.vertices();
+	while (!cv.esVacio()) {
+		w = cv.quitar().getObj();
+		if (nSalidasVertices[w] > 0) {
+			return w;
+		}
+	}
+	return T();
+}
 
 //Ejercicio 6
 template <typename T, typename U>
@@ -186,10 +228,10 @@ int main()
     cout << endl << " Caminos acotados en G a coste 9 desde el vertice 2:" << endl;
     caminosAcotados(G, 2, 9);
 
-/*
+
     cout << endl << endl << " Vertice outConectado en G: " << outConectado(G);
     cout << endl << " Vertice outConectado en H: " << outConectado(H);
-
+/*
     cout << endl << endl << " Recorrido en profundidad de H desde el vertice Huelva:  ";
     recorrido_profundidad(H, string("Huelva"));
     cout << endl << endl;
