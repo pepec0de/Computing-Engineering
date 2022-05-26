@@ -175,8 +175,30 @@ T outConectado(const Grafo<T, U>& G) {
 
 //Ejercicio 6
 template <typename T, typename U>
-void recorrido_profundidad(const Grafo<T, U>& G, const T& v)
-{
+void recorrido_profundidad(const Grafo<T, U>& G, const T& v) {
+	map<T, bool> visitados;
+	Conjunto<Vertice<T>> cv = G.vertices();
+	while (!cv.esVacio()) {
+		visitados[cv.quitar().getObj()] = false;
+	}
+	recorrido_profundidad(G, v, visitados);
+	for (auto it = visitados.begin(); it != visitados.end(); ++it)
+		if (it->second == false)
+			cout << it->first << " - ";
+
+	cout << endl;
+}
+
+template <typename T, typename U>
+void recorrido_profundidad(const Grafo<T, U>& G, const T& v, map<T, bool>& visitados) {
+	cout << v << " - ";
+	visitados[v] = true;
+	Conjunto<Vertice<T>> adys = G.adyacentes(v);
+	T w;
+	while (!adys.esVacio()) {
+		w = adys.quitar().getObj();
+		if (!visitados[w]) recorrido_profundidad(G, w, visitados);
+	}
 }
 
 
@@ -231,11 +253,16 @@ int main()
 
     cout << endl << endl << " Vertice outConectado en G: " << outConectado(G);
     cout << endl << " Vertice outConectado en H: " << outConectado(H);
-/*
+
     cout << endl << endl << " Recorrido en profundidad de H desde el vertice Huelva:  ";
     recorrido_profundidad(H, string("Huelva"));
     cout << endl << endl;
-*/
+
+    /// PRUEBA
+	cout << endl << endl << " Recorrido en profundidad de G desde el vertice 2:  ";
+    recorrido_profundidad(G, 2);
+    cout << endl << endl;
+
 
     system("PAUSE");
     return 0;

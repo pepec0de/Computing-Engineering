@@ -16,9 +16,9 @@
 					<Add directory="include" />
 				</Compiler>
 				<Linker>
-					<Add library="C:/Users/Pepe/Documents/Universidad/UWU/Asignaturas/Segundo/Estructura de Datos II/Practicas/Sesion2/Practica2/abb.o" />
-					<Add library="C:/Users/Pepe/Documents/Universidad/UWU/Asignaturas/Segundo/Estructura de Datos II/Practicas/Sesion2/Practica2/arbin.o" />
-					<Add library="C:/Users/Pepe/Documents/Universidad/UWU/Asignaturas/Segundo/Estructura de Datos II/Practicas/Sesion2/Practica2/nodoB.o" />
+					<Add library="C:/Users/Pepe/Documents/Programas/Dev/Computing-Engineering/Segundo/EstructuraDatosII/Practica2/abb.o" />
+					<Add library="C:/Users/Pepe/Documents/Programas/Dev/Computing-Engineering/Segundo/EstructuraDatosII/Practica2/arbin.o" />
+					<Add library="C:/Users/Pepe/Documents/Programas/Dev/Computing-Engineering/Segundo/EstructuraDatosII/Practica2/nodoB.o" />
 				</Linker>
 			</Target>
 			<Target title="Release">
