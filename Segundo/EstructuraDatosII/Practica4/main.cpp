@@ -42,29 +42,46 @@ T verticeMaxCoste1(const Grafo<T, float>& G) {
 // Version eficiente
 template <typename T>
 T verticeMaxCoste(const Grafo<T, float>& G) {
-	T result;
 	if (!G.esVacio()) {
-		map<T, int> costeVertices;
-
+		map<T, float> costeVertices;
+		Conjunto<Vertice<T>> conjVertices = G.vertices();
+		while (!conjVertices.esVacio()) {
+			costeVertices[conjVertices.quitar().getObj()] = 0;
+		}
+		Conjunto<Arista<T, float>> conjAristas = G.aristas();
+		while (!conjAristas.esVacio()) {
+			Arista<T, float> currA = conjAristas.quitar();
+			costeVertices[currA.getOrigen()] += currA.getEtiqueta();
+		}
+		float maxCoste = 0;
+		T v;
+		for (auto it = costeVertices.begin(); it != costeVertices.end(); it++) {
+			if (maxCoste < it->second) {
+				maxCoste = it->second;
+				v = it->first;
+			}
+		}
+		return v;
 	}
-	return result;
+	return T();
 }
 
 //Ejercicio 2
-/// USAR LOS ANTECESORES ES MUCHO MAS COSTOSO QUE USAR LOS ADYACENTES
+/// TODO : terminar
 template <typename T, typename U>
 void inaccesibles(const Grafo<T, U>& G) {
 	if (!G.esVacio()) {
-		Conjunto<T> resultado;
+		Conjunto<Vertice<T>> conjInaccesibles = G.vertices();
 		Conjunto<Vertice<T>> conjVertices = G.vertices();
+		Conjunto<Vertice<T>> adys;
 		while(!conjVertices.esVacio()) {
-			T currObj = conjVertices.quitar().getObj();
-			if (G.antecesores(currObj).esVacio()) {
-				resultado.anadir(currObj);
+			adys = G.adyacentes(conjVertices.quitar().getObj());
+			while (!adys.esVacio()) {
+				conjInaccesibles.eliminar(adys.quitar().getObj());
 			}
 		}
-		while (!resultado.esVacio()) {
-			cout << resultado.quitar() << " - ";
+		while (!conjInaccesibles.esVacio()) {
+			cout << conjInaccesibles.quitar().getObj() << " - ";
 		}
 		cout << endl;
 	}
@@ -182,10 +199,6 @@ void recorrido_profundidad(const Grafo<T, U>& G, const T& v) {
 		visitados[cv.quitar().getObj()] = false;
 	}
 	recorrido_profundidad(G, v, visitados);
-	for (auto it = visitados.begin(); it != visitados.end(); ++it)
-		if (it->second == false)
-			cout << it->first << " - ";
-
 	cout << endl;
 }
 
