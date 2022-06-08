@@ -10,37 +10,14 @@
 
 using namespace std;
 
+template <typename A, typename B>
+void printMap(const map<A, B>& mapV) {
+	for (auto it = mapV.begin(); it != mapV.end(); it++) {
+		cout << "{ " << it->first << " : " << it->second << "}\n";
+	}
+}
+
 //Ejercicio 1
-
-/// Version bastante ineficiente
-//template <typename T>
-//T verticeMaxCoste1(const Grafo<T, float>& G) {
-//	T result;
-//	if (!G.esVacio()) {
-//		Conjunto<Vertice<T>> conjVertices = G.vertices();
-//		Conjunto<Arista<T, float> > conjAristas;
-//		float maxCoste = 0, currCoste;
-//
-//		while(!conjVertices.esVacio()) {
-//			Vertice<T> currVert = conjVertices.quitar();
-//			conjAristas = G.aristas();
-//			currCoste = 0;
-//			// INEFICIENCIA : Se itera por todo el conjunto de aristas tantas veces como el numero de vertices
-//			while(!conjAristas.esVacio()) {
-//				Arista<T, float> currArista = conjAristas.quitar();
-//				if (currArista.getOrigen() == currVert.getObj()) {
-//					currCoste += currArista.getEtiqueta();
-//				}
-//			}
-//			if (maxCoste < currCoste) {
-//				maxCoste = currCoste;
-//				result = currVert.getObj();
-//			}
-//		}
-//	}
-//	return result;
-//}
-
 template <typename T>
 T verticeMaxCoste(const Grafo<T, float>& G) {
 	if (!G.esVacio()) {
@@ -94,7 +71,6 @@ void inaccesibles(const Grafo<T, U>& G) {
 
 // Ejercicio 3
 /// NO RECURSIVO Y USANDO QUEUE
-/// ARREGLAR
 template <typename T, typename U>
 bool caminoEntreDos(const Grafo<T, U>& G, const T& vo, const T& vd) {
 	if (G.esVacio())
@@ -122,7 +98,7 @@ bool caminoEntreDos(const Grafo<T, U>& G, const T& vo, const T& vd) {
 	return false;
 }
 
-/// EXTENSION
+/// Mostrar todos los posibles caminos
 // RECURSIVO
 template <typename T, typename U>
 void mostrarCaminos(const Grafo<T, U>& G, const T& vo, const T& vd) {
@@ -133,15 +109,16 @@ void mostrarCaminos(const Grafo<T, U>& G, const T& vo, const T& vd) {
 			visitados[cVertices.quitar().getObj()] = false;
 
 		queue<T> camino;
-		if (!buscarCaminos(G, vo, vd, visitados, camino)) {
+		bool check = false;
+		buscarCaminos(G, vo, vd, visitados, camino, check);
+		if (!check) {
 			cout << "No existen caminos.\n";
 		}
 	}
 }
 
 template <typename T, typename U>
-bool buscarCaminos(const Grafo<T, U>& G, const T& vo, const T& vd, map<T, bool> &visitados, queue<T> camino) {
-	bool result = false;
+void buscarCaminos(const Grafo<T, U>& G, const T& vo, const T& vd, map<T, bool> &visitados, queue<T> camino, bool &check) {
 	if (vo != vd) {
 		visitados[vo] = true;
 		camino.push(vo);
@@ -149,24 +126,45 @@ bool buscarCaminos(const Grafo<T, U>& G, const T& vo, const T& vd, map<T, bool> 
 		T v;
 		while (!cAdy.esVacio()) {
 			v = cAdy.quitar().getObj();
+			//cout << v << " - ";
 			if (!visitados[v]) {
-				result = buscarCaminos(G, v, vd, visitados, camino);
+				buscarCaminos(G, v, vd, visitados, camino, check);
 			}
 		}
 		visitados[vo] = false;
 	} else {
-		cout << "CAMINO ENCONTRADO: ";
+		cout << "Camino: ";
 		while (!camino.empty()) {
 			cout << camino.front() << " - ";
 			camino.pop();
 		}
 		cout << vd << endl;
-		return true;
+		check = true;
 	}
-	return result;
 }
 
+/// Mostrar camino mas corto
+template <typename T, typename U>
+void mostrarCaminoMasCorto(const Grafo<T, U>& G, const T& vo, const T& vd) {
+	if (!G.esVacio()) {
+		map<T, bool> visitados;
+		Conjunto<Vertice<T>> cVertices = G.vertices();
+		while (!cVertices.esVacio())
+			visitados[cVertices.quitar().getObj()] = false;
 
+		queue<T> camino;
+		bool check = false;
+		buscarCaminos(G, vo, vd, visitados, camino, check);
+		if (!check) {
+			cout << "No existen caminos.\n";
+		}
+	}
+}
+
+template <typename T, typename U>
+void buscarCaminoMasCorto(const Grafo<T, U>& G, const T& vo, const T& vd, map<T, bool> &visitados, queue<T> camino, bool &check, U camino, U& caminoMin) {
+
+}
 
 //Ejercicio 4
 /// RECURSIVO
@@ -296,6 +294,10 @@ int main()
     H.insertarArista("Aljaraque", "Mazagon", 5);
     H.insertarArista("Almonte", "Huelva", 6);
 
+    Grafo<string, float> Prueba(2);
+    Prueba.insertarVertice("Lepe");
+    Prueba.insertarVertice("Huelva");
+    Prueba.insertarArista("Lepe", "Huelva", 4);
 
 //    cout << " Vertice de maximo coste en G: " << verticeMaxCoste(G) << endl;
 //    cout << " Vertice de maximo coste en H: " << verticeMaxCoste(H) << endl;
@@ -312,7 +314,7 @@ int main()
 //    cout << endl << " Camino entre Dos en H de Niebla a Mazagon: ";
 //    cout << (caminoEntreDos(H, string("Niebla"), string("Mazagon")) ? " SI " : " NO ") << endl;
 
-	mostrarCaminos(H, string("Lepe"), string("Almonte"));
+	mostrarCaminos(H, string("Lepe"), string("Matalascañas"));
 
 //    cout << endl << " Caminos acotados en G a coste 9 desde el vertice 2:" << endl;
 //    caminosAcotados(G, 2, 9);
