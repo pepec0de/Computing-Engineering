@@ -181,7 +181,6 @@ bool TTienda::AnadirEstante(TEstante pEstante) {
             }
             delete [] Estantes;
             Estantes = aux;
-            delete [] aux;
         }
         Estantes[NEstan] = pEstante;
         NEstan++;
@@ -210,7 +209,6 @@ bool TTienda::EliminarEstante(int pPos) {
             }
             delete [] Estantes;
             Estantes = aux;
-            delete [] aux;
         }
         resultado = true;
     }
