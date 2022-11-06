@@ -14,19 +14,20 @@ public class Algoritmos {
 		int result[] = {-1, -1, -1};
 		
 		if (n >= 3) {
-			double distTotal = 0, dist;
+			double distTotal = Double.MAX_VALUE, dist;
 			
 			for (int i = 0; i < n; i++) {
 				for (int j = 0; j < n; j++) {
-					for (int k = 0; k < n; k++) {
-						if (i != j && i != k && j != k) {
-							dist = plano[i].getDistancia(plano[j]) + plano[j].getDistancia(plano[k]);
-							if (distTotal == 0 || distTotal > dist) {
-								distTotal = dist;
-								result[0] = i;
-								result[1] = j;
-								result[2] = k;
-							}
+					if (i == j) continue;		
+
+					for (int k = i + 1; k < n; k++) {
+						if (j == k) continue;
+						dist = plano[i].getDistancia(plano[j]) + plano[j].getDistancia(plano[k]);
+						if (distTotal > dist) {
+							distTotal = dist;
+							result[0] = i;
+							result[1] = j;
+							result[2] = k;
 						}
 					}
 				}
@@ -51,10 +52,6 @@ public class Algoritmos {
 				regOrden[i] = i;
 			ordenarPlano(plano, regOrden);
 			exhaustivaRC(plano, 0, plano.length-1, result);
-			System.out.print("Result = ");
-			for (int i = 0; i < result.length; i++)
-				System.out.print(result[i] + ", ");
-			System.out.println();
 			result[0] = regOrden[result[0]];
 			result[1] = regOrden[result[1]];
 			result[2] = regOrden[result[2]];
@@ -62,15 +59,15 @@ public class Algoritmos {
 		return result;
 	}
 	
-	public double exhaustivaRC(Punto plano[], int c, int f, int result[]) {
-		int n = f - c + 1;
+	public double exhaustivaRC(Punto plano[], int comienzo, int fin, int result[]) {
+		int n = fin - comienzo + 1;
 		if (n > 3) {
 			int p = n/2;
-			System.out.println("c = " + c + " p = " + p + " f = " + f);
-			if (c < p-1) {
+			System.out.println("c = " + comienzo + " p = " + p + " fin = " + fin);
+			if ( comienzo < p-1) {
 				int resultI[] = new int[3], resultD[] = new int[3], result1[];
-				double distMinI = exhaustivaRC(plano, c, p-1, resultI);
-				double distMinD = exhaustivaRC(plano, p, f, resultD);
+				double distMinI = exhaustivaRC(plano, comienzo, p-1, resultI);
+				double distMinD = exhaustivaRC(plano, p, fin, resultD);
 				double distMin = distMinI;
 				result1 = resultI;
 				if (distMinD < distMinI) {
@@ -79,9 +76,9 @@ public class Algoritmos {
 				}
 				
 				double distMinC = 0, dist;
-				for (int i = c; i <= f; i++) {
-					for (int j = c; j <= f; j++) {
-						for (int k = c; k <= f; k++) {
+				for (int i = comienzo; i <= fin; i++) {
+					for (int j = comienzo; j <= fin; j++) {
+						for (int k = comienzo; k <= fin; k++) {
 							if (i != j && i != k && j != k) {
 								dist = plano[i].getDistancia(plano[j]) + plano[j].getDistancia(plano[k]);
 								if (distMinC == 0 || distMinC > dist) {
@@ -103,10 +100,10 @@ public class Algoritmos {
 				return distMin;
 			}
 		} else if (n == 3) {
-			result[0] = c;
-			result[1] = c+1;
-			result[2] = c+2;
-			return plano[c].getDistancia(plano[c+1]) + plano[c+1].getDistancia(plano[c+2]);
+			result[0] = comienzo;
+			result[1] = comienzo+1;
+			result[2] = comienzo+2;
+			return plano[comienzo].getDistancia(plano[comienzo+1]) + plano[comienzo+1].getDistancia(plano[comienzo+2]);
 		}
 		return Double.MAX_VALUE;
 	}
@@ -115,11 +112,11 @@ public class Algoritmos {
 		Quicksort(plano, 0, plano.length - 1, regOrden);
 	}
 	
-	public void Quicksort(Punto v[], int c, int f, int regOrden[]) {
-		if (c < f) {
-			int p = Partition(v, c, f, regOrden);
-			Quicksort(v, c, p - 1, regOrden);
-			Quicksort(v, p + 1, f, regOrden);
+	public void Quicksort(Punto v[], int comienzo, int fin, int regOrden[]) {
+		if (comienzo < fin) {
+			int p = Partition(v, comienzo, fin, regOrden);
+			Quicksort(v, comienzo, p - 1, regOrden);
+			Quicksort(v, p + 1, fin, regOrden);
 		}
 	}
 	
@@ -132,11 +129,12 @@ public class Algoritmos {
 		regOrden[j] = tmp1;
 	}
 	
-	private int Partition(Punto v[], int c, int f, int regOrden[]) {
-		int piv = f;
-		for (int i = c; i < f; i++) {
+
+	private int Partition(Punto v[], int comienzo, int fin, int regOrden[]) {
+		int piv = fin;
+		for (int i = comienzo; i < fin; i++) {
 			if ((v[i].getX() <= v[piv].getX() && i > piv) || v[i].getX() > v[piv].getX()) {
-				swap(v, i, f, regOrden);
+				swap(v, i, fin, regOrden);
 				i--;
 			} else if (v[i].getX() > v[piv].getX()) {
 				swap(v, i, piv, regOrden);
