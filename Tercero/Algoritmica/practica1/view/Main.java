@@ -1,40 +1,26 @@
 package practica1.view;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import practica1.model.Algoritmos;
 import practica1.model.Punto;
 
 public class Main {
 	public Main() {
-		// Puntos más cercanos -> 7, 10, 8
+		// burma14.tsp : Puntos más cercanos -> 7, 10, 8
+		
 		double coor[][] = {
-				{16.47, 96.10},
-				{16.47, 94.44},
-				{20.09, 92.54},
-				{22.39, 93.37},
-				{25.23, 97.24},
-				{22.00, 96.05},
-				{20.47, 97.02},
-				{17.20, 96.29},//
-				{16.30, 97.38},//
-				{14.05, 98.12},
-				{16.53, 97.38},//
+				{160.53, 970.38},
 				{21.52, 95.59},
 				{19.41, 97.13},
 				{20.09, 94.55} 
 		};
 		
-		double coor1[][] = {
-				{16.53, 97.38},
-				{21.52, 95.59},
-				{19.41, 97.13},
-				{20.09, 94.55} 
-		};
-		
-		Punto plano[] = new Punto[coor.length];
-		for (int i = 0; i < coor.length; i++) {
-			plano[i] = new Punto(coor[i][0], coor[i][1]);
-		}
-		
+		Punto plano[] = getTSPFileNodes("TSPSamples\\burma14.tsp");
 		Algoritmos alg = new Algoritmos();
 		
 		int result[] = alg.BusquedaExhaustiva(plano);
@@ -49,17 +35,61 @@ public class Main {
 			System.out.print(result[i] + ", ");
 		System.out.println();
 		
-//		alg.BusquedaExhaustivaRC(plano, orden);
-//		for (int i = 0; i < plano.length; i++)
-//			System.out.println(plano[i].getX() + ", " + plano[i].getY());
+	}
+	
+	// Funcion que toma el archivo de formato TSPLIB95
+	private Punto[] getTSPFileNodes(String filepath) {
+		Punto[] result = null;
 		
-//		int exhaustiva[] = alg.BusquedaExhaustiva(plano);
-//		System.out.println(String.valueOf(exhaustiva));
-//		
-//		for (int i = 0; i < exhaustiva.length; i++) {
-//			System.out.println("Punto" + String.valueOf(i) + ": " + String.valueOf(exhaustiva[i]));
-//		}
+		BufferedReader br;
+		String line;
+		String dim = "DIMENSION: ";
+		String type = "DISPLAY_DATA_TYPE: COORD_DISPLAY";
+		String start = "NODE_COORD_SECTION";
+		String coordLine[];
+		int posStr[] = new int[3];
 		
+		boolean isTypeOk = false, dataStart = false;
+		int n = -1;
+		try {
+			br = new BufferedReader(new FileReader(filepath));
+			
+			while ( (line = br.readLine()) != null) {
+				
+				// Tomamos el valor del parametro DIMENSION
+				if (line.indexOf(dim) != -1) {
+					n = Integer.parseInt(line.substring(dim.length(), line.length()));
+					result = new Punto[n];
+				} else // Comprobamos que el tipo de datos es el correcto
+				if (line.equals(type)) {
+					isTypeOk = true;
+				} else // Recogemos los datos
+				if (isTypeOk && dataStart) {
+					if (line.strip().equals("EOF")) {
+						dataStart = false;
+					} else {
+						coordLine = line.stripIndent().split(" ");
+						for (int i = 0, j = 0; i < coordLine.length && j < 3; i++) {
+							if (!coordLine[i].equals("")) {
+								posStr[j] = i;
+								j++;
+							}
+						}
+						result[Integer.parseInt(coordLine[posStr[0]]) - 1]
+								= new Punto(Double.parseDouble(coordLine[posStr[1]]), Double.parseDouble(coordLine[posStr[2]]));			
+					}
+				} else // Comprobamos si en la siguiente linea ya se presentan los datos 
+				if (line.equals(start)) {
+					dataStart = true;
+				}
+			}
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	public static void main(String args[]) {

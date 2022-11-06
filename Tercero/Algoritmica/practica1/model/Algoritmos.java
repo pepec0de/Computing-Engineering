@@ -51,10 +51,6 @@ public class Algoritmos {
 				regOrden[i] = i;
 			ordenarPlano(plano, regOrden);
 			exhaustivaRC(plano, 0, plano.length-1, result);
-			System.out.print("Result = ");
-			for (int i = 0; i < result.length; i++)
-				System.out.print(result[i] + ", ");
-			System.out.println();
 			result[0] = regOrden[result[0]];
 			result[1] = regOrden[result[1]];
 			result[2] = regOrden[result[2]];
