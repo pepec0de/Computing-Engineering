@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1651083521 source:c:\users\pepe\documents\programas\dev\computing-engineering\segundo\estructuradatosii\examen\arboles\main.cpp
+	<iostream>
+	<cstdlib>
+	<queue>
+	"arbin.h"
+	"abb.h"
+	<math.h>
+

@@ -1,6 +1,4 @@
-package practica1.model;
-
-import java.util.ArrayList;
+package amc.practica1.model;
 
 public class Algoritmos {
 	
@@ -18,15 +16,17 @@ public class Algoritmos {
 			
 			for (int i = 0; i < n; i++) {
 				for (int j = 0; j < n; j++) {
-					for (int k = 0; k < n; k++) {
-						if (i != j && i != k && j != k) {
-							dist = plano[i].getDistancia(plano[j]) + plano[j].getDistancia(plano[k]);
-							if (distTotal == 0 || distTotal > dist) {
-								distTotal = dist;
-								result[0] = i;
-								result[1] = j;
-								result[2] = k;
-							}
+					if (i == j)
+						continue;
+					for (int k = i+1; k < n; k++) {
+						if (j == k)
+							continue;
+						dist = plano[i].getDistancia(plano[j]) + plano[j].getDistancia(plano[k]);
+						if (distTotal == 0 || distTotal > dist) {
+							distTotal = dist;
+							result[0] = i;
+							result[1] = j;
+							result[2] = k;
 						}
 					}
 				}
@@ -63,10 +63,10 @@ public class Algoritmos {
 		if (n > 3) {
 			int p = n/2;
 			System.out.println("c = " + c + " p = " + p + " f = " + f);
-			if (c < p-1) {
+			if (c < p-1 && p+1 < f) {
 				int resultI[] = new int[3], resultD[] = new int[3], result1[];
 				double distMinI = exhaustivaRC(plano, c, p-1, resultI);
-				double distMinD = exhaustivaRC(plano, p, f, resultD);
+				double distMinD = exhaustivaRC(plano, p+1, f, resultD);
 				double distMin = distMinI;
 				result1 = resultI;
 				if (distMinD < distMinI) {

@@ -1,13 +1,12 @@
-package practica1.view;
+package amc.practica1.view;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import practica1.model.Algoritmos;
-import practica1.model.Punto;
+import amc.practica1.model.Algoritmos;
+import amc.practica1.model.Punto;
 
 public class Main {
 	public Main() {
@@ -67,7 +66,9 @@ public class Main {
 				if (isTypeOk && dataStart) {
 					if (line.strip().equals("EOF")) {
 						dataStart = false;
+						
 					} else {
+						line.stripIndent();
 						coordLine = line.stripIndent().split(" ");
 						for (int i = 0, j = 0; i < coordLine.length && j < 3; i++) {
 							if (!coordLine[i].equals("")) {

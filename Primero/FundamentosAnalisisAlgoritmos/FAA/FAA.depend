@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1662457777 source:c:\users\pepe\documents\programas\dev\computing-engineering\primero\fundamentosanalisisalgoritmos\faa\main.cpp
+	<iostream>
+	<math.h>
+
