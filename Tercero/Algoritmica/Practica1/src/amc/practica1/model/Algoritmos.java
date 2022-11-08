@@ -1,11 +1,8 @@
-package amc.practica1.model;
+package amc.practica1a.model;
 
 public class Algoritmos {
 	
-	public Algoritmos() {
-		
-		
-	}
+	public Algoritmos() {}
 	
 	public int[] BusquedaExhaustiva(Punto plano[]) {
 		int n = plano.length;
@@ -140,5 +137,9 @@ public class Algoritmos {
 			}
 		}
 		return piv;
+	}
+	
+	public void Dijkstra() {
+		
 	}
 }

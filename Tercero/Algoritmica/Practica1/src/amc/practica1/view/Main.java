@@ -1,16 +1,15 @@
-package amc.practica1.view;
+package amc.practica1a.view;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import amc.practica1.model.Algoritmos;
-import amc.practica1.model.Punto;
+import amc.practica1a.model.*;
 
 public class Main {
 	public Main() {
-		// burma14.tsp : Puntos más cercanos -> 7, 10, 8
+		// burma14.tsp : Puntos mas cercanos -> 7, 10, 8
 		
 		double coor[][] = {
 				{160.53, 970.38},
@@ -48,7 +47,7 @@ public class Main {
 		String coordLine[];
 		int posStr[] = new int[3];
 		
-		boolean isTypeOk = false, dataStart = false;
+		boolean dataStart = false;
 		int n = -1;
 		try {
 			br = new BufferedReader(new FileReader(filepath));
@@ -59,11 +58,8 @@ public class Main {
 				if (line.indexOf(dim) != -1) {
 					n = Integer.parseInt(line.substring(dim.length(), line.length()));
 					result = new Punto[n];
-				} else // Comprobamos que el tipo de datos es el correcto
-				if (line.equals(type)) {
-					isTypeOk = true;
 				} else // Recogemos los datos
-				if (isTypeOk && dataStart) {
+				if (dataStart) {
 					if (line.strip().equals("EOF")) {
 						dataStart = false;
 						
@@ -91,6 +87,31 @@ public class Main {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	// Funcion que obtiene el grafo de un conjunto de puntos
+	public Grafo<Integer, Integer> getGraph(Punto[] nodes) {
+		int n = nodes.length;
+		Grafo<Integer, Integer> grafo = new Grafo<>();
+		for (int i = 0; i != n; i++) {
+			grafo.addNodo(new Nodo<Integer>(i+1, nodes[i]));
+		}
+		
+		for (int i = 0; i < n; i++) {
+			// Nodo i
+			Arista<Integer, Integer> arista;
+			for (int j = i+1; j < n; j++) {
+				arista = new Arista<>();
+				arista.setOrigen(grafo.getNodo(i));
+				arista.setDestino(grafo.getNodo(j));
+				// Aplicamos formula peso = [ (distancia entre los 2 puntos * 100) % 100] +1
+				arista.setPeso( (int) (((arista.getOrigen().getPunto().getDistancia( arista.getDestino().getPunto())*100) % 100) + 1));
+				
+				grafo.addArista(arista);
+			}
+		}
+
+		return grafo;
 	}
 	
 	public static void main(String args[]) {
