@@ -1,4 +1,4 @@
-package amc.practica1a.model;
+package amc.practica1.model;
 
 public class Algoritmos {
 	
@@ -139,7 +139,7 @@ public class Algoritmos {
 		return piv;
 	}
 	
-	public void Dijkstra() {
+	public void Dijkstra(Grafo<Integer, Integer> grafo) {
 		
 	}
 }

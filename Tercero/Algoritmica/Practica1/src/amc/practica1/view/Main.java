@@ -1,11 +1,11 @@
-package amc.practica1a.view;
+package amc.practica1.view;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import amc.practica1a.model.*;
+import amc.practica1.model.*;
 
 public class Main {
 	public Main() {

@@ -1,4 +1,4 @@
-package amc.practica1a.model;
+package amc.practica1.model;
 
 public class Punto {
 	

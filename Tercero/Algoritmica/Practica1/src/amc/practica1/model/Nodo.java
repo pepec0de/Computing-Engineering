@@ -1,4 +1,4 @@
-package amc.practica1a.model;
+package amc.practica1.model;
 
 public class Nodo<E> {
 	private E valor;
