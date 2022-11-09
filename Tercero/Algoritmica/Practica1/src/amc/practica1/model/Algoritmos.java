@@ -138,8 +138,4 @@ public class Algoritmos {
 		}
 		return piv;
 	}
-	
-	public void Dijkstra(Grafo<Integer, Integer> grafo) {
-		
-	}
 }

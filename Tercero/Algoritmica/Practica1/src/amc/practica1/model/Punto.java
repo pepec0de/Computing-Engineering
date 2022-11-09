@@ -34,5 +34,16 @@ public class Punto {
 		return Math.sqrt( Math.pow(getX() - p.getX(), 2) + Math.pow(getY() - p.getY(), 2));
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		
+		if (!(o instanceof Punto))
+			return false;
+		
+		Punto p = (Punto) o;
+		return getX() == p.getX() && getY() == p.getY();
+	}
 
 }

@@ -18,19 +18,46 @@ public class Main {
 				{20.09, 94.55} 
 		};
 		
-		Punto plano[] = getTSPFileNodes("TSPSamples\\burma14.tsp");
-		Algoritmos alg = new Algoritmos();
+//		Punto plano[] = getTSPFileNodes("TSPSamples\\burma14.tsp");
+//		Algoritmos alg = new Algoritmos();
+//		
+//		int result[] = alg.BusquedaExhaustiva(plano);
+//		System.out.print("Result = ");
+//		for (int i = 0; i < result.length; i++)
+//			System.out.print(result[i] + ", ");
+//		System.out.println();
+//		
+//		result = alg.BusquedaExhaustivaRC(plano.clone());
+//		System.out.print("Result = ");
+//		for (int i = 0; i < result.length; i++)
+//			System.out.print(result[i] + ", ");
+//		System.out.println();
 		
-		int result[] = alg.BusquedaExhaustiva(plano);
-		System.out.print("Result = ");
-		for (int i = 0; i < result.length; i++)
-			System.out.print(result[i] + ", ");
-		System.out.println();
 		
-		result = alg.BusquedaExhaustivaRC(plano.clone());
-		System.out.print("Result = ");
-		for (int i = 0; i < result.length; i++)
-			System.out.print(result[i] + ", ");
+		GrafoDirigido<Integer, Integer> grafo = new GrafoDirigido<>();
+		Nodo<Integer> nodos[] = new Nodo[5];
+		for (int i = 0; i < 5; i++) {
+			nodos[i] = new Nodo<Integer>(i+1);
+			grafo.addNodo(nodos[i]);
+		}
+		Arista<Integer, Integer> aristas[] = new Arista[8];
+		aristas[0] = new Arista(nodos[1-1], nodos[5-1], 10);
+		aristas[1] = new Arista(nodos[1-1], nodos[4-1], 100);
+		aristas[2] = new Arista(nodos[1-1], nodos[3-1], 30);
+		aristas[3] = new Arista(nodos[1-1], nodos[2-1], 50);
+		aristas[4] = new Arista(nodos[5-1], nodos[4-1], 10);
+		aristas[5] = new Arista(nodos[4-1], nodos[2-1], 20);
+		aristas[6] = new Arista(nodos[4-1], nodos[3-1], 50);
+		aristas[7] = new Arista(nodos[3-1], nodos[2-1], 5);
+		for (int i = 0; i < 8; i++)
+			grafo.addArista(aristas[i]);
+		
+		AlgoritmosGrafo<Integer, Integer> algGrafo = new AlgoritmosGrafo<>();
+		int distancias[] = algGrafo.Dijkstra(grafo, 0);
+		System.out.print("Dijkstra = ");
+		for (int i = 0; i < distancias.length; i++) {
+			System.out.print(distancias[i] + ", ");
+		}
 		System.out.println();
 		
 	}
@@ -90,9 +117,9 @@ public class Main {
 	}
 	
 	// Funcion que obtiene el grafo de un conjunto de puntos
-	public Grafo<Integer, Integer> getGraph(Punto[] nodes) {
+	public GrafoDirigido<Integer, Integer> getGraph(Punto[] nodes) {
 		int n = nodes.length;
-		Grafo<Integer, Integer> grafo = new Grafo<>();
+		GrafoDirigido<Integer, Integer> grafo = new GrafoDirigido<>();
 		for (int i = 0; i != n; i++) {
 			grafo.addNodo(new Nodo<Integer>(i+1, nodes[i]));
 		}
@@ -102,8 +129,8 @@ public class Main {
 			Arista<Integer, Integer> arista;
 			for (int j = i+1; j < n; j++) {
 				arista = new Arista<>();
-				arista.setOrigen(grafo.getNodo(i));
-				arista.setDestino(grafo.getNodo(j));
+				arista.setOrigen(grafo.getNodoAt(i));
+				arista.setDestino(grafo.getNodoAt(j));
 				// Aplicamos formula peso = [ (distancia entre los 2 puntos * 100) % 100] +1
 				arista.setPeso( (int) (((arista.getOrigen().getPunto().getDistancia( arista.getDestino().getPunto())*100) % 100) + 1));
 				
