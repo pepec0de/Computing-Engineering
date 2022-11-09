@@ -10,7 +10,6 @@ public class AlgoritmosGrafo<E, L> {
 		Set<Arista<E, Integer>> salientes = grafo.getAristasSalientes(idcNodoInicial);
 		if (salientes.isEmpty())
 			return null;
-		
 		Set<Integer> nodosPorRecorrer = new HashSet<>();
 		int distancias[] = new int[grafo.getNumeroNodos()];
 		int distRecorrida = 0, distMin;
@@ -36,23 +35,14 @@ public class AlgoritmosGrafo<E, L> {
 			
 			distMin = Integer.MAX_VALUE;
 			for (i = 0; i < distancias.length; i++) {
-				if (nodosPorRecorrer.contains(i)) {
-					if (distMin > distancias[i]) {
-						distMin = distancias[i];
-						nodoActual = i;
-						distRecorrida = distancias[i];
-					}
+				if (nodosPorRecorrer.contains(i) && distMin > distancias[i]) {
+					distMin = distancias[i];
+					nodoActual = i;
+					distRecorrida = distancias[i];
 				}
 			}
 			
 			salientes = grafo.getAristasSalientes(nodoActual);
-			
-			System.out.println("\nNodo actual = " + (nodoActual+1));
-			System.out.print("[");
-			for (i = 0; i < distancias.length; i++) {
-				System.out.print(distancias[i] + ", ");
-			}
-			System.out.println("]");
 		}
 		
 		return distancias;
