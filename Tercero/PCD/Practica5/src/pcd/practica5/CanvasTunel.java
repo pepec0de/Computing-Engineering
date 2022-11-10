@@ -6,6 +6,7 @@ package pcd.practica5;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
@@ -21,11 +22,15 @@ public class CanvasTunel extends Canvas {
     
     private Image imgTunel, imgCoche, imgFurgo;
     private ArrayList<Integer> colaCoches, colaFurgos;
-    
+    private final int margenX = 30, margenY = 30;
+    private char[] estadoTunel; // {c, f}
+    private int[] vehiTunel;
     
     public CanvasTunel() {
         colaCoches = new ArrayList<>();
         colaFurgos = new ArrayList<>();
+        estadoTunel = new char[3];
+        vehiTunel = new int[3];
         
         try {
             imgTunel = ImageIO.read(new File("tunel.png")).getScaledInstance(200, 100, 1);
@@ -52,35 +57,77 @@ public class CanvasTunel extends Canvas {
         return colaFurgos.get(0);
     }
     
-    // Funcion que manda a paint(g) pintar el coche en el tunel de lavado
-    public synchronized void lavarCoche() {
-        
-    }
-    public int getNColaCoche() {
-        return colaCoches.size();
-    }
-    
-    public int getNColaFurgo() {
-        return colaFurgos.size();
-    }
-    
     @Override
     public void paint(Graphics g) {
         Image offscreen = createImage(getWidth(), getHeight());
         Graphics og = offscreen.getGraphics();
-        int margenX = 30, margenY = 30;
-        int hTunel = imgTunel.getHeight(null), hCoche = imgCoche.getHeight(null), hFurgo = imgFurgo.getHeight(null);
+ 
+        int hTunel = imgTunel.getHeight(null);
+        int wCoche = imgCoche.getWidth(null), hCoche = imgCoche.getHeight(null);
+        int wFurgo = imgCoche.getWidth(null), hFurgo = imgFurgo.getHeight(null);
+        int yColaFurgo = margenY + hCoche + 100;
+        int xColas = margenX + 300;
         
+        og.setFont(new Font("Arial", 0, 20));
+        
+        // Tuneles de lavado
         for (int i = 0; i < 3; i++)
             og.drawImage(imgTunel, margenX, margenY + hTunel*i, null);
         
+        // Area cola coches
         og.setColor(Color.CYAN);
-        og.fillRect(margenX + 300, margenY, 700, hCoche);
+        og.fillRect(xColas, margenY, wCoche*10, hCoche);
+        for (int i = 0; i < colaCoches.size(); i++) {
+            pintarCoche(og, colaCoches.get(i), xColas + imgCoche.getWidth(null)*i, margenY);
+        }
         
+        // Area cola furgos
         og.setColor(Color.MAGENTA);
-        og.fillRect(margenX + 300, margenY + hCoche + 100, 700, hFurgo);
-        og.drawImage(imgFurgo, margenX + 36, margenY, null);
+        og.fillRect(xColas, yColaFurgo, wFurgo*10, hFurgo);
+        for (int i = 0; i < colaFurgos.size(); i++) {
+            pintarFurgo(og, colaFurgos.get(i), xColas + (imgFurgo.getWidth(null) + 5)*i, yColaFurgo);
+        }
+        
+        for (int i = 0; i < 3; i++) {
+            pintarVehiculoTunel(og, i, estadoTunel[i], vehiTunel[i]);
+        }
         
         g.drawImage(offscreen, 0, 0, null);
+    }
+    
+    private void pintarCoche(Graphics g, int id, int x, int y) {
+        g.drawImage(imgCoche, x, y, null);
+        g.setColor(Color.BLUE);
+        g.drawString(String.valueOf(id), x, y + 50);
+    }
+    
+    private void pintarFurgo(Graphics g, int id, int x, int y) {
+        g.drawImage(imgFurgo, x, y, null);
+        g.setColor(Color.BLUE);
+        g.drawString(String.valueOf(id), x, y + 50);
+    }
+    
+    private void pintarVehiculoTunel(Graphics g, int pos, char v, int id) {
+        switch (v) {
+            case 'c':
+                colaCoches.remove((Object) id);
+                pintarCoche(g, id, margenX + 36, margenY + 100*pos);
+                break;
+            
+            case 'f':
+                colaFurgos.remove((Object) id);
+                pintarFurgo(g, id, margenX + 36, margenY + 100*pos);
+                break;
+        }
+    }
+    
+    public synchronized void meterVehiculo(char v, int pos) {
+        estadoTunel[pos] = v;
+        vehiTunel[pos] = (int) Thread.currentThread().getId();
+    }
+    
+    public synchronized void sacarVehiculo(int pos) {
+        estadoTunel[pos] = 0;
+        vehiTunel[pos] = 0;
     }
 }

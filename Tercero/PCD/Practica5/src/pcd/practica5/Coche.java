@@ -27,11 +27,13 @@ public class Coche extends Thread {
         }
         
         try {
-            tunel.entraCoche();
-            System.out.println("Coche " + getId() + " ENTRA");
+            int p = tunel.entraCoche();
+            canvas.meterVehiculo('c', p);
+            System.out.println("Coche " + getId() + " ENTRA " + p);
             Thread.sleep(r.nextInt(1, 4) * 1000);
-            System.out.println("Coche " + getId() + " SALE");
+            System.out.println("Coche " + getId() + " SALE " + p);
             tunel.saleCoche();
+            canvas.sacarVehiculo(p);
             
         } catch (InterruptedException ex) {
             

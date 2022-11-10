@@ -16,7 +16,7 @@ public class Ventana extends javax.swing.JFrame {
     public Ventana(CanvasTunel cv) {
         initComponents();
         
-        final int ANCHO = 1100, ALTO = 500;
+        final int ANCHO = 1500, ALTO = 500;
         cv.setSize(ANCHO, ALTO);
         
         setTitle("Tuneles de lavado");
