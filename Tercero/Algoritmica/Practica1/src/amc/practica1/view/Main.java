@@ -14,12 +14,10 @@ public class Main {
 				{20.09, 94.55} 
 		};
 		
-		MainVentana v = new MainVentana();
-		Controller controller = new Controller(v);
-		v.setVisible(true);
+		Controller controller = new Controller();
 		
-		//controller.imprimirPuntos(new Generador().getPuntosTSPFile("TSPSamples\\burma14.tsp"));
-		controller.imprimirPuntos(new Generador().getPuntosRandom(5, new amc.practica1.model.Punto(10, 10), new amc.practica1.model.Punto(80, 80)));
+		//controller.imprimirPuntos(new Generador().getPuntosTSPFile("TSPSamples\\ch150.tsp"));
+		//controller.imprimirPuntos(new Generador().getPuntosRandom(5, new amc.practica1.model.Punto(60, 60), new amc.practica1.model.Punto(90, 90)));
 	}
 	
 	public static void main(String args[]) {

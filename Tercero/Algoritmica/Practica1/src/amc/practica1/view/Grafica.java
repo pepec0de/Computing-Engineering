@@ -7,6 +7,8 @@ import java.awt.geom.Ellipse2D.Double;
 public class Grafica extends Canvas {
 	
 	private double puntos[][];
+	private String pesos[];
+	private int aristas[][];
 	private double offX, offY, scaleX, scaleY, zoomX, zoomY;
 	private int pSize = 5;
 	
@@ -73,6 +75,12 @@ public class Grafica extends Canvas {
 		scaleY = getHeight() / (maxY - minY);
 		offX = minX;
 		offY = minY;
+		repaint();
+	}
+	
+	public void pintarAristas(int idxAristas[][], String peso[]) {
+		this.aristas = idxAristas;
+		this.pesos = peso;
 		repaint();
 	}
 	
