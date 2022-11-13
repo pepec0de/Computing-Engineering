@@ -13,14 +13,12 @@ public class CVentanaDatos {
 	private Punto pMin, pMax;
 	private int n;
 	private Controller control;
-	private Dialogs d;
 	
 	public CVentanaDatos(Controller c) {
 		control = c;
 		ventana = new VentanaDatos();
 		pMin = new Punto();
 		pMax = new Punto();
-		d = new Dialogs();
 		initActions();
 	}
 	
@@ -34,8 +32,7 @@ public class CVentanaDatos {
 				pMax.setX((double) (int) ventana.xPuntoMax.getValue());
 				pMax.setY((double) (int) ventana.yPuntoMax.getValue());
 				if (n <= 0 || (pMin.getX() >= pMax.getX() && pMin.getY() >= pMax.getY())) {
-					// Datos incorrectos
-					d.error("Datos incorrectos");
+					control.getDialogs().showError("Datos incorrectos");
 				} else {
 					control.imprimirPuntos(control.getGenerador().getPuntosRandom(n, pMin, pMax));
 					ventana.dispose();

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package pcd.practica5;
 
 import java.awt.Canvas;
@@ -41,11 +37,11 @@ public class CanvasTunel extends Canvas {
         }
     }
     
-    public synchronized void meterFurgo(int id) {
+    public synchronized void addFurgo(int id) {
         colaFurgos.add(id);
     }
     
-    public synchronized void meterCoche(int id) {
+    public synchronized void addCoche(int id) {
         colaCoches.add(id);
     }
     
@@ -58,7 +54,7 @@ public class CanvasTunel extends Canvas {
     }
     
     @Override
-    public void paint(Graphics g) {
+    public synchronized void paint(Graphics g) {
         Image offscreen = createImage(getWidth(), getHeight());
         Graphics og = offscreen.getGraphics();
  
@@ -87,7 +83,6 @@ public class CanvasTunel extends Canvas {
         for (int i = 0; i < colaFurgos.size(); i++) {
             pintarFurgo(og, colaFurgos.get(i), xColas + (imgFurgo.getWidth(null) + 5)*i, yColaFurgo);
         }
-        
         for (int i = 0; i < 3; i++) {
             pintarVehiculoTunel(og, i, estadoTunel[i], vehiTunel[i]);
         }
@@ -95,39 +90,43 @@ public class CanvasTunel extends Canvas {
         g.drawImage(offscreen, 0, 0, null);
     }
     
-    private void pintarCoche(Graphics g, int id, int x, int y) {
+    private synchronized void pintarCoche(Graphics g, int id, int x, int y) {
         g.drawImage(imgCoche, x, y, null);
         g.setColor(Color.BLUE);
         g.drawString(String.valueOf(id), x, y + 50);
     }
     
-    private void pintarFurgo(Graphics g, int id, int x, int y) {
+    private synchronized void pintarFurgo(Graphics g, int id, int x, int y) {
         g.drawImage(imgFurgo, x, y, null);
         g.setColor(Color.BLUE);
         g.drawString(String.valueOf(id), x, y + 50);
     }
     
-    private void pintarVehiculoTunel(Graphics g, int pos, char v, int id) {
+    private synchronized void pintarVehiculoTunel(Graphics g, int pos, char v, int id) {
         switch (v) {
-            case 'c':
-                colaCoches.remove((Object) id);
-                pintarCoche(g, id, margenX + 36, margenY + 100*pos);
-                break;
+            case 'c' -> pintarCoche(g, id, margenX + 36, margenY + 100*pos);
             
-            case 'f':
-                colaFurgos.remove((Object) id);
-                pintarFurgo(g, id, margenX + 36, margenY + 100*pos);
-                break;
+            case 'f' -> pintarFurgo(g, id, margenX + 36, margenY + 100*pos);
         }
     }
     
     public synchronized void meterVehiculo(char v, int pos) {
+        switch (v) {
+            case 'c':
+                colaCoches.remove(0);
+                break;
+            case 'f':
+                colaFurgos.remove(0);
+                break;
+        }
         estadoTunel[pos] = v;
         vehiTunel[pos] = (int) Thread.currentThread().getId();
+        repaint();
     }
     
     public synchronized void sacarVehiculo(int pos) {
         estadoTunel[pos] = 0;
         vehiTunel[pos] = 0;
+        repaint();
     }
 }

@@ -3,6 +3,7 @@ package amc.practica1.controller;
 import amc.practica1.model.Generador;
 import amc.practica1.model.GrafoDirigido;
 import amc.practica1.model.Punto;
+import amc.practica1.view.Dialogs;
 import amc.practica1.view.Grafica;
 import amc.practica1.view.MainVentana;
 
@@ -13,6 +14,7 @@ public class Controller {
 	private Generador gen;
 	private Punto puntos[][];
 	private GrafoDirigido<Integer, Integer> grafo;
+	private Dialogs dialog;
 	
 	public Controller() {
 		MainVentana v = new MainVentana();
@@ -24,6 +26,7 @@ public class Controller {
 		v.add(grafica);
 		
 		gen = new Generador();
+		dialog = new Dialogs();
 	}
 	
 	public void imprimirPuntos(Punto puntos[]) {
@@ -38,5 +41,13 @@ public class Controller {
 	
 	public Generador getGenerador() {
 		return gen;
+	}
+	
+	public Grafica getGrafica() {
+		return grafica;
+	}
+	
+	public Dialogs getDialogs() {
+		return dialog;
 	}
 }

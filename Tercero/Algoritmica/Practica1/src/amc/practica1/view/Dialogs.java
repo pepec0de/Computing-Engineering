@@ -6,11 +6,9 @@ import javax.swing.JOptionPane;
 
 public class Dialogs {
 
-	public Dialogs() {
-		
-	}
+	public Dialogs() {}
 	
-	public void error(String error) {
+	public void showError(String error) {
 		JOptionPane.showMessageDialog(null, error, "Error", TrayIcon.MessageType.ERROR.ordinal());
 	}
 }

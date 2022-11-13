@@ -5,30 +5,29 @@ package pcd.practica5;
  * @author Pepe
  */
 public class Tunel {
-    private int libres;
-    private int nfurgos;
+
+    private int nfurgos, libres;
     private boolean hayFurgoCentro;
+    private boolean libre[];
     
     public Tunel() {
-        libres = 3;
         nfurgos = 0;
+        libre = new boolean[3];
+        for (int i = 0; i < 3; i++)
+            libre[i] = true;
+        libres = 3;
     }
     
     public synchronized int entraCoche() throws InterruptedException {
         while (libres == 0) {
             wait();
         }
-        int r = 2;
-        if (libres == 3) {
-            r = 0; // arriba
-        } else if (nfurgos == 2) {
-            r = 1; // centro
-        } else if (hayFurgoCentro) {
-            if (libres == 2) {
-                r = 0;
-            }
-        }
+        
+        int r = 0;
+        while (r < 3 && !libre[r]) r++;
+        libre[r] = false;
         libres--;
+        
         return r;
     }
     
@@ -38,28 +37,38 @@ public class Tunel {
         }
         
         int r = 0;
-        if (nfurgos == 0) {
-            r = 1;
+        if (nfurgos == 1) {
+            if (libre[0]) {
+                r = 0;
+            } else {
+                r = 2;
+            }
+        } else { // nfurgos == 0
+            while (r < 3 && !libre[r]) r++;
+        }
+        
+        if (r == 1)
             hayFurgoCentro = true;
-        } else if (nfurgos == 1 && !hayFurgoCentro) {
-            r = 2;
-        } 
+        
+        libre[r] = false;
         nfurgos++;
         libres--;
         return r;
     }
     
-    public synchronized void saleFurgo() {
-        if (hayFurgoCentro) {
+    public synchronized void saleFurgo(int p) {
+        if (p == 1) {
             hayFurgoCentro = false;
         }
+        libre[p] = true;
         libres++;
         nfurgos--;
-        notifyAll();
+        notify();
     }
     
-    public synchronized void saleCoche() {
+    public synchronized void saleCoche(int p) {
+        libre[p] = true;
         libres++;
-        notifyAll();
+        notify();
     }
 }

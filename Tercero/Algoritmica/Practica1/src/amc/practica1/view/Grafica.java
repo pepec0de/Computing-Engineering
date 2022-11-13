@@ -11,6 +11,7 @@ public class Grafica extends Canvas {
 	private int aristas[][];
 	private double offX, offY, scaleX, scaleY, zoomX, zoomY;
 	private int pSize = 5;
+	private double mult = 0;
 	
 	public Grafica() {
 		zoomX = 0;
@@ -36,7 +37,7 @@ public class Grafica extends Canvas {
 				drawPoint(og, puntos[i][0], puntos[i][1]);
 			}
 			
-			//drawLine(og, puntos[0][0], puntos[0][1], puntos[6][0], puntos[6][1]);
+			drawLine(og, puntos[0][0], puntos[0][1], puntos[6][0], puntos[6][1]);
 		}
 
 		g.drawImage(offscreen, 0, 0, null);
@@ -95,5 +96,30 @@ public class Grafica extends Canvas {
 									(x1 - offX - (pSize/2))*scaleX + zoomX + 1,
 									(y1 - offY - (pSize/2))*scaleY + zoomY + 1));
 	}
+	
+	
+	
+    public void zoomIn(double q) {
+        this.mult += q;
+        this.scaleX *= 1.15;
+        this.scaleY *= 1.15;
+
+        repaint();
+    }
+
+    public void zoomOut(double q) {
+        this.mult -= q;
+        this.scaleX *= 0.85;
+        this.scaleY *= 0.85;
+
+        repaint();
+    }
+
+    public void resetZoom() {
+        this.zoomX = 0;
+        this.zoomY = 0;
+        this.mult = 0;
+    }
+	
 	
 }
