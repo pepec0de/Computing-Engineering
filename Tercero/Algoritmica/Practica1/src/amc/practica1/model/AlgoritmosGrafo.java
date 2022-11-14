@@ -11,7 +11,7 @@ public class AlgoritmosGrafo<E, L> {
 		if (salientes.isEmpty())
 			return null;
 		Set<Integer> nodosPorRecorrer = new HashSet<>();
-		int distancias[] = new int[grafo.getNumeroNodos()];
+		int distancias[] = new int[grafo.getSize()];
 		int distRecorrida = 0, distMin;
 		int nodoActual = idcNodoInicial, i;
 		

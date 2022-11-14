@@ -34,7 +34,7 @@ public class GrafoDirigido<E, L> {
 		return nodos.get(index);
 	}
 	
-	public int getNumeroNodos() {
+	public int getSize() {
 		return nodos.size();
 	}
 	

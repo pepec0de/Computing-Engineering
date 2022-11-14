@@ -7,14 +7,14 @@ import amc.practica1.model.Punto;
 import amc.practica1.view.Dialogs;
 import amc.practica1.view.VentanaDatos;
 
-public class CVentanaDatos {
+public class DatosController {
 	
 	private VentanaDatos ventana;
 	private Punto pMin, pMax;
 	private int n;
 	private Controller control;
 	
-	public CVentanaDatos(Controller c) {
+	public DatosController(Controller c) {
 		control = c;
 		ventana = new VentanaDatos();
 		pMin = new Punto();

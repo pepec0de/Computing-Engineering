@@ -120,6 +120,5 @@ public class Grafica extends Canvas {
         this.zoomY = 0;
         this.mult = 0;
     }
-	
-	
+
 }

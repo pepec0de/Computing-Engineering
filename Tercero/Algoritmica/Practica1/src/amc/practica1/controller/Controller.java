@@ -12,7 +12,7 @@ public class Controller {
 	private Grafica grafica;
 	private FrameController cVentana;
 	private Generador gen;
-	private Punto puntos[][];
+	private Punto puntos[];
 	private GrafoDirigido<Integer, Integer> grafo;
 	private Dialogs dialog;
 	
@@ -29,7 +29,8 @@ public class Controller {
 		dialog = new Dialogs();
 	}
 	
-	public void imprimirPuntos(Punto puntos[]) {
+	public void imprimirPuntos(Punto datos[]) {
+		puntos = datos;
 		double dPuntos[][] = new double[puntos.length][2];
 		for (int i = 0; i < puntos.length; i++) {
 			dPuntos[i][0] = puntos[i].getX();
@@ -37,6 +38,10 @@ public class Controller {
 			System.out.println(puntos[i].getX() + ", " + puntos[i].getY());
 		}
 		grafica.pintarPuntos(dPuntos);
+	}
+	
+	public void imprimirGrafo(GrafoDirigido<Integer, Integer> datos) {
+		grafo = datos;
 	}
 	
 	public Generador getGenerador() {
@@ -50,4 +55,22 @@ public class Controller {
 	public Dialogs getDialogs() {
 		return dialog;
 	}
+
+	public Punto[] getPuntos() {
+		return puntos;
+	}
+
+	public void setPuntos(Punto[] puntos) {
+		this.puntos = puntos;
+	}
+
+	public GrafoDirigido<Integer, Integer> getGrafo() {
+		return grafo;
+	}
+
+	public void setGrafo(GrafoDirigido<Integer, Integer> grafo) {
+		this.grafo = grafo;
+	}
+	
+	
 }
