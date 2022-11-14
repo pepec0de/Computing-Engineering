@@ -71,18 +71,20 @@ public class Algoritmos {
 					result1 = resultD;
 				}
 				
-				double distMinC = 0, dist;
+				double distMinC = Double.MAX_VALUE, dist;
 				for (int i = c; i <= f; i++) {
 					for (int j = c; j <= f; j++) {
-						for (int k = c; k <= f; k++) {
-							if (i != j && i != k && j != k) {
-								dist = plano[i].getDistancia(plano[j]) + plano[j].getDistancia(plano[k]);
-								if (distMinC == 0 || distMinC > dist) {
-									distMinC = dist;
-									result[0] = i;
-									result[1] = j;
-									result[2] = k;
-								}
+						if (i == j)
+							continue;
+						for (int k = i+1; k <= f; k++) {
+							if (j == k)
+								continue;
+							dist = plano[i].getDistancia(plano[j]) + plano[j].getDistancia(plano[k]);
+							if (distMinC > dist) {
+								distMinC = dist;
+								result[0] = i;
+								result[1] = j;
+								result[2] = k;
 							}
 						}
 					}

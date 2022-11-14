@@ -117,7 +117,7 @@ public class Generador {
 		
 		Punto p;
 		for (int i = 0; i < n;) {
-			p = new Punto(r.nextDouble(pMin.getX(), pMax.getX()), r.nextDouble(pMin.getY(), pMax.getY()));
+			p = new Punto((double) r.nextInt((int)pMin.getX(), (int)pMax.getX()), (double)r.nextInt( (int)pMin.getY(), (int)pMax.getY()));
 			if (!puntos.contains(p)) {
 				puntos.add(p);
 				plano[i] = p;

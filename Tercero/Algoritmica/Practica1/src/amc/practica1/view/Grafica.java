@@ -37,7 +37,7 @@ public class Grafica extends Canvas {
 				drawPoint(og, puntos[i][0], puntos[i][1]);
 			}
 			
-			drawLine(og, puntos[0][0], puntos[0][1], puntos[6][0], puntos[6][1]);
+			//drawLine(og, puntos[0][0], puntos[0][1], puntos[6][0], puntos[6][1]);
 		}
 
 		g.drawImage(offscreen, 0, 0, null);
@@ -86,8 +86,9 @@ public class Grafica extends Canvas {
 	}
 	
 	private void drawPoint(Graphics2D g, double x, double y) {
-		g.fill(new Rectangle2D.Double( (x - offX - (pSize/2))*scaleX + zoomX,
-									(y - offY - (pSize/2))*scaleY + zoomY, pSize, pSize));
+		g.fill(new Rectangle2D.Double( ((x - offX - (pSize/2))*scaleX + zoomX) % getWidth(),
+									((y - offY - (pSize/2))*scaleY + zoomY) % getHeight(), pSize, pSize));
+		System.out.println("Imprimiendo " + x + ", " + y + " en " + (x - offX - (pSize/2))*scaleX + zoomX + ", " + (y - offY - (pSize/2))*scaleY + zoomY);
 	}
 	
 	private void drawLine(Graphics2D g, double x0, double y0, double x1, double y1) {

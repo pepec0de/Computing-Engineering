@@ -23,6 +23,7 @@ public class Controller {
 		
 		this.grafica = new Grafica();
 		grafica.setSize(v.getWidth(), v.getHeight());
+		System.out.println(grafica.getWidth() + ", " + grafica.getHeight());
 		v.add(grafica);
 		
 		gen = new Generador();
