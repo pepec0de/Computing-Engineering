@@ -9,12 +9,10 @@ import isdd.practice3.view.*;
  */
 public class ISDD_Practice3 {
     
-    private ConsoleView view;
     private LoginControl login;
     
     public ISDD_Practice3() {
         login = new LoginControl();
-        
     }
     
     public static void main(String[] args) {

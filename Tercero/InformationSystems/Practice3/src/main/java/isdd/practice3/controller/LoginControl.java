@@ -15,6 +15,7 @@ public class LoginControl implements ActionListener {
     private ConnectionDB conn;
     private DialogView dialog;
     private DBView dbView;
+    private DBControl dbCtl;
     
     public LoginControl() {
         view = new LoginView();
@@ -22,9 +23,10 @@ public class LoginControl implements ActionListener {
         view.setVisible(true);
         
         dbView = new DBView();
+        dbCtl = new DBControl(dbView);
         dbView.mExit.addActionListener(this);
-        dbView.mMemManage.addActionListener(this);
-        dbView.mTrainManage.addActionListener(this);
+        dbView.mMemManage.addActionListener(dbCtl);
+        dbView.mTrainManage.addActionListener(dbCtl);
 
         dialog = new DialogView();
         
@@ -60,7 +62,6 @@ public class LoginControl implements ActionListener {
     }
 
     private void openDBView() {
-        
         dbView.setVisible(true);
     }
     
@@ -85,8 +86,5 @@ public class LoginControl implements ActionListener {
             dialog.show(-1, ex.getMessage());
         }
     }
-
-    private void retrieveMetadata() {
-    }
-
+    
 }

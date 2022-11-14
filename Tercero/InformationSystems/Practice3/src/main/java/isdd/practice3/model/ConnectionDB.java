@@ -29,4 +29,13 @@ public class ConnectionDB {
     public DatabaseMetaData informationDB() throws SQLException {
         return connection.getMetaData();
     }
+    
+    public Object[][] getTableFromQuery(String cmd) throws Exception {
+        Object[][] table;
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery(cmd);
+        rs.getMetaData().
+        
+        return null;
+    }
 }
