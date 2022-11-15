@@ -12,9 +12,15 @@ public class Generador {
 		Random r = new Random(System.currentTimeMillis());
 		
 		for (int i = 0; i < 5; i++) {
-			nodos[i] = new Nodo<Integer>(i+1, new Punto(r.nextDouble(0, 10), r.nextDouble(0, 10)));
+			nodos[i] = new Nodo<Integer>(i+1);
 			grafo.addNodo(nodos[i]);
 		}
+		
+		nodos[0].setPunto(new Punto(5, 6));
+		nodos[1].setPunto(new Punto(8, 4));
+		nodos[2].setPunto(new Punto(7, 1));
+		nodos[3].setPunto(new Punto(5, 1));
+		nodos[4].setPunto(new Punto(3, 4));
 		
 		Arista<Integer, Integer> aristas[] = new Arista[8];
 		aristas[0] = new Arista(nodos[1-1], nodos[5-1], 10);

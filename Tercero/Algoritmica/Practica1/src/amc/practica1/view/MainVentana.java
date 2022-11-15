@@ -10,6 +10,7 @@ public class MainVentana extends JFrame {
 	public JMenuItem generarDatos;
 	public JMenu grafo;
 	public JMenuItem generarGrafo;
+	public JMenuItem generarEjemplo;
 	public JMenu algo;
 	public JMenuItem exhaustivo;
 	public JMenuItem recursivo;
@@ -44,7 +45,9 @@ public class MainVentana extends JFrame {
 		
 		grafo = new JMenu("Grafo");
 		generarGrafo = new JMenuItem("Generar grafo");
+		generarEjemplo = new JMenuItem("Generar grafo ejemplo");
 		grafo.add(generarGrafo);
+		grafo.add(generarEjemplo);
 		bar.add(grafo);
 		
 		algo = new JMenu("Algoritmo");

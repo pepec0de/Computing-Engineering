@@ -6,7 +6,6 @@ import java.io.File;
 
 import javax.swing.*;
 
-import amc.practica1.view.DijkstraView;
 import amc.practica1.view.MainVentana;
 
 public class FrameController {
@@ -14,14 +13,14 @@ public class FrameController {
 	private MainVentana main;
 	private Controller control;
 	private DatosController datos;
-	private DijkstraView dijkstraView;
+	private DijkstraControl dijkstra;
 	
 	public FrameController(Controller c, MainVentana v) {
 		control = c;
 		datos = new DatosController(c);
 		main = v;
 		main.setVisible(true);
-		dijkstraView = new DijkstraView();
+		dijkstra = new DijkstraControl(c);
 		initActions();
 	}
 	
@@ -34,7 +33,7 @@ public class FrameController {
 				ch.setCurrentDirectory(new File(System.getProperty("user.dir")));
 				int r = ch.showOpenDialog(main);
 				if (r == JFileChooser.APPROVE_OPTION) {
-					control.imprimirPuntos(control.getGenerador().getPuntosTSPFile(ch.getSelectedFile().getAbsolutePath()));
+					control.generarPuntos(control.getGenerador().getPuntosTSPFile(ch.getSelectedFile().getAbsolutePath()));
 				}
 			}
 		});
@@ -44,6 +43,29 @@ public class FrameController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				datos.abrir();
+			}
+		});
+		
+		// GRAFO
+		main.generarGrafo.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if (control.getPuntos() != null) {
+					control.generarGrafo(control.getGenerador().getGraph(control.getPuntos()));
+				} else {
+					control.getDialogs().showError("Necesitas generar puntos");
+				}
+			}
+		});
+		
+		main.generarEjemplo.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				control.generarGrafo(control.getGenerador().grafoEjemplo());
 			}
 		});
 		
@@ -80,8 +102,7 @@ public class FrameController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (control.getGrafo() != null) {
-					dijkstraView.abrir();
-					
+					dijkstra.abrir();
 				} else {
 					control.getDialogs().showError("Necesitas generar un grafo.");
 				}

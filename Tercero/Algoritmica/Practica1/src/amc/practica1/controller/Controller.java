@@ -1,8 +1,8 @@
 package amc.practica1.controller;
 
-import amc.practica1.model.Generador;
-import amc.practica1.model.GrafoDirigido;
-import amc.practica1.model.Punto;
+import java.util.Set;
+
+import amc.practica1.model.*;
 import amc.practica1.view.Dialogs;
 import amc.practica1.view.Grafica;
 import amc.practica1.view.MainVentana;
@@ -12,26 +12,42 @@ public class Controller {
 	private Grafica grafica;
 	private FrameController cVentana;
 	private Generador gen;
+	private Dialogs dialog;
+	
 	private Punto puntos[];
 	private GrafoDirigido<Integer, Integer> grafo;
-	private Dialogs dialog;
+	
+	private Algoritmos algPuntos;
+	private AlgoritmosGrafo<Integer, Integer> algGrafo;
 	
 	public Controller() {
 		MainVentana v = new MainVentana();
-		
 		cVentana = new FrameController(this, v);
-		
 		this.grafica = new Grafica();
+		algPuntos = new Algoritmos();
+		algGrafo = new AlgoritmosGrafo<>();
+		
 		grafica.setSize(v.getWidth(), v.getHeight());
-		System.out.println(grafica.getWidth() + ", " + grafica.getHeight());
 		v.add(grafica);
 		
-		gen = new Generador();
-		dialog = new Dialogs();
 	}
 	
-	public void imprimirPuntos(Punto datos[]) {
+	public void generarPuntos(Punto datos[]) {
 		puntos = datos;
+		representarPuntos();
+	}
+	
+	public void generarGrafo(GrafoDirigido<Integer, Integer> g) {
+		grafo = g;
+		puntos = new Punto[grafo.getSize()];
+		for (Nodo<Integer> nodo : grafo.nodos())
+			puntos[grafo.getIndexOf(nodo)] = nodo.getPunto();
+		
+		representarPuntos();
+		grafica.pintarAristas(grafo.aristas());
+	}
+	
+	private void representarPuntos() {
 		double dPuntos[][] = new double[puntos.length][2];
 		for (int i = 0; i < puntos.length; i++) {
 			dPuntos[i][0] = puntos[i].getX();
@@ -39,10 +55,6 @@ public class Controller {
 			System.out.println(puntos[i].getX() + ", " + puntos[i].getY());
 		}
 		grafica.pintarPuntos(dPuntos);
-	}
-	
-	public void imprimirGrafo(GrafoDirigido<Integer, Integer> datos) {
-		grafo = datos;
 	}
 	
 	public Generador getGenerador() {
@@ -71,6 +83,10 @@ public class Controller {
 
 	public void setGrafo(GrafoDirigido<Integer, Integer> grafo) {
 		this.grafo = grafo;
+	}
+	
+	public AlgoritmosGrafo<Integer, Integer> getAlgGrafo() {
+		return algGrafo;
 	}
 	
 	

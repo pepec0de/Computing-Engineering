@@ -16,7 +16,7 @@ public class Generador {
         Tunel tunel = new Tunel();
         Ventana ventana = new Ventana(cv);
         ventana.setVisible(true);
-        
+
         for (int i = 0; i < n; i++) {
             if (r.nextInt(0, 2) == 0) {
                 vehiculos[i] = new Coche(tunel, cv);
@@ -35,5 +35,6 @@ public class Generador {
                 System.err.println(ex.getMessage());
             }
         System.out.println("Fin de hilos");
+        
     }
 }

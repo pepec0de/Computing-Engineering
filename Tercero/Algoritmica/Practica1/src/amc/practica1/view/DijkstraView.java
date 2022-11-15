@@ -3,17 +3,6 @@ package amc.practica1.view;
 import javax.swing.JFrame;
 
 public class DijkstraView extends JFrame {
-	
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    public javax.swing.JLabel lblVectorD;
-    public javax.swing.JTable tablaDistancias;
-    public javax.swing.JTable tablaPasos;
-    public javax.swing.JSpinner spinOrigen;
-    public javax.swing.JButton btnCalc;
-    public javax.swing.JLabel jLabel1;
     
 	public DijkstraView() {
 		setTitle("Algoritmo de Dijkstra");
@@ -21,10 +10,6 @@ public class DijkstraView extends JFrame {
 		setLocationRelativeTo(null);
 		
 		initComponents();
-	}
-	
-	public void abrir() {
-		setVisible(true);
 	}
 	
     private void initComponents() {
@@ -40,19 +25,18 @@ public class DijkstraView extends JFrame {
         spinOrigen = new javax.swing.JSpinner();
         btnCalc = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        tablaPasos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+//        tablaPasos.setModel(new javax.swing.table.DefaultTableModel(
+//            new Object [][] {
+//                {null, null, null, null},
+//                {null, null, null, null},
+//                {null, null, null, null},
+//                {null, null, null, null}
+//            },
+//            new String [] {
+//                "Title 1", "Title 2", "Title 3", "Title 4"
+//            }
+//        ));
+        
         jScrollPane1.setViewportView(tablaPasos);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -72,17 +56,17 @@ public class DijkstraView extends JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tablaDistancias.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+//        tablaDistancias.setModel(new javax.swing.table.DefaultTableModel(
+//            new Object [][] {
+//                {null, null, null, null},
+//                {null, null, null, null},
+//                {null, null, null, null},
+//                {null, null, null, null}
+//            },
+//            new String [] {
+//                "Title 1", "Title 2", "Title 3", "Title 4"
+//            }
+//        ));
         jScrollPane2.setViewportView(tablaDistancias);
 
         lblVectorD.setText("Vector D");
@@ -150,4 +134,15 @@ public class DijkstraView extends JFrame {
 
         pack();
     }
+    
+    public javax.swing.JButton btnCalc;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    public javax.swing.JLabel lblVectorD;
+    public javax.swing.JSpinner spinOrigen;
+    public javax.swing.JTable tablaDistancias;
+    public javax.swing.JTable tablaPasos;
 }

@@ -28,17 +28,13 @@ public class Furgo implements Runnable {
         
         try {
             int p;
-            //synchronized (this) { 
-                p = tunel.entraFurgo();
-                canvas.meterVehiculo('f', p);
-            //}
+            p = tunel.entraFurgo();
+            canvas.meterVehiculo('f', p);
             System.out.println("Furgo " + Thread.currentThread().getId() + " ENTRA " + p);
             Thread.sleep(r.nextInt(1, 4) * 1000);
             System.out.println("Furgo " + Thread.currentThread().getId() + " SALE " + p);
-            //synchronized (this) { 
-                tunel.saleFurgo(p);
-                canvas.sacarVehiculo(p);
-            //}
+            tunel.saleFurgo(p);
+            canvas.sacarVehiculo(p);
             
         } catch (InterruptedException ex) {
             

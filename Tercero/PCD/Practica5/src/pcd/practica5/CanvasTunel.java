@@ -87,6 +87,7 @@ public class CanvasTunel extends Canvas {
             pintarVehiculoTunel(og, i, estadoTunel[i], vehiTunel[i]);
         }
         
+        og.drawImage(offscreen, 0, 0, null);
         g.drawImage(offscreen, 0, 0, null);
     }
     

@@ -34,7 +34,7 @@ public class DatosController {
 				if (n <= 0 || (pMin.getX() >= pMax.getX() && pMin.getY() >= pMax.getY())) {
 					control.getDialogs().showError("Datos incorrectos");
 				} else {
-					control.imprimirPuntos(control.getGenerador().getPuntosRandom(n, pMin, pMax));
+					control.generarPuntos(control.getGenerador().getPuntosRandom(n, pMin, pMax));
 					ventana.dispose();
 				}
 			}
