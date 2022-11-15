@@ -26,10 +26,10 @@ public class Controller {
 		this.grafica = new Grafica();
 		algPuntos = new Algoritmos();
 		algGrafo = new AlgoritmosGrafo<>();
+		gen = new Generador();
 		
 		grafica.setSize(v.getWidth(), v.getHeight());
 		v.add(grafica);
-		
 	}
 	
 	public void generarPuntos(Punto datos[]) {

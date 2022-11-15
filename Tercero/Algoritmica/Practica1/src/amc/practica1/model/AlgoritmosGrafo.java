@@ -50,8 +50,8 @@ public class AlgoritmosGrafo<E, L> {
 	}
 	
 	public void DijkstraPasos(GrafoDirigido<E, Integer> grafo, int idcNodoInicial,
-			ArrayList<Nodo<E>> listaActuales, 
-			ArrayList<HashSet<Integer>> listaNodos, 
+			ArrayList<E> listaActuales, 
+			ArrayList<ArrayList<E>> listaNodos, 
 			ArrayList<int[]> listaDist) {
 		
 		Set<Arista<E, Integer>> salientes = grafo.getAristasSalientes(idcNodoInicial);
@@ -90,8 +90,11 @@ public class AlgoritmosGrafo<E, L> {
 				}
 			}
 			listaDist.add(distancias.clone());
-			listaActuales.add(grafo.getNodoAt(nodoActual));
-			listaNodos.add((HashSet<Integer>) nodosPorRecorrer);
+			listaActuales.add(grafo.getNodoAt(nodoActual).getValor());
+			listaNodos.add(new ArrayList<>());
+			for (Integer nodo : nodosPorRecorrer) {
+				listaNodos.get(listaNodos.size()-1).add(grafo.getNodoAt(nodo).getValor());
+			}
 			
 			salientes = grafo.getAristasSalientes(nodoActual);
 		}

@@ -15,8 +15,8 @@ public class DijkstraControl {
 	private Controller control;
 	private DijkstraView view;
 	private int idx;
-	private ArrayList<Nodo<Integer>> listaActuales; 
-	private ArrayList<HashSet<Integer>> listaNodos;
+	private ArrayList<Integer> listaActuales; 
+	private ArrayList<ArrayList<Integer>> listaNodos;
 	private ArrayList<int[]> listaDist;
 	
 	public DijkstraControl(Controller c) {
@@ -36,6 +36,9 @@ public class DijkstraControl {
 			public void actionPerformed(ActionEvent e) {
 				if (datosCorrectos()) {
 					idx = (int) view.spinOrigen.getValue();
+					listaActuales = new ArrayList<>();
+					listaNodos = new ArrayList<>();
+					listaDist = new ArrayList<>();
 					control.getAlgGrafo().DijkstraPasos(control.getGrafo(), idx, listaActuales, listaNodos, listaDist);
 					writeTables();
 				} else {
@@ -59,13 +62,29 @@ public class DijkstraControl {
 				pasos[i][1] = listaActuales.get(i-1);
 			}
 			Object conjunto = "{";
-			for (Integer nodo : listaNodos.get(i)) {
-				conjunto += nodo.toString() + ", ";
+			for (int j = 0; j < listaNodos.get(i).size(); j++) {
+				conjunto += listaNodos.get(i).get(j).toString() + (j == listaNodos.get(i).size()-1 ? "" : ", ");
 			}
 			conjunto += "}";
 			pasos[i][2] = conjunto; 
 		}
 		view.tablaPasos.setModel(new DefaultTableModel(pasos, columnsPasos));
+		
+		Object distancias[][] = new Object[filas][listaDist.get(0).length];
+		Object columnsDist[] = new Object[listaDist.get(0).length];
+		for (int i = 0; i < control.getGrafo().getSize(); i++) {
+			if (i != idx) {
+				columnsDist[i] = control.getGrafo().getNodoAt(i).getValor();
+			}
+		}
+		
+		for (int i = 0; i < filas; i++) {
+			for (int j = 0; j < listaDist.get(0).length; j++) {
+				distancias[i][j] = listaDist.get(i)[j];
+			}
+		}
+		
+		view.tablaDistancias.setModel(new DefaultTableModel(distancias, columnsDist));
 	}
 	
 	private boolean datosCorrectos() {
