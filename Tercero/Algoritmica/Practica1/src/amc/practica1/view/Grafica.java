@@ -13,6 +13,7 @@ public class Grafica extends Canvas {
 	private double offX, offY, scaleX, scaleY, zoomX, zoomY;
 	private int pSize = 5;
 	private double mult = 0;
+	private final int MAXX = 830, MAXY = 735;
 
 	public Grafica() {
 		zoomX = 0;
@@ -76,8 +77,8 @@ public class Grafica extends Canvas {
 			}
 		}
 
-		scaleX = getWidth() / (maxX - minX);
-		scaleY = getHeight() / (maxY - minY);
+		scaleX = MAXX / (maxX - minX);
+		scaleY = MAXY / (maxY - minY);
 		offX = minX;
 		offY = minY;
 		System.out.println("scaleX = " + scaleX + ", scaleY = " + scaleY + ", offX = " + offX + ", offY = " + offY);
@@ -90,15 +91,15 @@ public class Grafica extends Canvas {
 	}
 
 	private void drawPoint(Graphics2D g, double x, double y) {
-		System.out.println(x + ", " + y + " -> " + getXScaledPointCoord(x) + ", " + getYScaledPointCoord(y));
-		g.fill(new Rectangle2D.Double(getXScaledPointCoord(x), getYScaledPointCoord(y), pSize, pSize));
+		System.out.println(x + ", " + y + " -> " + getXScaledCoord(x) + ", " + getYScaledCoord(y));
+		g.fill(new Rectangle2D.Double(getXScaledCoord(x), getYScaledCoord(y), pSize, pSize));
 	}
 
 	private void drawArista(Graphics2D g, Arista<Integer, Integer> a) {
-		double x0 = getXScaledLineCoord(a.getOrigen().getPunto().getX()),
-				y0 = getYScaledLineCoord(a.getOrigen().getPunto().getY()),
-				x1 = getXScaledLineCoord(a.getDestino().getPunto().getX()),
-				y1 = getYScaledLineCoord(a.getDestino().getPunto().getY());
+		double x0 = getXScaledCoord(a.getOrigen().getPunto().getX()),
+				y0 = getYScaledCoord(a.getOrigen().getPunto().getY()),
+				x1 = getXScaledCoord(a.getDestino().getPunto().getX()),
+				y1 = getYScaledCoord(a.getDestino().getPunto().getY());
 		g.setColor(Color.BLUE);
 		g.draw(new Line2D.Double(x0, y0, x1, y1));
 		int minX = (int) x0, maxX = (int) x1;
@@ -118,20 +119,12 @@ public class Grafica extends Canvas {
 		g.drawString(a.getPeso().toString(), x, y);
 	}
 	
-	private double getXScaledPointCoord(double v) {
-		return Math.abs((v - offX)* scaleX + zoomX - (pSize / 2));
+	private double getXScaledCoord(double v) {
+		return Math.abs((v - offX)*scaleX + zoomX - (pSize / 2));
 	}
 	
-	private double getYScaledPointCoord(double v) {
-		return Math.abs((v - offY)* scaleY + zoomY - (pSize / 2));
-	}
-	
-	private double getXScaledLineCoord(double v) {
-		return (v - offX)* scaleX + zoomX - (pSize / 2) + 1;
-	}
-	
-	private double getYScaledLineCoord(double v) {
-		return (v - offY) * scaleY + zoomY - (pSize / 2) + 1;
+	private double getYScaledCoord(double v) {
+		return Math.abs((v - offY)*scaleY + zoomY - (pSize / 2));
 	}
 
 	public void zoomIn(double q) {
