@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import amc.practica1.types.Arista;
+import amc.practica1.types.GrafoDirigido;
+
 public class AlgoritmosGrafo<E, L> {
 
 	// Algoritmo de Dijkstra que devuelve las distancias

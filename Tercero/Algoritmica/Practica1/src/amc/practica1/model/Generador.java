@@ -4,6 +4,11 @@ import java.io.*;
 import java.util.HashSet;
 import java.util.Random;
 
+import amc.practica1.types.Arista;
+import amc.practica1.types.GrafoDirigido;
+import amc.practica1.types.Nodo;
+import amc.practica1.types.Punto;
+
 public class Generador {
 
 	public GrafoDirigido<Integer, Integer> grafoEjemplo() {
@@ -16,11 +21,11 @@ public class Generador {
 			grafo.addNodo(nodos[i]);
 		}
 		
-		nodos[0].setPunto(new Punto(26, 78));
-		nodos[1].setPunto(new Punto(35, 75));
-		nodos[2].setPunto(new Punto(33, 66));
-		nodos[3].setPunto(new Punto(21, 63));
-		nodos[4].setPunto(new Punto(18, 76));
+		nodos[0].setPunto(new Punto(13, 39));
+		nodos[1].setPunto(new Punto(15, 34));
+		nodos[2].setPunto(new Punto(17, 30));
+		nodos[3].setPunto(new Punto(10, 33));
+		nodos[4].setPunto(new Punto(9, 40));
 		
 		Arista<Integer, Integer> aristas[] = new Arista[8];
 		aristas[0] = new Arista(nodos[1-1], nodos[5-1], 10);
@@ -68,7 +73,7 @@ public class Generador {
 		
 		BufferedReader br;
 		String line;
-		String dim = "DIMENSION: ";
+		String dim1 = "DIMENSION: ", dim2 = "DIMENSION : ";
 		String start = "NODE_COORD_SECTION";
 		String coordLine[];
 		int posStr[] = new int[3];
@@ -81,10 +86,13 @@ public class Generador {
 			while ( (line = br.readLine()) != null) {
 				
 				// Tomamos el valor del parametro DIMENSION
-				if (line.indexOf(dim) != -1) {
-					n = Integer.parseInt(line.substring(dim.length(), line.length()));
+				if (line.indexOf(dim1) != -1) {
+					n = Integer.parseInt(line.substring(dim1.length(), line.length()));
 					result = new Punto[n];
-				} else // Recogemos los datos
+				} else if(line.indexOf(dim2) != -1) {
+					n = Integer.parseInt(line.substring(dim2.length(), line.length()));
+					result = new Punto[n];
+			    } else // Recogemos los datos
 				if (dataStart) {
 					if (line.strip().equals("EOF")) {
 						dataStart = false;

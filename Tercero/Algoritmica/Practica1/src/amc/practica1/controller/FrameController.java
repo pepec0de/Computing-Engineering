@@ -76,7 +76,7 @@ public class FrameController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (control.getPuntos() != null) {
-					
+					control.pintarSolucionPuntos(control.getAlgPuntos().BusquedaExhaustiva(control.getPuntos()));
 				} else {
 					control.getDialogs().showError("Necesitas generar puntos.");
 				}
@@ -89,7 +89,7 @@ public class FrameController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (control.getPuntos() != null) {
-					
+					control.pintarSolucionPuntos(control.getAlgPuntos().BusquedaDyV(control.getPuntos()));
 				} else {
 					control.getDialogs().showError("Necesitas generar puntos.");
 				}

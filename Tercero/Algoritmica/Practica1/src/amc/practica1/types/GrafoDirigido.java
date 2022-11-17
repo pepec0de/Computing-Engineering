@@ -1,4 +1,4 @@
-package amc.practica1.model;
+package amc.practica1.types;
 
 import java.util.ArrayList;
 import java.util.HashSet;

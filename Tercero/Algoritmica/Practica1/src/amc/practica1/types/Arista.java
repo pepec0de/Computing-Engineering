@@ -1,4 +1,4 @@
-package amc.practica1.model;
+package amc.practica1.types;
 
 public class Arista<E, L> {
 	private L peso;

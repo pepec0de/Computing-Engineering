@@ -3,7 +3,7 @@ package amc.practica1.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import amc.practica1.model.Punto;
+import amc.practica1.types.Punto;
 import amc.practica1.view.Dialogs;
 import amc.practica1.view.VentanaDatos;
 
