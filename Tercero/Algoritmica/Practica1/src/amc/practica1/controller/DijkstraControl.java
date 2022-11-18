@@ -8,10 +8,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+import amc.practica1.types.Arista;
 import amc.practica1.types.Nodo;
 import amc.practica1.view.DijkstraView;
 
@@ -52,25 +55,34 @@ public class DijkstraControl {
 						listaActuales = new ArrayList<>();
 						listaNodos = new ArrayList<>();
 						listaDist = new ArrayList<>();
-						control.getAlgGrafo().DijkstraPasos(control.getGrafo(), idx, listaActuales, listaNodos, listaDist);
-						int n = control.getGrafo().getSize();
-						int solucion = 0;
-						
-						// Escribir archivo
-						try {
-							BufferedWriter bw = new BufferedWriter(new FileWriter(archivo));
-							String s = "NAME: " + archivo.getName() + "\nTYPE: TOUR" + "\nDIMENSION: " + String.valueOf(n)
-										+ "\nSOLUTION: " + String.valueOf(solucion) + "\nTOUR_SECTION\n";
+						if (control.getAlgGrafo().DijkstraPasos(control.getGrafo(), idx, listaActuales, listaNodos, listaDist)) {
+							int n = control.getGrafo().getSize();
+							int solucion = 0;
+							int distancias[] = listaDist.get(listaDist.size()-1);
+							for (int i = 0; i < distancias.length; i++) {
+								solucion += distancias[i];
+							}
+							// Escribir archivo
+							try {
+								BufferedWriter bw = new BufferedWriter(new FileWriter(archivo));
+								String s = "NAME: " + archivo.getName() + "\nTYPE: TOUR" + "\nDIMENSION: " + String.valueOf(n)
+								+ "\nSOLUTION: " + String.valueOf(solucion) + "\nTOUR_SECTION\n";
+								for (int i = 0; i < n; i++) {
+									if (i != idx) {
+										s += String.valueOf(distancias[i]) + " - " + control.getAlgGrafo().DijkstraCamino(control.getGrafo(), idx, i) + "\n"; 
+									}
+								}
+								s += "-1\nEOF\n";
+								bw.write(s);
+								bw.close();
+							} catch (IOException e1) {
+								control.getDialogs().showError(e1.getMessage());
+							}
 							
-							s += "-1\n";
-							s += "EOF";
-							bw.write(s);
-							bw.close();
-						} catch (IOException e1) {
-							control.getDialogs().showError(e1.getMessage());
+							writeTables();
+						} else {
+							control.getDialogs().showError("No existen caminos mínimos");
 						}
-						
-						writeTables();
 					}
 				} else {
 					control.getDialogs().showError("Índice incorrecto");

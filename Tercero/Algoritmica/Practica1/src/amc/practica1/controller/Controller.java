@@ -73,7 +73,9 @@ public class Controller {
 		Set<Arista<Integer, Integer>> solucion = new HashSet<>();
 		for (int i = 0; i < 3; i++) {
 			if (i != nexo) {
-				solucion.add(new Arista<Integer, Integer>(new Nodo<Integer>(null, puntos[result[nexo]]), new Nodo<Integer>(null, puntos[result[i]]), null));
+				solucion.add(new Arista<Integer, Integer>(new Nodo<Integer>(null, puntos[result[nexo]]), 
+						new Nodo<Integer>(null, puntos[result[i]]), 
+						(int) puntos[result[nexo]].getDistancia(puntos[result[i]])));
 			}
 		}
 		pintarLineasSolucion(solucion);
