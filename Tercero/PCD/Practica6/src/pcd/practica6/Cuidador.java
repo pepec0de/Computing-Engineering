@@ -9,10 +9,12 @@ import java.util.concurrent.Semaphore;
 public class Cuidador extends Thread {
     
     private Semaphore perros, cuida;
+    private mCanvas canvas;
     
     public Cuidador(Semaphore perros, Semaphore cuida, mCanvas cv) {
         this.perros = perros;
         this.cuida = cuida;
+        this.canvas = cv;
     }
     
     @Override
@@ -20,9 +22,12 @@ public class Cuidador extends Thread {
         while (true) {
             try {
                 cuida.acquire();
+                canvas.cuidaPerro();
+                System.out.println("Cuidador " + getId() + " da galleta");
                 // galleta
                 perros.release();
             } catch (InterruptedException ex) {
+                ex.printStackTrace();
             }
         }
         

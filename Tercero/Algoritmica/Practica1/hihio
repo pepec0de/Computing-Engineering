@@ -1,0 +1,11 @@
+NAME: hihio
+TYPE: TOUR
+DIMENSION: 5
+SOLUTION: 95
+TOUR_SECTION
+35 - 1, 5, 4, 3, 
+30 - 1, 5, 4, 
+20 - 1, 5, 
+10 - 1, 
+-1
+EOF

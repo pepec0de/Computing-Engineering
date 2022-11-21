@@ -1,0 +1,13 @@
+# Script de gnuplot generado por benchmark
+set title "DyV"
+set key top left vertical inside
+set grid
+set xlabel "Talla (n)"
+set ylabel "Tiempo (ms)"
+NlogN(x) = a*x*(log(x)/log(2)) + b*x +c
+fit NlogN(x) "DyV.dat" using 1:2 via a, b, c
+plot "DyV.dat" using 1:2 title "DyV", NlogN(x)
+set terminal pdf
+set output "DyV.pdf"
+replot
+pause 5 "Pulsa Enter para continuar..."

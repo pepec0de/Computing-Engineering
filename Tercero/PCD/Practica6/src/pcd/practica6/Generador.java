@@ -57,17 +57,26 @@ public class Generador extends javax.swing.JFrame {
         Random r = new Random(System.currentTimeMillis());
         mCanvas cv = new mCanvas();
         Generador mf = new Generador();
+        mf.setSize(1500, 450);
+        cv.setSize(mf.getWidth(), mf.getHeight());
         mf.add(cv);
         mf.setVisible(true);
-        
+        Cuidador cuidador = new Cuidador(perros, cuida, cv);
         Thread hilos[] = new Thread[20];
         for (int i = 0; i < hilos.length; i++) {
             if (r.nextInt(1, 11) > 3) {
-                hilos[i] = new ViajeroMaleta(rayos, perros, cuida, cv);
+                hilos[i] = new ViajeroMaleta(rayosMaleta, perros, cuida, cv);
             } else {
                 hilos[i] = new Thread(new ViajeroMano(rayos, perros, cuida, cv));
             }
         }
+        cuidador.start();
+        for (int i = 0; i < hilos.length; i++) {
+            hilos[i].start();
+        }
+        System.out.println("Hilos lanzados");
+//        rayos.release();
+//        rayosMaleta.release();
         
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -91,6 +100,7 @@ public class Generador extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Generador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        cv.repaint();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

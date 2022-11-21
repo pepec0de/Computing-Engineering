@@ -1,0 +1,13 @@
+# Script de gnuplot generado por benchmark
+set title "Dijkstra"
+set key top left vertical inside
+set grid
+set xlabel "Talla (n)"
+set ylabel "Tiempo (ms)"
+Cuadrada(x) = a*x*x + b*x + c
+fit Cuadrada(x) "Dijkstra.dat" using 1:2 via a, b, c
+plot "Dijkstra.dat" using 1:2 title "Dijkstra", Cuadrada(x)
+set terminal pdf
+set output "Dijkstra.pdf"
+replot
+pause 5 "Pulsa Enter para continuar..."

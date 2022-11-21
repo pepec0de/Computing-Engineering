@@ -1,0 +1,13 @@
+# Script de gnuplot generado por benchmark
+set title "Exhaustivo"
+set key top left vertical inside
+set grid
+set xlabel "Talla (n)"
+set ylabel "Tiempo (ms)"
+Cubica(x) = a*x*x*x +b*x*x +c*x +d
+fit Cubica(x) "Exhaustivo.dat" using 1:2 via a, b, c, d
+plot "Exhaustivo.dat" using 1:2 title "Exhaustivo", Cubica(x)
+set terminal pdf
+set output "Exhaustivo.pdf"
+replot
+pause 5 "Pulsa Enter para continuar..."
