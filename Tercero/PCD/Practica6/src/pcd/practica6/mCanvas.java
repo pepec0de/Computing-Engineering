@@ -18,13 +18,25 @@ public class mCanvas extends Canvas {
     
     private ArrayList<Integer> pasMaleta, pasMano;
     private Image imgCuida, imgPerro, imgPasMaleta, imgPasMano;
-    private boolean scanMano;
-    private boolean scanMaleta[] = new boolean[2];
-    private boolean perros[] = new boolean[2];
+    private int scanMano;
+    private int scanMaleta[];
+    private int perros[], tipoPerros[];
+    private int cuidador;
     
     public mCanvas() {
         pasMaleta = new ArrayList<>();
         pasMano = new ArrayList<>();
+        scanMano = -1;
+        scanMaleta = new int [] {-1, -1};
+        perros = new int [] {-1, -1};
+        /*
+         * Codigos de perros
+         * -1 -> libre
+         * 0 -> comiendo
+         * != de 0, -1 -> escaneando
+        */
+        tipoPerros = new int[] {-1, -1};
+        cuidador = -1;
         
         try {
             imgCuida = ImageIO.read(new File("cuida.png")).getScaledInstance(80, 80, 0);
@@ -36,12 +48,12 @@ public class mCanvas extends Canvas {
         }
     }
     
-    public void addPasMaleta(int id) {
+    public synchronized void addPasMaleta(int id) {
         pasMaleta.add(id);
         repaint();
     }
     
-    public void addPasMano(int id) {
+    public synchronized void addPasMano(int id) {
         pasMano.add(id);
         repaint();
     }
@@ -54,20 +66,53 @@ public class mCanvas extends Canvas {
         return pasMaleta.get(0) == id;
     }
     
-    public synchronized void salirColaPasMano() {
-        pasMano.remove(0);
+    public synchronized void entraScanMano(int id) {
+        if (!pasMano.isEmpty())
+            pasMano.remove(0);
+        scanMano = id;
+        repaint();
     }
     
-    public synchronized void salirColaPasMaleta() {
+    public synchronized void saleScanMano() {
+        scanMano = -1;
+        repaint();
+    }
+    
+    public synchronized int entraScanMaleta(int id) {
         pasMaleta.remove(0);
+        int i = 0;
+        while (i < 2 && scanMaleta[i] != -1) i++;
+        scanMaleta[i] = id;
+        return i;
     }
     
-    public synchronized void entraScanMano() {
-        
+    public synchronized int entraPerros(int id, int tipo) {
+        int i = 0;
+        while (i < 2 && perros[i] != -1) i++;
+        perros[i] = id;
+        tipoPerros[i] = tipo;
+        repaint();
+        return i;
     }
     
-    public synchronized void entraScanMaleta() {
-        
+    public synchronized int cuidaPerro(int id) {
+        int i = 0;
+        while (i < 2 && perros[i] != 0) i++;
+        cuidador = id;
+        repaint();
+        return i;
+    }
+    
+    public synchronized void perroLibre(int p) {
+        cuidador = -1;
+        perros[p] = -1;
+        repaint();
+    }
+    
+    // Cuando un pasajero sale de perros, el perro que le ha escaneado tiene que comer
+    public synchronized void salePerros(int p) {
+        perros[p] = 0;
+        repaint();
     }
     
     @Override
@@ -89,14 +134,38 @@ public class mCanvas extends Canvas {
             pintarPasMaleta(og, xColas + 90*i, margenY + 170, pasMaleta.get(i));
         }
         
+        // Pinar escaneres
+        // Escaner pasajeros de mano
         og.setColor(Color.RED);
         og.fillRect(margenX + xRayos, margenY, 100, 100);
+        if (scanMano != -1) {
+            pintarPasMano(og, margenX + xRayos, margenY, scanMano);
+        }
+        // Escaneres pasajeros de maleta
         og.setColor(Color.BLUE);
-        og.fillRect(margenX + xRayos, margenY + 110, 100, 100);
-        og.fillRect(margenX + xRayos, margenY + 220, 100, 100);
+        for (int i = 0; i < 2; i++) {
+            og.fillRect(margenX + xRayos, margenY + 110 + 110*i, 100, 100);
+            if (scanMaleta[i] != -1) {
+                pintarPasMaleta(og, margenX + xRayos, margenY + 110 + 110*i, scanMaleta[i]);
+            }
+        }
         
-        
-        og.drawImage(imgCuida, margenX, margenY, null);
+        // Pintamos los perros
+        for (int i = 0; i < perros.length; i++) {
+            if (perros[i] != 0) {
+                pintarPerro(og, margenX + 110, margenY + 110*i);
+                if (perros[i] != -1)
+                    if (tipoPerros[i] == 1) {
+                        pintarPasMano(og, margenX + 220, margenY + 110*i, perros[i]);
+                    } else {
+                        pintarPasMaleta(og, margenX + 220, margenY + 110*i, perros[i]);
+                    }
+            }
+        }
+        // Pintamos el cuidador
+        if (cuidador != -1) {
+            pintarCuidador(og, margenX, margenY);
+        }
         
         og.drawImage(offscreen, 0, 0, null);
         g.drawImage(offscreen, 0, 0, null);
@@ -105,6 +174,13 @@ public class mCanvas extends Canvas {
     @Override
     public void update(Graphics g) {
         paint(g);
+    }
+    
+    private void pintarCuidador(Graphics g, int x, int y) {
+        g.drawImage(imgCuida, x, y, null);
+        g.setFont(new Font("Arial", Font.BOLD, 15));
+        g.setColor(Color.BLUE);
+        g.drawString("" + cuidador, x, y + 20);
     }
     
     private void pintarPasMano(Graphics g, int x, int y, Integer id) {
@@ -119,6 +195,10 @@ public class mCanvas extends Canvas {
         g.setColor(Color.BLUE);
         g.drawImage(imgPasMaleta, x, y, null);
         g.drawString(id.toString(), x, y + 20);
+    }
+    
+    private void pintarPerro(Graphics g, int x, int y) {
+        g.drawImage(imgPerro, x, y, null);
     }
     
 }

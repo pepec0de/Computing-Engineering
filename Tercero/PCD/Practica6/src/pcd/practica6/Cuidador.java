@@ -19,13 +19,16 @@ public class Cuidador extends Thread {
     
     @Override
     public void run() {
+        int id = (int) getId();
         while (true) {
             try {
                 cuida.acquire();
-                canvas.cuidaPerro();
+                int p = canvas.cuidaPerro(id);
                 System.out.println("Cuidador " + getId() + " da galleta");
                 // galleta
+                sleep(1000);
                 perros.release();
+                canvas.perroLibre(p);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }

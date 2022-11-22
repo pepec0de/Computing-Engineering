@@ -2,7 +2,6 @@ package amc.practica1.view;
 
 import java.awt.*;
 import java.awt.geom.*;
-import java.util.ArrayList;
 import java.util.Set;
 
 import amc.practica1.types.Arista;

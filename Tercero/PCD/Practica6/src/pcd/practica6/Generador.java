@@ -50,7 +50,7 @@ public class Generador extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        Semaphore rayos = new Semaphore(1),
+        Semaphore rayosMano = new Semaphore(1),
                 perros = new Semaphore(2),
                 rayosMaleta = new Semaphore(2),
                 cuida = new Semaphore(0);
@@ -67,16 +67,15 @@ public class Generador extends javax.swing.JFrame {
             if (r.nextInt(1, 11) > 3) {
                 hilos[i] = new ViajeroMaleta(rayosMaleta, perros, cuida, cv);
             } else {
-                hilos[i] = new Thread(new ViajeroMano(rayos, perros, cuida, cv));
+                hilos[i] = new Thread(new ViajeroMano(rayosMano, perros, cuida, cv));
             }
         }
         cuidador.start();
-        for (int i = 0; i < hilos.length; i++) {
-            hilos[i].start();
+        for (Thread hilo : hilos) {
+            hilo.start();
         }
+        
         System.out.println("Hilos lanzados");
-//        rayos.release();
-//        rayosMaleta.release();
         
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

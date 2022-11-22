@@ -25,19 +25,20 @@ public class ViajeroMaleta extends Thread {
         canvas.addPasMaleta(id);
         
         while (!canvas.esPrimeroPasMaleta(id)) {}
-        
+        /*
         try {
+           
+            //sleep(5000);
             rayos.acquire();
-            canvas.salirColaPasMaleta();
             System.out.println("ViajeroMaleta " + getId() + " pasa rayosMaleta");
-            canvas.entraScanMaleta();
+            //int p = canvas.entraScanMaleta(id);
             //rayos.release();
-                        
+            // espera
             perros.acquire();
+            //canvas.entraPerrosMaleta(id);
             rayos.release();
-            canvas.entraPerros();
             // Tiempo espera
-            canvas.salir();
+            //canvas.salir();
             
             System.out.println("ViajeroMaleta " + getId() + " entra a perros");
             
@@ -46,6 +47,6 @@ public class ViajeroMaleta extends Thread {
             System.out.println("ViajeroMaleta " + getId() + " sale");
         } catch (InterruptedException ex) {
             ex.printStackTrace();
-        }
+        }*/
     }
 }
