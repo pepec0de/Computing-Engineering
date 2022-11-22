@@ -1,5 +1,6 @@
 package pcd.practica6;
 
+import java.util.Random;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -10,11 +11,13 @@ public class Cuidador extends Thread {
     
     private Semaphore perros, cuida;
     private mCanvas canvas;
+    private Random r;
     
     public Cuidador(Semaphore perros, Semaphore cuida, mCanvas cv) {
         this.perros = perros;
         this.cuida = cuida;
         this.canvas = cv;
+        r = new Random(System.currentTimeMillis());
     }
     
     @Override
@@ -24,9 +27,9 @@ public class Cuidador extends Thread {
             try {
                 cuida.acquire();
                 int p = canvas.cuidaPerro(id);
-                System.out.println("Cuidador " + getId() + " da galleta");
+                System.out.println("Cuidador " + id + " da galleta");
                 // galleta
-                sleep(1000);
+                sleep(r.nextInt(1, 4)*1000);
                 canvas.perroLibre(p);
                 perros.release();
             } catch (InterruptedException ex) {

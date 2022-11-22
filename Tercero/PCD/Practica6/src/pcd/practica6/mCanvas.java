@@ -164,8 +164,6 @@ public class mCanvas extends Canvas {
                         pintarPasMano(og, margenX + 220, margenY + 110*i, perros[i]);
                     } else if (tipoPerros[i] == 2) {
                         pintarPasMaleta(og, margenX + 220, margenY + 110*i, perros[i]);
-                    } else {
-                        System.exit(1234567890);
                     }
             }
         }

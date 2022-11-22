@@ -1,5 +1,6 @@
 package pcd.practica6;
 
+import java.util.Random;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -11,12 +12,14 @@ public class ViajeroMano implements Runnable {
     private Semaphore rayos, perros, cuida;
     private mCanvas canvas;
     private int id;
+    private Random r;
     
     public ViajeroMano(Semaphore rayos, Semaphore perros, Semaphore cuida, mCanvas cv) {
         this.rayos = rayos;
         this.perros = perros;
         this.cuida = cuida;
         canvas = cv;
+        r = new Random(System.currentTimeMillis());
     }
     
     @Override
@@ -31,7 +34,7 @@ public class ViajeroMano implements Runnable {
             rayos.acquire();
             System.out.println("ViajeroMano " + id + " pasa a rayosMano");
             canvas.entraScanMano(id);
-            Thread.sleep(1000);
+            Thread.sleep(r.nextInt(1, 4)*1000);
             
             perros.acquire();
             
@@ -42,7 +45,7 @@ public class ViajeroMano implements Runnable {
             System.out.println("ViajeroMano " + id + " entra a perros");
             int p = canvas.entraPerros(id, 1);
             
-            Thread.sleep(3000);
+            Thread.sleep(r.nextInt(1, 4)*1000);
             
             canvas.salePerros(p);
             cuida.release();

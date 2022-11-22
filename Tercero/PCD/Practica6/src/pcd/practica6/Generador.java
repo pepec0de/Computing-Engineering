@@ -17,7 +17,7 @@ public class Generador extends javax.swing.JFrame {
      * Creates new form Generador
      */
     public Generador() {
-        setTitle("Practica 6 - Sincronización con semáforos");
+        setTitle("Práctica 6 - Sincronización con semáforos");
         initComponents();
     }
 
@@ -50,34 +50,6 @@ public class Generador extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        Semaphore rayosMano = new Semaphore(1),
-                perros = new Semaphore(2),
-                rayosMaleta = new Semaphore(2),
-                cuida = new Semaphore(0);
-        Random r = new Random(System.currentTimeMillis());
-        mCanvas cv = new mCanvas();
-        Generador mf = new Generador();
-        mf.setSize(1500, 450);
-        cv.setSize(mf.getWidth(), mf.getHeight());
-        mf.add(cv);
-        mf.setVisible(true);
-        Cuidador cuidador = new Cuidador(perros, cuida, cv);
-        Thread hilos[] = new Thread[20];
-        for (int i = 0; i < hilos.length; i++) {
-            if (r.nextInt(1, 11) > 3) {
-                hilos[i] = new ViajeroMaleta(rayosMaleta, perros, cuida, cv);
-            } else {
-                hilos[i] = new Thread(new ViajeroMano(rayosMano, perros, cuida, cv));
-            }
-        }
-        cuidador.start();
-        for (Thread hilo : hilos)
-            System.out.println(hilo + " : " + hilo.getId());
-        
-        for (Thread hilo : hilos) {
-            hilo.start();
-        }
-        
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -100,7 +72,47 @@ public class Generador extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Generador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        cv.repaint();
+        
+        
+        Semaphore rayosMano = new Semaphore(1),
+                perros = new Semaphore(2),
+                rayosMaleta = new Semaphore(2),
+                cuida = new Semaphore(0);
+        Random r = new Random(System.currentTimeMillis());
+        mCanvas cv = new mCanvas();
+        Generador mf = new Generador();
+        mf.setSize(1500, 450);
+        cv.setSize(mf.getWidth(), mf.getHeight());
+        mf.add(cv);
+        mf.setVisible(true);
+        Cuidador cuidador = new Cuidador(perros, cuida, cv);
+        Thread hilos[] = new Thread[20];
+        for (int i = 0; i < hilos.length; i++) {
+            if (r.nextInt(1, 11) > 3) {
+                hilos[i] = new ViajeroMaleta(rayosMaleta, perros, cuida, cv);
+            } else {
+                hilos[i] = new Thread(new ViajeroMano(rayosMano, perros, cuida, cv));
+            }
+        }
+        
+        cuidador.start();
+        for (Thread hilo : hilos) {
+            hilo.start();
+        }
+        
+        for (Thread hilo : hilos) {
+            try {
+                hilo.join();
+            } catch (InterruptedException ex) {}
+        }
+        
+        try {
+            Thread.sleep(5000);
+        } catch (Exception ex) {
+            
+        }
+        mf.dispose();
+        System.exit(0);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
