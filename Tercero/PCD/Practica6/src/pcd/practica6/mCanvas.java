@@ -83,7 +83,13 @@ public class mCanvas extends Canvas {
         int i = 0;
         while (i < 2 && scanMaleta[i] != -1) i++;
         scanMaleta[i] = id;
+        repaint();
         return i;
+    }
+    
+    public synchronized void saleScanMaleta(int p) {
+        scanMaleta[p] = -1;
+        repaint();
     }
     
     public synchronized int entraPerros(int id, int tipo) {
@@ -142,8 +148,8 @@ public class mCanvas extends Canvas {
             pintarPasMano(og, margenX + xRayos, margenY, scanMano);
         }
         // Escaneres pasajeros de maleta
-        og.setColor(Color.BLUE);
         for (int i = 0; i < 2; i++) {
+            og.setColor(Color.GREEN);
             og.fillRect(margenX + xRayos, margenY + 110 + 110*i, 100, 100);
             if (scanMaleta[i] != -1) {
                 pintarPasMaleta(og, margenX + xRayos, margenY + 110 + 110*i, scanMaleta[i]);
@@ -157,8 +163,10 @@ public class mCanvas extends Canvas {
                 if (perros[i] != -1)
                     if (tipoPerros[i] == 1) {
                         pintarPasMano(og, margenX + 220, margenY + 110*i, perros[i]);
-                    } else {
+                    } else if (tipoPerros[i] == 2) {
                         pintarPasMaleta(og, margenX + 220, margenY + 110*i, perros[i]);
+                    } else {
+                        System.exit(1234567890);
                     }
             }
         }

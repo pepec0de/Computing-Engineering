@@ -28,10 +28,9 @@ public class ViajeroMano implements Runnable {
         while (!canvas.esPrimeroPasMano(id)) {}
         
         try {
-            //Thread.sleep(5000);
             rayos.acquire();
-            canvas.entraScanMano(id);
             System.out.println("ViajeroMano " + Thread.currentThread().getId() + " pasa a rayosMano");
+            canvas.entraScanMano(id);
             Thread.sleep(1000);
             
             perros.acquire();
