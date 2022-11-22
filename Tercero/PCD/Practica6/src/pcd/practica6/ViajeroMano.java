@@ -29,7 +29,7 @@ public class ViajeroMano implements Runnable {
         
         try {
             rayos.acquire();
-            System.out.println("ViajeroMano " + Thread.currentThread().getId() + " pasa a rayosMano");
+            System.out.println("ViajeroMano " + id + " pasa a rayosMano");
             canvas.entraScanMano(id);
             Thread.sleep(1000);
             
@@ -38,7 +38,8 @@ public class ViajeroMano implements Runnable {
             // Los equipajes no podrán ser sacados del equipo de rayos hasta que no esté alguno de los dos perros disponibles
             rayos.release();
             canvas.saleScanMano();
-            System.out.println("ViajeroMano " + Thread.currentThread().getId() + " entra a perros");
+            System.out.println("ViajeroMano " + id + " sale de rayosMano");
+            System.out.println("ViajeroMano " + id + " entra a perros");
             int p = canvas.entraPerros(id, 1);
             
             Thread.sleep(3000);
@@ -46,7 +47,7 @@ public class ViajeroMano implements Runnable {
             canvas.salePerros(p);
             cuida.release();
             
-            System.out.println("ViajeroMaleta " + Thread.currentThread().getId() + " sale");
+            System.out.println("ViajeroMaleta " + id + " sale");
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         }

@@ -67,8 +67,7 @@ public class mCanvas extends Canvas {
     }
     
     public synchronized void entraScanMano(int id) {
-        if (!pasMano.isEmpty())
-            pasMano.remove(0);
+        pasMano.remove(0);
         scanMano = id;
         repaint();
     }

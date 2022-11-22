@@ -28,8 +28,8 @@ public class ViajeroMaleta extends Thread {
         
         try {
             rayos.acquire();
-            System.out.println("ViajeroMaleta " + getId() + " pasa rayosMaleta");
             int p = canvas.entraScanMaleta(id);
+            System.out.println("ViajeroMaleta " + id + " pasa rayosMaleta " + p);
 
             sleep(1000);
             
@@ -37,8 +37,9 @@ public class ViajeroMaleta extends Thread {
             
             // Liberamos la posicion del escaner antes del release para evitar conflictos
             canvas.saleScanMaleta(p);
+            System.out.println("ViajeroMaleta " + id + " sale rayosMaleta " + p);
             rayos.release();
-            System.out.println("ViajeroMaleta " + getId() + " entra a perros");
+            System.out.println("ViajeroMaleta " + id + " entra a perros");
             p = canvas.entraPerros(id, 2);
             
             Thread.sleep(3000);

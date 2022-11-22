@@ -27,8 +27,8 @@ public class Cuidador extends Thread {
                 System.out.println("Cuidador " + getId() + " da galleta");
                 // galleta
                 sleep(1000);
-                perros.release();
                 canvas.perroLibre(p);
+                perros.release();
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }

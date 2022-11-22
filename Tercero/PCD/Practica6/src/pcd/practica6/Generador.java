@@ -71,11 +71,12 @@ public class Generador extends javax.swing.JFrame {
             }
         }
         cuidador.start();
+        for (Thread hilo : hilos)
+            System.out.println(hilo + " : " + hilo.getId());
+        
         for (Thread hilo : hilos) {
             hilo.start();
         }
-        
-        System.out.println("Hilos lanzados");
         
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
