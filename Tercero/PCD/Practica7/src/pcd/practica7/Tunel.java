@@ -1,74 +1,117 @@
 package pcd.practica7;
 
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  *
  * @author Pepe
  */
 public class Tunel {
-
-    private int nfurgos, libres;
-    private boolean hayFurgoCentro;
-    private boolean libre[];
+    
+    final Lock mutex = new ReentrantLock();
+    final Condition cCoches = mutex.newCondition(), 
+                    cFurgos = mutex.newCondition();
+    
+    int ncoches, nfurgos, libres, ncochesEspera, nfurgosEspera;
+    boolean libre[];
     
     public Tunel() {
+        ncoches = 0;
         nfurgos = 0;
-        libre = new boolean[3];
-        for (int i = 0; i < 3; i++)
-            libre[i] = true;
+        ncochesEspera = 0;
+        nfurgosEspera = 0;
         libres = 3;
+        libre = new boolean []{true, true, true};
     }
     
-    public synchronized int entraCoche() throws InterruptedException {
-        while (libres == 0) {
-            wait();
-        }
+    public int entraCoche() {
+        mutex.lock();
+        int p = -1;
         
-        int r = 0;
-        while (r < 3 && !libre[r]) r++;
-        libre[r] = false;
-        libres--;
-        
-        return r;
-    }
-    
-    public synchronized int entraFurgo() throws InterruptedException {
-        while (libres == 0 || hayFurgoCentro || nfurgos == 2) {
-            wait();
-        }
-        
-        int r = 0;
-        if (nfurgos == 1) {
-            if (libre[0]) {
-                r = 0;
-            } else {
-                r = 2;
+        try {
+            ncochesEspera++;
+            while (libres == 0 || ncoches == 2) {
+                cCoches.await();
             }
-        } else { // nfurgos == 0
-            while (r < 3 && !libre[r]) r++;
+            
+            p = 0;
+            while (p < 3 && !libre[p]) p++;
+            
+            if (p == 3) throw new Exception("Cagaste coche " + Thread.currentThread().getId());
+            libre[p] = false;
+            libres--;
+            ncoches++;
+            ncochesEspera--;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mutex.unlock();
         }
-        
-        if (r == 1)
-            hayFurgoCentro = true;
-        
-        libre[r] = false;
-        nfurgos++;
-        libres--;
-        return r;
+        return p;
     }
     
-    public synchronized void saleFurgo(int p) {
-        if (p == 1) {
-            hayFurgoCentro = false;
+    public int entraFurgo() {
+        mutex.lock();
+        int p = -1;
+        
+        try {
+            nfurgosEspera++;
+            while (libres == 0 || (nfurgos == 2 && ncochesEspera > 0)) {
+                cFurgos.await();
+            }
+            
+            p = 0;
+            while (p < 3 && !libre[p]) p++;
+            
+            if (p == 3) throw new Exception("Cagaste furgo " + Thread.currentThread().getId());
+            libre[p] = false;
+            libres--;
+            nfurgos++;
+            nfurgosEspera--;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mutex.unlock();
         }
-        libre[p] = true;
-        libres++;
-        nfurgos--;
-        notify();
+        return p;
     }
     
-    public synchronized void saleCoche(int p) {
-        libre[p] = true;
-        libres++;
-        notify();
+    public void saleFurgo(int p) {
+        mutex.lock();
+        try {
+            nfurgos--;
+            libres++;
+            libre[p] = true;
+            
+            if (nfurgos < 2 || ncochesEspera == 0) {
+                cFurgos.signal();
+            } else {
+                // y si hay coches esperando
+                cCoches.signal();
+            }
+        } finally {            
+            mutex.unlock();
+        }
+    }
+    
+    public void saleCoche(int p) {
+        mutex.lock();
+        try {
+            ncoches--;
+            libres++;
+            libre[p] = true;
+            
+            if (nfurgos < 2 || ncochesEspera == 0) {
+                cFurgos.signal();
+            } else {
+                cCoches.signal();
+            }
+            
+        } finally {            
+            mutex.unlock();
+        }
     }
 }

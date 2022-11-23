@@ -39,18 +39,33 @@ public class CanvasTunel extends Canvas {
     
     public synchronized void addFurgo(int id) {
         colaFurgos.add(id);
+        repaint();
     }
     
     public synchronized void addCoche(int id) {
         colaCoches.add(id);
+        repaint();
     }
     
-    public synchronized int PrimerCoche() {
-        return colaCoches.get(0);
+    public synchronized void meterVehiculo(char v, int pos) {
+        int id = (int) Thread.currentThread().getId();
+        switch (v) {
+            case 'c':
+                colaCoches.remove((Object) id);
+                break;
+            case 'f':
+                colaFurgos.remove((Object) id);
+                break;
+        }
+        estadoTunel[pos] = v;
+        vehiTunel[pos] = (int) Thread.currentThread().getId();
+        repaint();
     }
     
-    public synchronized int PrimerFurgo() {
-        return colaFurgos.get(0);
+    public synchronized void sacarVehiculo(int pos) {
+        estadoTunel[pos] = 0;
+        vehiTunel[pos] = 0;
+        repaint();
     }
     
     @Override
@@ -109,25 +124,5 @@ public class CanvasTunel extends Canvas {
             
             case 'f' -> pintarFurgo(g, id, margenX + 36, margenY + 100*pos);
         }
-    }
-    
-    public synchronized void meterVehiculo(char v, int pos) {
-        switch (v) {
-            case 'c':
-                colaCoches.remove(0);
-                break;
-            case 'f':
-                colaFurgos.remove(0);
-                break;
-        }
-        estadoTunel[pos] = v;
-        vehiTunel[pos] = (int) Thread.currentThread().getId();
-        repaint();
-    }
-    
-    public synchronized void sacarVehiculo(int pos) {
-        estadoTunel[pos] = 0;
-        vehiTunel[pos] = 0;
-        repaint();
     }
 }

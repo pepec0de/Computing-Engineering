@@ -22,12 +22,6 @@ public class Coche extends Thread {
 
         canvas.addCoche((int) getId());
 
-        while (canvas.PrimerCoche() != getId()) {
-            // esperamos
-            
-        }
-        canvas.repaint();
-
         try {
             int p;
             p = tunel.entraCoche();

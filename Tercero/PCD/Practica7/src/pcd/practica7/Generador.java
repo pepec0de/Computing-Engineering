@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package pcd.practica7;
 
 import java.util.Random;
@@ -13,7 +9,7 @@ import java.util.Random;
 public class Generador {
 
     public static void main(String[] args) {
-        int n = 10;
+        int n = 50;
         Thread vehiculos[] = new Thread[n];
         Random r = new Random(System.currentTimeMillis());
         CanvasTunel cv = new CanvasTunel();
@@ -22,16 +18,20 @@ public class Generador {
         ventana.setVisible(true);
 
         for (int i = 0; i < n; i++) {
-            if (r.nextInt(0, 2) == 0) {
-                vehiculos[i] = new Coche(tunel, cv);
-            } else {
+//            if (r.nextInt(0, 2) == 0) {
+//                vehiculos[i] = new Coche(tunel, cv);
+//            } else {
                 vehiculos[i] = new Thread(new Furgo(tunel, cv));
-            }
+            //}
         }
         
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < n; i++) {
             vehiculos[i].start();
-        cv.repaint();
+            try {
+                Thread.sleep(r.nextInt(1, 3)*1000);
+            } catch (InterruptedException ex) {ex.printStackTrace();}
+        }
+        
         for (int i = 0; i < n; i++)
             try {
                 vehiculos[i].join();

@@ -22,10 +22,6 @@ public class Furgo implements Runnable {
         
         canvas.addFurgo((int) Thread.currentThread().getId());
         
-        while (canvas.PrimerFurgo() != Thread.currentThread().getId()) {
-            // esperamos
-        }
-        
         try {
             int p;
             p = tunel.entraFurgo();
