@@ -18,8 +18,7 @@ int Algoritmos_EUF::SelectIt(vector<int>& A, int p, int r, int k) {
 		int i = q - p + 1;
 		if (k <= i) {
 			r = q;
-		}
-		else {
+		} else {
 			p = q + 1;
 			k = k - i;
 		}
