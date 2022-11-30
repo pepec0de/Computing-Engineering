@@ -18,14 +18,11 @@ public class Generador {
         ventana.setVisible(true);
 
         for (int i = 0; i < n; i++) {
-//            if (r.nextInt(0, 2) == 0) {
-//                vehiculos[i] = new Coche(tunel, cv);
-//            } else {
+            if (r.nextInt(0, 2) == 0) {
+                vehiculos[i] = new Coche(tunel, cv);
+            } else {
                 vehiculos[i] = new Thread(new Furgo(tunel, cv));
-            //}
-        }
-        
-        for (int i = 0; i < n; i++) {
+            }
             vehiculos[i].start();
             try {
                 Thread.sleep(r.nextInt(1, 3)*1000);

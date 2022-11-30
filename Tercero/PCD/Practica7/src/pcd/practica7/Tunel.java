@@ -39,7 +39,6 @@ public class Tunel {
             p = 0;
             while (p < 3 && !libre[p]) p++;
             
-            if (p == 3) throw new Exception("Cagaste coche " + Thread.currentThread().getId());
             libre[p] = false;
             libres--;
             ncoches++;
@@ -66,7 +65,6 @@ public class Tunel {
             p = 0;
             while (p < 3 && !libre[p]) p++;
             
-            if (p == 3) throw new Exception("Cagaste furgo " + Thread.currentThread().getId());
             libre[p] = false;
             libres--;
             nfurgos++;
