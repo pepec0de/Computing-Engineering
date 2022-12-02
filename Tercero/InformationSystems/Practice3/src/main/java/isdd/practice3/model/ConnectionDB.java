@@ -22,6 +22,10 @@ public class ConnectionDB {
             throw new SQLException();
     }
     
+    public Connection getConnection() {
+        return connection;
+    }
+    
     public void disconnect() throws SQLException {
         connection.close();
     }

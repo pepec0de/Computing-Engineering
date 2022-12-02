@@ -23,7 +23,7 @@ public class LoginControl implements ActionListener {
         view.setVisible(true);
         
         dbView = new DBView();
-        dbCtl = new DBControl(dbView);
+        dbCtl = new DBControl(this, dbView);
         dbView.mExit.addActionListener(this);
         dbView.mMemManage.addActionListener(dbCtl);
         dbView.mTrainManage.addActionListener(dbCtl);
@@ -69,6 +69,7 @@ public class LoginControl implements ActionListener {
         try {
             //conn = new ConnectionDB("oracle", "172.17.20.39:1521", "ETSI", "ISDD_003", "holaBuenas");
             //conn = new ConnectionDB("mariadb", "172.18.1.241:3306", "ETSI", "ISDD_003", "ISDD_003");
+            
             conn = new ConnectionDB(dbms, ip + ":" + port, db, user, password);
             dbView.setTitle(db + " database (" + ip + ":" + port + ")");
             return true;
@@ -85,6 +86,10 @@ public class LoginControl implements ActionListener {
         } catch (SQLException ex) {
             dialog.show(-1, ex.getMessage());
         }
+    }
+    
+    public ConnectionDB getConn() {
+        return conn;
     }
     
 }
