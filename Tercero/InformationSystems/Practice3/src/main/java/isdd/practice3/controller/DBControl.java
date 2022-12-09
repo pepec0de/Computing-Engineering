@@ -67,22 +67,22 @@ public class DBControl implements ActionListener {
         activityDialog = new ActivityDialog(view, true);
         activityDialog.ok.addActionListener(this);
         activityDialog.cancel.addActionListener(this);
-        
+
         v = new Verifier();
     }
 
     private void refreshMembers() throws SQLException {
         model.setDataVector(getMembersData(), members.columnNames());
     }
-    
+
     private void refreshTrainers() throws SQLException {
         model.setDataVector(getTrainersData(), trainers.columnNames());
     }
-    
+
     private void refreshActivities() throws SQLException {
         model.setDataVector(getActivitiesData(), activities.columnNames());
     }
-    
+
     private Object[][] getMembersData() throws SQLException {
         ArrayList<Member> arr = members.listAllMembers();
         if (!arr.isEmpty()) {
@@ -149,29 +149,29 @@ public class DBControl implements ActionListener {
     }
 
     private String getNextId() {
-        String lastId = (String) view.table.getModel().getValueAt(view.table.getModel().getRowCount()-1, 0);
-        
+        String lastId = (String) view.table.getModel().getValueAt(view.table.getModel().getRowCount() - 1, 0);
+
         String letter = lastId.replaceAll("[0-9]", "");
         String code = lastId.replaceAll("[\\D]", "");
-        
+
         return String.format(letter + "%03d", Integer.parseInt(code) + 1);
     }
-    
+
     private void setTrainerId(String id) {
         trainDialog.code.setText(id);
         trainDialog.code.setEditable(false);
     }
-    
+
     private void setActivityId(String id) {
         activityDialog.id.setText(id);
         activityDialog.id.setEditable(false);
     }
-    
+
     private void setMemberId(String id) {
         memberDialog.num.setText(id);
         memberDialog.num.setEditable(false);
     }
-    
+
     private void emptyDialog() {
         switch (current) {
             case "Member":
@@ -183,7 +183,7 @@ public class DBControl implements ActionListener {
                 memberDialog.phone.setText(null);
                 memberDialog.startingDate.setDate(null);
                 break;
-            
+
             case "Trainer":
                 trainDialog.date.setDate(null);
                 trainDialog.email.setText(null);
@@ -192,7 +192,7 @@ public class DBControl implements ActionListener {
                 trainDialog.nick.setText(null);
                 trainDialog.id.setText(null);
                 break;
-                
+
             case "Activity":
                 activityDialog.name.setText(null);
                 activityDialog.description.setText(null);
@@ -201,28 +201,37 @@ public class DBControl implements ActionListener {
                 break;
         }
     }
-    
+
     private void fillDialog(int row) {
         switch (current) {
             case "Member":
                 memberDialog.name.setText((String) view.table.getModel().getValueAt(row, 1));
                 memberDialog.id.setText((String) view.table.getModel().getValueAt(row, 2));
-                try {memberDialog.birthDate.setDate(v.getStringDate((String) view.table.getModel().getValueAt(row, 3)));} catch (ParseException ex) {}
+                try {
+                    memberDialog.birthDate.setDate(v.getStringDate((String) view.table.getModel().getValueAt(row, 3)));
+                } catch (ParseException ex) {
+                }
                 memberDialog.phone.setText((String) view.table.getModel().getValueAt(row, 4));
                 memberDialog.email.setText((String) view.table.getModel().getValueAt(row, 5));
-                try {memberDialog.startingDate.setDate(v.getStringDate((String) view.table.getModel().getValueAt(row, 6)));} catch (ParseException ex) {}
+                try {
+                    memberDialog.startingDate.setDate(v.getStringDate((String) view.table.getModel().getValueAt(row, 6)));
+                } catch (ParseException ex) {
+                }
                 memberDialog.cathegory.setText((String) view.table.getModel().getValueAt(row, 7));
                 break;
-            
+
             case "Trainer":
                 trainDialog.name.setText((String) view.table.getModel().getValueAt(row, 1));
                 trainDialog.id.setText((String) view.table.getModel().getValueAt(row, 2));
                 trainDialog.phone.setText((String) view.table.getModel().getValueAt(row, 3));
                 trainDialog.email.setText((String) view.table.getModel().getValueAt(row, 4));
-                try {trainDialog.date.setDate(v.getStringDate((String) view.table.getModel().getValueAt(row, 5)));} catch (ParseException ex) {}
+                try {
+                    trainDialog.date.setDate(v.getStringDate((String) view.table.getModel().getValueAt(row, 5)));
+                } catch (ParseException ex) {
+                }
                 trainDialog.nick.setText((String) view.table.getModel().getValueAt(row, 6));
                 break;
-                
+
             case "Activity":
                 activityDialog.name.setText((String) view.table.getModel().getValueAt(row, 1));
                 activityDialog.description.setText((String) view.table.getModel().getValueAt(row, 2));
@@ -231,7 +240,7 @@ public class DBControl implements ActionListener {
                 break;
         }
     }
-    
+
     private void openDialog() {
         // Get ID to block the code textfield
         String id = "";
@@ -240,14 +249,14 @@ public class DBControl implements ActionListener {
                 id = getNextId();
                 emptyDialog();
                 break;
-                
+
             case "Update":
                 int row = view.table.getSelectedRow();
                 id = (String) view.table.getModel().getValueAt(row, 0);
                 fillDialog(row);
                 break;
         }
-        
+
         switch (current) {
             case "Trainer":
                 setTrainerId(id);
@@ -267,7 +276,117 @@ public class DBControl implements ActionListener {
                 activityDialog.setVisible(true);
                 break;
         }
+    }
 
+    private void closeDialog() {
+        switch (current) {
+            case "Member":
+                memberDialog.dispose();
+                break;
+
+            case "Trainer":
+                trainDialog.dispose();
+                break;
+
+            case "Activity":
+                activityDialog.dispose();
+                break;
+        }
+    }
+
+    private void execUpdate() throws SQLException {
+        String ver;
+        switch (current) {
+            case "Member":
+                Member m = new Member(memberDialog.num.getText(),
+                        memberDialog.name.getText(),
+                        memberDialog.id.getText(),
+                        v.getDateString(memberDialog.birthDate.getDate()),
+                        memberDialog.phone.getText(),
+                        memberDialog.email.getText(),
+                        v.getDateString(memberDialog.startingDate.getDate()),
+                        memberDialog.cathegory.getText());
+                ver = v.verify(m);
+                if (ver != null) {
+                    main.getDialog().show(-1, ver);
+                } else {
+                    switch (action) {
+                        case "New" ->
+                            members.insertMember(m);
+
+                        case "Update" ->
+                            members.updateMember(m);
+                    }
+                    memberDialog.dispose();
+                    refreshMembers();
+                }
+                break;
+
+            case "Trainer":
+                Trainer t = new Trainer(trainDialog.code.getText(),
+                        trainDialog.name.getText(),
+                        trainDialog.id.getText(),
+                        trainDialog.phone.getText(),
+                        trainDialog.email.getText(),
+                        v.getDateString(trainDialog.date.getDate()),
+                        trainDialog.nick.getText());
+                ver = v.verify(t);
+                if (ver != null) {
+                    main.getDialog().show(-1, ver);
+                } else {
+                    switch (action) {
+                        case "New" ->
+                            trainers.insertTrainer(t);
+
+                        case "Update" ->
+                            trainers.updateTrainer(t);
+                    }
+                    trainDialog.dispose();
+                    refreshTrainers();
+                }
+                break;
+
+            case "Activity":
+                Activity a = new Activity(activityDialog.id.getText(),
+                        activityDialog.name.getText(),
+                        activityDialog.description.getText(),
+                        activityDialog.price.getText(),
+                        activityDialog.trainer.getText());
+                ver = v.verify(a);
+                if (ver != null) {
+                    main.getDialog().show(-1, ver);
+                } else {
+                    switch (action) {
+                        case "New" ->
+                            activities.insertActivity(a);
+
+                        case "Update" ->
+                            activities.updateActivity(a);
+                    }
+                    activityDialog.dispose();
+                    refreshActivities();
+                }
+                break;
+        }
+    }
+
+    private void execDelete(String ver) throws SQLException {
+        switch (current) {
+            case "Member":
+                members.deleteMember(ver);
+                refreshMembers();
+                break;
+
+            case "Trainer":
+                trainers.deleteTrainer(ver);
+                refreshTrainers();
+                break;
+
+            case "Activity":
+                activities.deleteActivity(ver);
+                refreshActivities();
+                break;
+        }
     }
 
     @Override
@@ -301,7 +420,7 @@ public class DBControl implements ActionListener {
                         openDialog();
                     }
                     break;
-                    
+
                 case "New":
                     action = "New";
                     openDialog();
@@ -314,110 +433,18 @@ public class DBControl implements ActionListener {
                     } else {
                         ver = (String) view.table.getModel().getValueAt(row, 0);
                         if (main.getDialog().confirmWarning("Confirm delete of " + ver + "?") == 0) {
-                            switch (current) {
-                                case "Member":
-                                    members.deleteMember(ver);
-                                    refreshMembers();
-                                    break;
-
-                                case "Trainer":
-                                    trainers.deleteTrainer(ver);
-                                    refreshTrainers();
-                                    break;
-
-                                case "Activity":
-                                    activities.deleteActivity(ver);
-                                    refreshActivities();
-                                    break;
-                            }
+                            execDelete(ver);
                         }
                     }
                     break;
-                
-                // Dialogs actions
+
+                // Dialog buttons
                 case "OK":
-                    switch (current) {
-                        case "Member":
-                            Member m = new Member(memberDialog.num.getText(),
-                                    memberDialog.name.getText(), 
-                                     memberDialog.id.getText(), 
-                                v.getDateString(memberDialog.birthDate.getDate()),
-                                   memberDialog.phone.getText(), 
-                               memberDialog.email.getText(), 
-                           v.getDateString(memberDialog.startingDate.getDate()), 
-                             memberDialog.cathegory.getText());
-                            ver = v.verify(m);
-                            if (ver != null) {
-                                main.getDialog().show(-1, ver);
-                            } else {
-                                switch (action) {
-                                    case "New" -> members.insertMember(m);
-                                    
-                                    case "Update" -> members.updateMember(m);
-                                }
-                                memberDialog.dispose();
-                                refreshMembers();
-                            }
-                            break;
-                        
-                        case "Trainer":
-                            Trainer t = new Trainer(trainDialog.code.getText(),
-                                    trainDialog.name.getText(),
-                                    trainDialog.id.getText(),
-                                    trainDialog.phone.getText(),
-                                    trainDialog.email.getText(),
-                                    v.getDateString(trainDialog.date.getDate()),
-                                    trainDialog.nick.getText());
-                            ver = v.verify(t);
-                            if (ver != null) {
-                                main.getDialog().show(-1, ver);
-                            } else {
-                                switch (action) {
-                                    case "New" -> trainers.insertTrainer(t);
-                                    
-                                    case "Update" -> trainers.updateTrainer(t);
-                                }
-                                trainDialog.dispose();
-                                refreshTrainers();
-                            }
-                            break;
-                            
-                        case "Activity":
-                            Activity a = new Activity(activityDialog.id.getText(),
-                                    activityDialog.name.getText(),
-                                    activityDialog.description.getText(),
-                                    activityDialog.price.getText(),
-                                    activityDialog.trainer.getText());
-                            ver = v.verify(a);
-                            if (ver != null) {
-                                main.getDialog().show(-1, ver);
-                            } else {
-                                switch (action) {
-                                    case "New" -> activities.insertActivity(a);
-                                    
-                                    case "Update" -> activities.updateActivity(a);
-                                }
-                                activityDialog.dispose();
-                                refreshActivities();
-                            }
-                            break;
-                    }
+                    execUpdate();
                     break;
-                
+
                 case "Cancel":
-                    switch (current) {
-                        case "Member":
-                            memberDialog.dispose();
-                            break;
-                        
-                        case "Trainer":
-                            trainDialog.dispose();
-                            break;
-                        
-                        case "Activity":
-                            activityDialog.dispose();
-                            break;
-                    }
+                    closeDialog();
                     break;
             }
         } catch (SQLException ex) {
