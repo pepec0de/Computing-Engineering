@@ -2,6 +2,7 @@ package isdd.practice4.controller;
 
 import isdd.practice4.model.*;
 import isdd.practice4.view.ActivityDialog;
+import isdd.practice4.view.ActivityMembersDialog;
 import isdd.practice4.view.DBView;
 import isdd.practice4.view.MemberDialog;
 import isdd.practice4.view.TrainerDialog;
@@ -28,6 +29,7 @@ public class DBControl implements ActionListener {
     private MemberDialog memberDialog;
     private TrainerDialog trainDialog;
     private ActivityDialog activityDialog;
+    private ActivityMembersDialog actMemberDialog;
 
     // Model
     private MemberDAO members;
@@ -69,6 +71,10 @@ public class DBControl implements ActionListener {
         activityDialog.ok.addActionListener(this);
         activityDialog.cancel.addActionListener(this);
 
+        actMemberDialog = new ActivityMembersDialog(view, true);
+        actMemberDialog.ok.addActionListener(this);
+        actMemberDialog.cancel.addActionListener(this);
+        
         v = new Verifier();
     }
 
@@ -292,6 +298,10 @@ public class DBControl implements ActionListener {
             case "Activity":
                 activityDialog.dispose();
                 break;
+            
+            case "ActivityMembers":
+                actMemberDialog.dispose();
+                break;
         }
     }
 
@@ -412,7 +422,8 @@ public class DBControl implements ActionListener {
                     break;
                     
                 case "MemInActiv":
-                    
+                    current = "ActivityMembers";
+                    actMemberDialog.setVisible(true);
                     break;
 
                 case "Update":
@@ -450,6 +461,10 @@ public class DBControl implements ActionListener {
 
                 case "Cancel":
                     closeDialog();
+                    break;
+                    
+                case "Members":
+                    
                     break;
             }
         } catch (SQLException ex) {
