@@ -17,7 +17,6 @@ public class DBView extends JFrame {
      */
     public DBView() {
         setResizable(false);
-        setLocationRelativeTo(null);
         
         initComponents();
         initJMenu();
@@ -38,6 +37,8 @@ public class DBView extends JFrame {
         mTrainManage.setActionCommand("TrainManage");
         
         mActivities = new JMenu("Activities");
+        mActivManage = new JMenuItem("Activities Management");
+        mActivManage.setActionCommand("ActivManage");
         
         menuBar.add(mMain);
         mMain.add(mExit);
@@ -49,6 +50,7 @@ public class DBView extends JFrame {
         mTrainers.add(mTrainManage);
         
         menuBar.add(mActivities);
+        mActivities.add(mActivManage);
         
         setJMenuBar(menuBar);
     }
@@ -171,5 +173,6 @@ private JMenu mTrainers;
 public JMenuItem mTrainManage;
 
 private JMenu mActivities;
+public JMenuItem mActivManage;
 
 }

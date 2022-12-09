@@ -1,7 +1,6 @@
 package isdd.practice3.application;
 
 import isdd.practice3.controller.*;
-import isdd.practice3.view.*;
 
 /**
  *

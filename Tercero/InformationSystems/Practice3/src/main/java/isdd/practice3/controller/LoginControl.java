@@ -16,60 +16,29 @@ public class LoginControl implements ActionListener {
     private DialogView dialog;
     private DBView dbView;
     private DBControl dbCtl;
-    
+
     public LoginControl() {
         view = new LoginView();
         view.btnConnect.addActionListener(this);
         view.setVisible(true);
-        
+
         dbView = new DBView();
         dbCtl = new DBControl(this, dbView);
         dbView.mExit.addActionListener(this);
-        dbView.mMemManage.addActionListener(dbCtl);
-        dbView.mTrainManage.addActionListener(dbCtl);
 
         dialog = new DialogView();
-        
-    }
-    
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        switch (e.getActionCommand()) {
-            case "Connect":
-                boolean isConn = connect(view.comboServer.getItemAt(view.comboServer.getSelectedIndex()).toLowerCase(),
-                        view.txtIP.getText(), 
-                        view.txtPort.getText(), 
-                        view.txtName.getText(), 
-                        view.txtUser.getText(),
-                        String.valueOf(view.passwd.getPassword()));
-                if (isConn) {
-                    dialog.show(0, "Successfully connected!");
-                    openDBView();
-                    view.dispose();
-                } else {
-                    dialog.show(-1, "Connection failed :(");
-                }
-                
-                break;
-                
-            case "Exit":
-                disconnect();
-                dbView.dispose();
-                System.exit(0);
-                break;
-                
-        }
+
     }
 
     private void openDBView() {
-        dbView.setVisible(true);
+        dbCtl.show();
     }
-    
+
     private boolean connect(String dbms, String ip, String port, String db, String user, String password) {
         try {
             //conn = new ConnectionDB("oracle", "172.17.20.39:1521", "ETSI", "ISDD_003", "holaBuenas");
             //conn = new ConnectionDB("mariadb", "172.18.1.241:3306", "ETSI", "ISDD_003", "ISDD_003");
-            
+
             conn = new ConnectionDB(dbms, ip + ":" + port, db, user, password);
             dbView.setTitle(db + " database (" + ip + ":" + port + ")");
             return true;
@@ -82,14 +51,46 @@ public class LoginControl implements ActionListener {
     private void disconnect() {
         try {
             conn.disconnect();
-            
+
         } catch (SQLException ex) {
             dialog.show(-1, ex.getMessage());
         }
     }
-    
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        switch (e.getActionCommand()) {
+            case "Connect":
+                boolean isConn = connect(view.comboServer.getItemAt(view.comboServer.getSelectedIndex()).toLowerCase(),
+                        view.txtIP.getText(),
+                        view.txtPort.getText(),
+                        view.txtName.getText(),
+                        view.txtUser.getText(),
+                        String.valueOf(view.passwd.getPassword()));
+                if (isConn) {
+                    openDBView();
+                    view.dispose();
+                } else {
+                    dialog.show(-1, "Connection failed :(");
+                }
+
+                break;
+
+            case "Exit":
+                disconnect();
+                dbView.dispose();
+                System.exit(0);
+                break;
+
+        }
+    }
+
     public ConnectionDB getConn() {
         return conn;
     }
-    
+
+    public DialogView getDialog() {
+        return dialog;
+    }
+
 }

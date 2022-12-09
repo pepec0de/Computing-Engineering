@@ -19,4 +19,8 @@ public class DialogView {
                 JOptionPane.showMessageDialog(null, msg, "WARNING", TrayIcon.MessageType.INFO.ordinal());
         }
     }
+    
+    public int confirmWarning(String msg) {
+        return JOptionPane.showConfirmDialog(null, msg, "WARNING", 0, 2);
+    }
 }

@@ -36,27 +36,45 @@ public class MemberDAO {
         return list;
     }
     
-    public boolean insertMember(Member member) throws SQLException {
-        boolean ok = false;
-        try {
-            ps = conn.getConnection().prepareStatement("INSERT INTO MEMBER VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            ps.setString(1, member.getM_num());
-            ps.setString(2, member.getM_name());
-            ps.setString(3, member.getM_id());
-            ps.setString(4, member.getM_birthdate());
-            ps.setString(5, member.getM_phone());
-            ps.setString(6, member.getM_emailMember());
-            ps.setString(7, member.getM_startingDateMember());
-            ps.setString(8, member.getM_cathegoryMember());
-            
-            ps.executeUpdate();
-            
-            ps.close();
-            ok = true;
-        } catch (SQLException e) {
-            throw e;
-        }
-        return ok;
+    public void insertMember(Member member) throws SQLException {
+        ps = conn.getConnection().prepareStatement("INSERT INTO MEMBER VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        ps.setString(1, member.getM_num());
+        ps.setString(2, member.getM_name());
+        ps.setString(3, member.getM_id());
+        ps.setString(4, member.getM_birthdate());
+        ps.setString(5, member.getM_phone());
+        ps.setString(6, member.getM_emailMember());
+        ps.setString(7, member.getM_startingDateMember());
+        ps.setString(8, member.getM_cathegoryMember());
+
+        ps.executeUpdate();
+
+        ps.close();
+    }
+    
+    public void updateMember(Member member) throws SQLException {
+        ps = conn.getConnection().prepareStatement("UPDATE MEMBER SET M_NAME = ?, M_ID = ?, M_BIRHTDATE = ?, M_PHONE = ?, M_EMAILMEMBER = ?, M_STARTINGDATEMEMBER = ?, M_CATHEGORYMEMBER = ? WHERE M_NUM = ?");
+        ps.setString(1, member.getM_name());
+        ps.setString(2, member.getM_id());
+        ps.setString(3, member.getM_birthdate());
+        ps.setString(4, member.getM_phone());
+        ps.setString(5, member.getM_emailMember());
+        ps.setString(6, member.getM_startingDateMember());
+        ps.setString(7, member.getM_cathegoryMember());
+        ps.setString(8, member.getM_num());
+        
+        ps.executeUpdate();
+        
+        ps.close();
+    }
+    
+    public void deleteMember(String num) throws SQLException {
+        ps = conn.getConnection().prepareStatement("DELETE FROM MEMBER WHERE M_NUM = ?");
+        ps.setString(1, num);
+
+        ps.executeUpdate();
+
+        ps.close();
     }
     
     public String[] columnNames() {

@@ -18,7 +18,7 @@ public class TrainerDAO {
         this.conn = conn;
     } 
     
-    public ArrayList<Trainer> listAllMembers() throws SQLException {
+    public ArrayList<Trainer> listAllTrainers() throws SQLException {
         ArrayList<Trainer> list = new ArrayList<>();
         
         ps = conn.getConnection().prepareStatement("SELECT * FROM TRAINER");
@@ -35,25 +35,46 @@ public class TrainerDAO {
         return list;
     }
     
-    public boolean insertTrainer(Trainer trainer) throws SQLException {
-        boolean ok = false;
-        try {
-            ps = conn.getConnection().prepareStatement("INSERT INTO TRAINER VALUES (?, ?, ?, ?, ?, ?, ?)");
-            ps.setString(1, trainer.getT_cod());
-            ps.setString(2, trainer.getT_name());
-            ps.setString(3, trainer.getT_idNumber());
-            ps.setString(4, trainer.getT_phoneNumber());
-            ps.setString(5, trainer.getT_email());
-            ps.setString(6, trainer.getT_date());
-            ps.setString(7, trainer.getT_nick());
-            
-            ps.executeUpdate();
-            
-            ps.close();
-            ok = true;
-        } catch (SQLException e) {
-            throw e;
-        }
-        return ok;
+    public void insertTrainer(Trainer trainer) throws SQLException {
+        ps = conn.getConnection().prepareStatement("INSERT INTO TRAINER VALUES (?, ?, ?, ?, ?, ?, ?)");
+        ps.setString(1, trainer.getT_cod());
+        ps.setString(2, trainer.getT_name());
+        ps.setString(3, trainer.getT_idNumber());
+        ps.setString(4, trainer.getT_phoneNumber());
+        ps.setString(5, trainer.getT_email());
+        ps.setString(6, trainer.getT_date());
+        ps.setString(7, trainer.getT_nick());
+
+        ps.executeUpdate();
+
+        ps.close();
+    }
+    
+    public void updateTrainer(Trainer trainer) throws SQLException {
+        ps = conn.getConnection().prepareStatement("UPDATE TRAINER SET T_NAME = ?, T_IDNUMBER = ?, T_PHONENUMBER = ?, T_EMAIL = ?, T_DATE = ?, T_NICK = ? WHERE T_COD = ?");
+        ps.setString(1, trainer.getT_name());
+        ps.setString(2, trainer.getT_idNumber());
+        ps.setString(3, trainer.getT_phoneNumber());
+        ps.setString(4, trainer.getT_email());
+        ps.setString(5, trainer.getT_date());
+        ps.setString(6, trainer.getT_nick());
+        ps.setString(7, trainer.getT_cod());
+
+        ps.executeUpdate();
+
+        ps.close();
+    }
+    
+    public void deleteTrainer(String code) throws SQLException {
+        ps = conn.getConnection().prepareStatement("DELETE FROM TRAINER WHERE T_COD = ?");
+        ps.setString(1, code);
+
+        ps.executeUpdate();
+
+        ps.close();
+    }
+    
+    public String[] columnNames() {
+        return new String[] {"Code", "Name", "ID", "Phone Number", "E-Mail", "Date", "Nickname"};
     }
 }
