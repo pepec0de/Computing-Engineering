@@ -20,14 +20,12 @@ public class LoginControl implements ActionListener {
     public LoginControl() {
         view = new LoginView();
         view.btnConnect.addActionListener(this);
-        view.setVisible(true);
 
         dbView = new DBView();
         dbCtl = new DBControl(this, dbView);
         dbView.mExit.addActionListener(this);
 
         dialog = new DialogView();
-
     }
 
     private void openDBView() {
@@ -91,6 +89,10 @@ public class LoginControl implements ActionListener {
 
     public DialogView getDialog() {
         return dialog;
+    }
+
+    public void open() {
+        view.setVisible(true);
     }
 
 }
