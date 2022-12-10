@@ -11,8 +11,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -35,6 +34,7 @@ public class DBControl implements ActionListener {
     private TrainerDialog trainDialog;
     private ActivityDialog activityDialog;
     private ActivityMembersDialog actMemberDialog;
+    private ArrayList<String> activitiesId;
 
     // Model
     private MemberDAO members;
@@ -87,7 +87,6 @@ public class DBControl implements ActionListener {
             }
         };
         actMemberDialog.table.setModel(modelMembers);
-        
         v = new Verifier();
     }
 
@@ -317,9 +316,16 @@ public class DBControl implements ActionListener {
         }
     }
 
-    private void openActivityMembersDialog() {
-        // TODO : add combo information
-        actMemberDialog.actCombo.addItem("AC01");
+    private void openActivityMembersDialog() throws SQLException {
+        DefaultComboBoxModel<String> cModel = new DefaultComboBoxModel<>();
+        activitiesId = new ArrayList<>();
+        cModel.addElement("Select an activity...");
+        Object[][] result = getActivitiesData();
+        for (Object[] vec : result) {
+            activitiesId.add((String) vec[0]);
+            cModel.addElement((String) vec[1]);
+        }
+        actMemberDialog.actCombo.setModel(cModel);
         actMemberDialog.setVisible(true);
     }
     
@@ -502,7 +508,12 @@ public class DBControl implements ActionListener {
                     break;
                     
                 case "Members":
-                    refreshActivityMembers((String) actMemberDialog.actCombo.getSelectedItem());
+                    row = actMemberDialog.actCombo.getSelectedIndex();
+                    if (row != 0) {
+                        refreshActivityMembers(activitiesId.get(row-1));
+                    } else {
+                        main.getDialog().show(-1, "Select an activity");
+                    }
                     break;
             }
         } catch (SQLException ex) {
