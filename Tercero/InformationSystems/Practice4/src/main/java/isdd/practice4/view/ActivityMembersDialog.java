@@ -43,18 +43,16 @@ public class ActivityMembersDialog extends javax.swing.JDialog {
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Number", "E-Mail"
+
             }
         ));
         jScrollPane1.setViewportView(table);
-
-        actCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         cancel.setText("Cancel");
 

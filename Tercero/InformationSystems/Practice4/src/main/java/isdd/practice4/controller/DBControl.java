@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -25,6 +27,9 @@ public class DBControl implements ActionListener {
     // View
     private DBView view;
     private DefaultTableModel model;
+    
+    // ActivityMembers dialog
+    private DefaultTableModel modelMembers;
 
     private MemberDialog memberDialog;
     private TrainerDialog trainDialog;
@@ -35,6 +40,7 @@ public class DBControl implements ActionListener {
     private MemberDAO members;
     private TrainerDAO trainers;
     private ActivityDAO activities;
+    private ActivityMembersDAO activityMembers;
     private Verifier v;
 
     public DBControl(LoginControl c, DBView _view) {
@@ -58,7 +64,7 @@ public class DBControl implements ActionListener {
             }
         };
         view.table.setModel(model);
-
+        
         trainDialog = new TrainerDialog(view, true);
         trainDialog.ok.addActionListener(this);
         trainDialog.cancel.addActionListener(this);
@@ -74,6 +80,13 @@ public class DBControl implements ActionListener {
         actMemberDialog = new ActivityMembersDialog(view, true);
         actMemberDialog.ok.addActionListener(this);
         actMemberDialog.cancel.addActionListener(this);
+        modelMembers = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        actMemberDialog.table.setModel(modelMembers);
         
         v = new Verifier();
     }
@@ -88,6 +101,11 @@ public class DBControl implements ActionListener {
 
     private void refreshActivities() throws SQLException {
         model.setDataVector(getActivitiesData(), activities.columnNames());
+    }
+    
+    private void refreshActivityMembers(String a_id) throws SQLException {
+        //System.out.println(a_id);
+        modelMembers.setDataVector(getActivityMembersData(a_id), activityMembers.columnNames());
     }
 
     private Object[][] getMembersData() throws SQLException {
@@ -145,6 +163,20 @@ public class DBControl implements ActionListener {
                 i++;
             }
 
+            return result;
+        }
+        return null;
+    }
+    
+    private Object[][] getActivityMembersData(String a_id) throws SQLException {
+        ArrayList<String[]> arr = activityMembers.listMembersInActivity(a_id);
+        if (!arr.isEmpty()) {
+            Object[][] result = new Object[arr.size()][activityMembers.columnNames().length];
+            int i = 0;
+            for (String[] vec : arr) {
+                System.arraycopy(vec, 0, result[i], 0, activityMembers.columnNames().length);
+                i++;
+            }
             return result;
         }
         return null;
@@ -285,6 +317,11 @@ public class DBControl implements ActionListener {
         }
     }
 
+    private void openActivityMembersDialog() {
+        actMemberDialog.actCombo.addItem("AC01");
+        actMemberDialog.setVisible(true);
+    }
+    
     private void closeDialog() {
         switch (current) {
             case "Member":
@@ -423,7 +460,7 @@ public class DBControl implements ActionListener {
                     
                 case "MemInActiv":
                     current = "ActivityMembers";
-                    actMemberDialog.setVisible(true);
+                    openActivityMembersDialog();
                     break;
 
                 case "Update":
@@ -464,7 +501,7 @@ public class DBControl implements ActionListener {
                     break;
                     
                 case "Members":
-                    
+                    refreshActivityMembers((String) actMemberDialog.actCombo.getSelectedItem());
                     break;
             }
         } catch (SQLException ex) {
@@ -479,6 +516,7 @@ public class DBControl implements ActionListener {
         trainers = new TrainerDAO(main.getConn());
         members = new MemberDAO(main.getConn());
         activities = new ActivityDAO(main.getConn());
+        activityMembers = new ActivityMembersDAO(main.getConn());
         view.setVisible(true);
     }
 }
