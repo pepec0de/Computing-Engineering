@@ -318,6 +318,7 @@ public class DBControl implements ActionListener {
     }
 
     private void openActivityMembersDialog() {
+        // TODO : add combo information
         actMemberDialog.actCombo.addItem("AC01");
         actMemberDialog.setVisible(true);
     }
