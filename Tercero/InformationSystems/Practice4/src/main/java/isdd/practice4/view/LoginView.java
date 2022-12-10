@@ -64,27 +64,17 @@ public class LoginView extends javax.swing.JFrame {
 
         jLabel1.setText("Server:");
 
-        comboServer.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Oracle", "MariaDB" }));
+        comboServer.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select server", "Oracle", "MariaDB" }));
 
         jLabel2.setText("IP:");
 
-        txtIP.setText("172.17.20.39");
-
-        txtUser.setText("ISDD_003");
-
         jLabel3.setText("Password:");
-
-        passwd.setText("holaBuenas");
 
         jLabel4.setText("Username:");
 
         btnConnect.setText("Connect");
 
         jLabel5.setText("DB Name:");
-
-        txtName.setText("ETSI");
-
-        txtPort.setText("1521");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

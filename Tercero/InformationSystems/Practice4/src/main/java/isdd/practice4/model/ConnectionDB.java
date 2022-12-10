@@ -15,7 +15,7 @@ public class ConnectionDB {
         if (dbms.equals("oracle")) {
             url = "jdbc:oracle:thin:@" + ip + ":" + db;
         } else if (dbms.equals("mariadb")) {
-            url = "jdbc:mariadb://" + ip + "/";
+            url = "jdbc:mariadb://" + ip + "/" + db;
         }
         connection = DriverManager.getConnection(url, user, password);
         if (connection == null)

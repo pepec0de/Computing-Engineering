@@ -9,8 +9,10 @@ import isdd.practice4.view.*;
  *
  * @author Pepe
  */
-public class LoginControl implements ActionListener {
+public class LoginControl implements ActionListener, ItemListener {
 
+    // TODO : ADD ERROR MANAGEMENT IN STORED PROCEDURE
+    
     private LoginView view;
     private ConnectionDB conn;
     private DialogView dialog;
@@ -20,6 +22,7 @@ public class LoginControl implements ActionListener {
     public LoginControl() {
         view = new LoginView();
         view.btnConnect.addActionListener(this);
+        view.comboServer.addItemListener(this);
 
         dbView = new DBView();
         dbCtl = new DBControl(this, dbView);
@@ -34,9 +37,6 @@ public class LoginControl implements ActionListener {
 
     private boolean connect(String dbms, String ip, String port, String db, String user, String password) {
         try {
-            //conn = new ConnectionDB("oracle", "172.17.20.39:1521", "ETSI", "ISDD_003", "holaBuenas");
-            //conn = new ConnectionDB("mariadb", "172.18.1.241:3306", "ETSI", "ISDD_003", "ISDD_003");
-
             conn = new ConnectionDB(dbms, ip + ":" + port, db, user, password);
             dbView.setTitle(db + " database (" + ip + ":" + port + ")");
             return true;
@@ -80,6 +80,27 @@ public class LoginControl implements ActionListener {
                 System.exit(0);
                 break;
 
+        }
+    }
+    
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        switch ((String) view.comboServer.getSelectedItem()) {
+            case "Oracle":
+                view.txtIP.setText("172.17.20.39");
+                view.txtPort.setText("1521");
+                view.txtName.setText("ETSI");
+                view.txtUser.setText("ISDD_003");
+                view.passwd.setText("holaBuenas");
+                break;
+                
+            case "MariaDB":
+                view.txtIP.setText("172.18.1.241");
+                view.txtPort.setText("3306");
+                view.txtName.setText("ISDD_003");
+                view.txtUser.setText("ISDD_003");
+                view.passwd.setText("ISDD_003");
+                break;
         }
     }
 

@@ -119,9 +119,10 @@
     <Component class="javax.swing.JComboBox" name="comboServer">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="2">
-            <StringItem index="0" value="Oracle"/>
-            <StringItem index="1" value="MariaDB"/>
+          <StringArray count="3">
+            <StringItem index="0" value="Select server"/>
+            <StringItem index="1" value="Oracle"/>
+            <StringItem index="2" value="MariaDB"/>
           </StringArray>
         </Property>
       </Properties>
@@ -136,17 +137,11 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtIP">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="172.17.20.39"/>
-      </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JTextField" name="txtUser">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="ISDD_003"/>
-      </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
       </AuxValues>
@@ -157,9 +152,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JPasswordField" name="passwd">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="holaBuenas"/>
-      </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
       </AuxValues>
@@ -183,17 +175,11 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtName">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="ETSI"/>
-      </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JTextField" name="txtPort">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="1521"/>
-      </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
       </AuxValues>
