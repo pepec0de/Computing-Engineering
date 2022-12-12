@@ -7,8 +7,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import tiendabici.CanvasTienda;
 
 /**
@@ -32,7 +30,7 @@ public class Generador {
         ArrayList<Future<Integer>> vRepara = new ArrayList<>();
         Random r = new Random(System.currentTimeMillis());
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 50; i++) {
             if (r.nextInt(1, 11) > 5) {
                 vCompra.add(hCompra.submit(new Comprador(tienda, cv)));
             } else {
