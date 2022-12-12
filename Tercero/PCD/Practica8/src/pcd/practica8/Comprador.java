@@ -11,18 +11,26 @@ import tiendabici.CanvasTienda;
 public class Comprador implements Callable<Integer> {
 
     private CanvasTienda cv;
+    private Tienda tienda;
     private Random r;
     
-    public Comprador(CanvasTienda c) {
+    public Comprador(Tienda t, CanvasTienda c) {
+        tienda = t;
         cv = c;
         r = new Random(System.currentTimeMillis());
     }
     
     @Override
     public Integer call() throws Exception {
-        long id = Thread.currentThread().getId();
+        int id = (int) Thread.currentThread().getId();
         int t = r.nextInt(Const.TMIN, Const.TMAX);
         
+        cv.inserta('C', id);
+        char vendedor = tienda.entraComprador();
+        cv.quita('C', id);
+        
+        System.out.println("Comprador " + id + " entra");
+        cv.compra(vendedor, id);
         
         try {
             Thread.sleep(t*1000);
@@ -30,7 +38,9 @@ public class Comprador implements Callable<Integer> {
             System.out.println(id + " : " + e.getMessage());
         }
         
-        
+        System.out.println("Comprador " + id + " sale");
+        tienda.saleComprador();
+        cv.finalizado(vendedor, id);
         
         return t;
     }

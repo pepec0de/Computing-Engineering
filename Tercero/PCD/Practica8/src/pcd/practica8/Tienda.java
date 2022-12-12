@@ -24,38 +24,39 @@ public class Tienda {
     }
     
     public synchronized char entraComprador() throws InterruptedException {
-        char p = 0;
+        char vendedor = 'V';
         
-        nCompraEsperando++;
-        
-        if (nCompraEsperando > 2) {
-            tecnicoVendiendo = true;
-        }
+        nCompraEsperando++;        
+        tecnicoVendiendo = nCompraEsperando > 2;
         
         if (vendedorOcupado) {
-            if (!tecnicoVendiendo)
-                hCompra.wait();
-            else if (tecnicoOcupado) {
-                hCompra.wait();
-            } else {
-                tecnicoOcupado = true;
+            if (!tecnicoVendiendo || tecnicoOcupado) {
+                System.out.println("Comprador " + Thread.currentThread().getId() + " espera");
+                wait();
             }
-        } else {
+        }
+        
+        if (!vendedorOcupado) {
             vendedorOcupado = true;
+        } else if (tecnicoVendiendo && !tecnicoOcupado) {
+            vendedor = 'M';
+            tecnicoOcupado = true;
+        } else {
+            throw new InterruptedException("AYAYAYAYAYAY no");
         }
         
         nCompraEsperando--;
         
-        return p;
+        return vendedor;
     }
     
     public synchronized void entraReparador() throws InterruptedException {
         
-        if (tecnicoOcupado) {
-            hRepara.wait();
+        if (tecnicoVendiendo || tecnicoOcupado) {
+            wait();
         }
         
-        
+        tecnicoOcupado = true;
     }
     
     public synchronized void saleComprador() {
@@ -63,12 +64,12 @@ public class Tienda {
         if (tecnicoVendiendo && tecnicoOcupado) {
             tecnicoOcupado = false;
         }
-        hCompra.notify();
+        notify();
     }
     
     public synchronized void saleReparador() {
         tecnicoOcupado = false;
-        hRepara.notify();
+        notify();
     }
     
     

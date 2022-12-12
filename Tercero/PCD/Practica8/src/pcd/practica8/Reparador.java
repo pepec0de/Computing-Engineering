@@ -10,19 +10,27 @@ import tiendabici.CanvasTienda;
  */
 public class Reparador implements Callable<Integer> {
 
+    private Tienda tienda;
     private CanvasTienda cv;
     private Random r;
     
-    public Reparador(CanvasTienda c) {
+    public Reparador(Tienda t, CanvasTienda c) {
+        tienda = t;
         cv = c;
         r = new Random(System.currentTimeMillis());
     }
     
     @Override
     public Integer call() throws Exception {
-        long id = Thread.currentThread().getId();
+        int id = (int) Thread.currentThread().getId();
         int t = r.nextInt(Const.TMIN, Const.TMAX);
         
+        cv.inserta('R', id);
+        tienda.entraReparador();
+        cv.quita('R', id);
+        
+        System.out.println("Reparador " + Thread.currentThread().getId() + " entra");
+        cv.repara('M', id);
         
         try {
             Thread.sleep(t*1000);
@@ -30,7 +38,9 @@ public class Reparador implements Callable<Integer> {
             System.out.println(id + " : " + e.getMessage());
         }
         
-        
+        System.out.println("Reparador " + Thread.currentThread().getId() + " sale");
+        tienda.saleReparador();
+        cv.finalizado('M', id);
         
         return t;
     }

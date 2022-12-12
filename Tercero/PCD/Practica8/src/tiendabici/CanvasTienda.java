@@ -13,8 +13,6 @@ import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -135,7 +133,7 @@ public class CanvasTienda extends Canvas {
     }
 
     /**
-     * Pone a Comprar el id que se pasa
+     * Pone a reparar el id que se pasa
      * @param en_cual Si es 'V' lo coloca con el vendedor y si es 'M' lo coloca con el mecánico
      * @param id que se visualizará en el sitio
      */
@@ -150,7 +148,7 @@ public class CanvasTienda extends Canvas {
     }
 
     /**
-     * Pone a reparar el id que se pasa
+     * Pone a comprar el id que se pasa
      * @param en_cual Si es 'V' lo coloca con el vendedor y si es 'M' lo coloca con el mecánico
      * @param id que se visualizará en el sitio
      */
