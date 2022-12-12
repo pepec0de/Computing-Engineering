@@ -32,7 +32,7 @@ public class Generador {
         ArrayList<Future<Integer>> vRepara = new ArrayList<>();
         Random r = new Random(System.currentTimeMillis());
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 20; i++) {
             if (r.nextInt(1, 11) > 5) {
                 vCompra.add(hCompra.submit(new Comprador(tienda, cv)));
             } else {

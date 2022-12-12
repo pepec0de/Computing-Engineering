@@ -38,9 +38,9 @@ public class Reparador implements Callable<Integer> {
             System.out.println(id + " : " + e.getMessage());
         }
         
-        System.out.println("Reparador " + Thread.currentThread().getId() + " sale");
         tienda.saleReparador();
         cv.finalizado('M', id);
+        System.out.println("Reparador " + Thread.currentThread().getId() + " sale");
         
         return t;
     }

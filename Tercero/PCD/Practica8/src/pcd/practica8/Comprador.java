@@ -38,9 +38,9 @@ public class Comprador implements Callable<Integer> {
             System.out.println(id + " : " + e.getMessage());
         }
         
-        System.out.println("Comprador " + id + " sale");
         tienda.saleComprador();
         cv.finalizado(vendedor, id);
+        System.out.println("Comprador " + id + " sale");
         
         return t;
     }
