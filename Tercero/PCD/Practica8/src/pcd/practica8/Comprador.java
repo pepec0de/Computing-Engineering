@@ -2,6 +2,7 @@ package pcd.practica8;
 
 import java.util.Random;
 import java.util.concurrent.Callable;
+import tiendabici.CanvasTienda;
 
 /**
  *
@@ -9,9 +10,11 @@ import java.util.concurrent.Callable;
  */
 public class Comprador implements Callable<Integer> {
 
+    private CanvasTienda cv;
     private Random r;
     
-    public Comprador() {
+    public Comprador(CanvasTienda c) {
+        cv = c;
         r = new Random(System.currentTimeMillis());
     }
     
