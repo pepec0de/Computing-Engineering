@@ -103,7 +103,6 @@ public class DBControl implements ActionListener {
     }
     
     private void refreshActivityMembers(String a_id) throws SQLException {
-        //System.out.println(a_id);
         modelMembers.setDataVector(getActivityMembersData(a_id), activityMembers.columnNames());
     }
 

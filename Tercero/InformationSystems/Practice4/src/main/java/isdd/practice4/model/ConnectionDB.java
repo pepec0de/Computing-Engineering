@@ -9,8 +9,10 @@ import java.sql.*;
 public class ConnectionDB {
     
     private Connection connection;
+    private String dbms;
     
     public ConnectionDB(String dbms, String ip, String db, String user, String password) throws SQLException {
+        this.dbms = dbms;
         String url = null;
         if (dbms.equals("oracle")) {
             url = "jdbc:oracle:thin:@" + ip + ":" + db;
@@ -32,5 +34,9 @@ public class ConnectionDB {
     
     public DatabaseMetaData informationDB() throws SQLException {
         return connection.getMetaData();
+    }
+
+    public String getDbms() {
+        return dbms;
     }
 }
