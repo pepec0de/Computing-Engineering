@@ -25,7 +25,7 @@ public class Generador {
         Ventana v = new Ventana(cv);
         ExecutorService hCompra = Executors.newFixedThreadPool(10);
         ExecutorService hRepara = Executors.newFixedThreadPool(10);
-        Tienda tienda = new Tienda(hCompra, hRepara);
+        Tienda tienda = new Tienda();
         ArrayList<Future<Integer>> vCompra = new ArrayList<>();
         ArrayList<Future<Integer>> vRepara = new ArrayList<>();
         Random r = new Random(System.currentTimeMillis());

@@ -1,8 +1,5 @@
 package pcd.practica8;
 
-import java.util.concurrent.ExecutorService;
-
-
 /**
  *
  * @author Pepe
@@ -11,34 +8,36 @@ public class Tienda {
     
     private int nCompraEsperando;
     private boolean vendedorOcupado;
-    private boolean tecnicoOcupado, tecnicoVendiendo;
+    private boolean mecanicoOcupado, mecanicoVendiendo;
     
     public Tienda() {
         nCompraEsperando = 0;
         vendedorOcupado = false;
-        tecnicoOcupado = false;
-        tecnicoVendiendo = false;
+        mecanicoOcupado = false;
+        mecanicoVendiendo = false;
     }
     
     public synchronized char entraComprador() throws InterruptedException {
         char vendedor = 'V';
         
-        nCompraEsperando++;        
-        tecnicoVendiendo = nCompraEsperando > 2;
-        
-        if (vendedorOcupado || tecnicoVendiendo && tecnicoOcupado) {
+        nCompraEsperando++;
+
+        if (vendedorOcupado || mecanicoVendiendo && mecanicoOcupado) {
             System.out.println("Comprador " + Thread.currentThread().getId() + " espera");
             wait();
         }
         
+        if (!mecanicoOcupado && nCompraEsperando > 2)
+            mecanicoVendiendo = true;
+        
         if (!vendedorOcupado) {
             vendedorOcupado = true;
-        } else if (tecnicoVendiendo && !tecnicoOcupado) {
+        } else if (mecanicoVendiendo && !mecanicoOcupado) {
+            System.out.println("Mecanico se pone a vender");
             vendedor = 'M';
-            tecnicoOcupado = true;
+            mecanicoOcupado = true;
         } else {
-            System.out.println("Comprador " + Thread.currentThread().getId() + " Vendedor = " + vendedorOcupado + ", Tecnico vendiendo = " + tecnicoVendiendo + ", Tecnico ocupado = " + tecnicoOcupado);
-            throw new InterruptedException("AYAYAYAYAYAY no");
+            throw new InterruptedException("Error en comprador " + Thread.currentThread().getId());
         }
         
         nCompraEsperando--;
@@ -48,24 +47,27 @@ public class Tienda {
     
     public synchronized void entraReparador() throws InterruptedException {
         
-        if (tecnicoVendiendo || tecnicoOcupado) {
+        if (mecanicoVendiendo || mecanicoOcupado) {
             wait();
         }
         
-        tecnicoOcupado = true;
+        mecanicoOcupado = true;
     }
     
     public synchronized void saleComprador() {
         if (vendedorOcupado)
             vendedorOcupado = false;
-        else if (tecnicoVendiendo && tecnicoOcupado) {
-            tecnicoOcupado = false;
+        else if (mecanicoVendiendo && mecanicoOcupado) {
+            if (nCompraEsperando <= 2) {
+                mecanicoVendiendo = false;
+            }
+            mecanicoOcupado = false;
         }
         notify();
     }
     
     public synchronized void saleReparador() {
-        tecnicoOcupado = false;
+        mecanicoOcupado = false;
         notify();
     }
     

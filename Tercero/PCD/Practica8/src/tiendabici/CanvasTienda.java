@@ -174,7 +174,6 @@ public class CanvasTienda extends Canvas {
             mecanico = null;
         }
         repaint();
-
     }
 
     @Override
