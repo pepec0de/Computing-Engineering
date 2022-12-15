@@ -9,14 +9,11 @@ import java.util.concurrent.ExecutorService;
  */
 public class Tienda {
     
-    private ExecutorService hCompra, hRepara;
     private int nCompraEsperando;
     private boolean vendedorOcupado;
     private boolean tecnicoOcupado, tecnicoVendiendo;
     
-    public Tienda(ExecutorService hCompra, ExecutorService hRepara) {
-        this.hCompra = hCompra;
-        this.hRepara = hRepara;
+    public Tienda() {
         nCompraEsperando = 0;
         vendedorOcupado = false;
         tecnicoOcupado = false;
