@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration">
 -->
-<!DOCTYPE hibernate-configuration SYSTEM
-    "classpath://org/hibernate/hibernate-configuration-3.0.dtd">
+<!--DOCTYPE hibernate-configuration SYSTEM
+    "classpath://org/hibernate/hibernate-configuration-3.0.dtd"-->
+    
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration">
+
 <hibernate-configuration>
 <session-factory>
 <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
@@ -11,8 +15,8 @@
 <property name="hibernate.connection.password">holaBuenas</property>
 <property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>
 <property name="hibernate.show_sql">true</property>
-<mapping class="Model.Trainer"/>
-<mapping class="Model.Activity"/>
-<mapping class="Model.Member1"/>
+<mapping class="isdd.practice5.model.Trainer"/>
+<mapping class="isdd.practice5.model.Activity"/>
+<mapping class="isdd.practice5.model.Member1"/>
 </session-factory>
 </hibernate-configuration>

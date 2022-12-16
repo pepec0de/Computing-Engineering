@@ -9,7 +9,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <exec.mainClass>isdd.practice5.Application.Practice5</exec.mainClass>
+        <exec.mainClass>isdd.practice5.application.Practice5</exec.mainClass>
     </properties>
         <dependencies>
     <dependency>

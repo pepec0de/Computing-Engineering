@@ -5,14 +5,14 @@
     "classpath://org/hibernate/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
 <session-factory>
-<property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
-<property name="hibernate.connection.url">jdbc:oracle:thin:@172.17.20.39:1521:etsi</property>
+<property name="hibernate.connection.driver_class">org.mariadb.jdbc.Driver</property>
+<property name="hibernate.connection.url">jdbc:mariadb://172.18.1.241:3306/ISDD_003</property>
 <property name="hibernate.connection.username">ISDD_003</property>
-<property name="hibernate.connection.password">holaBuenas</property>
-<property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>
+<property name="hibernate.connection.password">ISDD_003</property>
+<property name="hibernate.dialect">org.hibernate.dialect.MariaDBDialect</property>
 <property name="hibernate.show_sql">true</property>
-<mapping class="Model.Trainer"/>
-<mapping class="Model.Activity"/>
-<mapping class="Model.Member1"/>
+<mapping class="model.Trainer"/>
+<mapping class="model.Activity"/>
+<mapping class="model.Member1"/>
 </session-factory>
 </hibernate-configuration>
