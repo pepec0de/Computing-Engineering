@@ -64,7 +64,6 @@ public class LoginControl implements ActionListener, ItemListener {
     
     public boolean connect() {
         String configFile = view.comboServer.getSelectedItem().toString().toLowerCase() + ".cfg.xml";
-        System.out.println(configFile);
         hibernate = new HibernateUtil(configFile);
         session = hibernate.getSessionFactory().openSession();
         
@@ -77,6 +76,7 @@ public class LoginControl implements ActionListener, ItemListener {
     
     public void openDBView() {
         dbCtl.show();
+        dbView.setTitle(session.toString());
     }
     
     

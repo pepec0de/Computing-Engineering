@@ -28,16 +28,23 @@ public class TrainerDAO {
         return list;
     }
     
-    public void insertTrainer(Trainer a) {
-        
+    public void insertTrainer(Trainer t) {
+        Transaction tr = session.beginTransaction();
+        session.save(t);
+        tr.commit();
     }
     
-    public void updateTrainer(Trainer a) {
-        
+    public void updateTrainer(Trainer t) {
+        Transaction tr = session.beginTransaction();
+        session.save(t);
+        tr.commit();
     }
     
     public void deleteTrainer(String id) {
-        
+        Transaction tr = session.beginTransaction();
+        Trainer t = session.get(Trainer.class, id);
+        session.delete(t);
+        tr.commit();
     }
     
     public String[] columnNames() {

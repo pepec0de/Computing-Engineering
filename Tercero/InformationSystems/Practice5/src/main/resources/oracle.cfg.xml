@@ -10,6 +10,8 @@
 <hibernate-configuration>
 <session-factory>
 <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
+<property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
+<property name="hibernate.connection.isolation">2</property>
 <property name="hibernate.connection.url">jdbc:oracle:thin:@172.17.20.39:1521:etsi</property>
 <property name="hibernate.connection.username">ISDD_003</property>
 <property name="hibernate.connection.password">holaBuenas</property>

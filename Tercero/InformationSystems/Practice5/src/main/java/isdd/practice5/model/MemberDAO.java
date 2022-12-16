@@ -28,16 +28,23 @@ public class MemberDAO {
         return list;
     }
     
-    public void insertMember(Member1 a) {
-        
+    public void insertMember(Member1 m) {
+        Transaction tr = session.beginTransaction();
+        session.save(m);
+        tr.commit();
     }
     
-    public void updateMember(Member1 a) {
-        
+    public void updateMember(Member1 m) {
+        Transaction tr = session.beginTransaction();
+        session.save(m);
+        tr.commit();
     }
     
     public void deleteMember(String id) {
-        
+        Transaction tr = session.beginTransaction();
+        Member1 m = session.get(Member1.class, id);
+        session.delete(m);
+        tr.commit();
     }
     
     public String[] columnNames() {

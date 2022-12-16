@@ -29,15 +29,22 @@ public class ActivityDAO {
     }
     
     public void insertActivity(Activity a) {
-        
+        Transaction tr = session.beginTransaction();
+        session.save(a);
+        tr.commit();
     }
     
     public void updateActivity(Activity a) {
-        
+        Transaction tr = session.beginTransaction();
+        session.save(a);
+        tr.commit();
     }
     
     public void deleteActivity(String id) {
-        
+        Transaction tr = session.beginTransaction();
+        Activity a = session.get(Activity.class, id);
+        session.delete(a);
+        tr.commit();
     }
 
     public String[] columnNames() {

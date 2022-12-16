@@ -6,13 +6,15 @@
 <hibernate-configuration>
 <session-factory>
 <property name="hibernate.connection.driver_class">org.mariadb.jdbc.Driver</property>
+<property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
+<property name="hibernate.connection.isolation">2</property>
 <property name="hibernate.connection.url">jdbc:mariadb://172.18.1.241:3306/ISDD_003</property>
 <property name="hibernate.connection.username">ISDD_003</property>
 <property name="hibernate.connection.password">ISDD_003</property>
 <property name="hibernate.dialect">org.hibernate.dialect.MariaDBDialect</property>
 <property name="hibernate.show_sql">true</property>
-<mapping class="model.Trainer"/>
-<mapping class="model.Activity"/>
-<mapping class="model.Member1"/>
+<mapping class="isdd.practice5.model.Trainer"/>
+<mapping class="isdd.practice5.model.Activity"/>
+<mapping class="isdd.practice5.model.Member1"/>
 </session-factory>
 </hibernate-configuration>

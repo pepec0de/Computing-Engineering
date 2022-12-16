@@ -4,12 +4,12 @@ import isdd.practice5.model.*;
 import isdd.practice5.view.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigInteger;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
-import org.hibernate.Session;
 
 /**
  *
@@ -86,19 +86,19 @@ public class DBControl implements ActionListener {
         v = new Verifier();
     }
 
-    private void refreshMembers() throws SQLException {
+    private void refreshMembers() {
         model.setDataVector(getMembersData(), members.columnNames());
     }
 
-    private void refreshTrainers() throws SQLException {
+    private void refreshTrainers() {
         model.setDataVector(getTrainersData(), trainers.columnNames());
     }
 
-    private void refreshActivities() throws SQLException {
+    private void refreshActivities() {
         model.setDataVector(getActivitiesData(), activities.columnNames());
     }
     
-    private void refreshActivityMembers(String a_id) throws SQLException {
+    private void refreshActivityMembers(String a_id) {
         //modelMembers.setDataVector(getActivityMembersData(a_id), activityMembers.columnNames());
     }
 
@@ -221,7 +221,7 @@ public class DBControl implements ActionListener {
                     memberDialog.startingDate.setDate(v.getStringDate((String) view.table.getModel().getValueAt(row, 6)));
                 } catch (ParseException ex) {
                 }
-                memberDialog.cathegory.setText((String) view.table.getModel().getValueAt(row, 7));
+                memberDialog.cathegory.setText(((Character) view.table.getModel().getValueAt(row, 7)).toString());
                 break;
 
             case "Trainer":
@@ -315,19 +315,28 @@ public class DBControl implements ActionListener {
         }
     }
 
-    private void execUpdate() throws SQLException {
+    private void execUpdate() {
         String ver;
         switch (current) {
             case "Member":
-                Member1 m = new Member1(memberDialog.num.getText(),
-                        memberDialog.name.getText(),
-                        memberDialog.id.getText(),
-                        v.getDateString(memberDialog.birthDate.getDate()),
-                        memberDialog.phone.getText(),
-                        memberDialog.email.getText(),
-                        v.getDateString(memberDialog.startingDate.getDate()),
-                        memberDialog.cathegory.getText().charAt(0));
+                Member1 m = new Member1();
+                switch (action) {
+                    case "Update":
+                        m = main.getSession().get(Member1.class, memberDialog.num.getText());
+                        break;
+                }
+                
+                m.setMNum(memberDialog.num.getText());
+                m.setMName(memberDialog.name.getText());
+                m.setMId(memberDialog.id.getText());
+                m.setMBirhtdate(v.getDateString(memberDialog.birthDate.getDate()));
+                m.setMPhone(memberDialog.phone.getText());
+                m.setMEmailmember(memberDialog.email.getText());
+                m.setMStartingdatemember(v.getDateString(memberDialog.startingDate.getDate()));
+                m.setMCathegorymember(memberDialog.cathegory.getText().charAt(0));
+                
                 ver = v.verify(m);
+                
                 if (ver != null) {
                     main.getDialog().show(-1, ver);
                 } else {
@@ -343,15 +352,25 @@ public class DBControl implements ActionListener {
                 }
                 break;
 
+
             case "Trainer":
-                Trainer t = new Trainer(trainDialog.code.getText(),
-                        trainDialog.name.getText(),
-                        trainDialog.id.getText(),
-                        trainDialog.phone.getText(),
-                        trainDialog.email.getText(),
-                        v.getDateString(trainDialog.date.getDate()),
-                        trainDialog.nick.getText());
+                Trainer t = new Trainer();
+                switch (action) {
+                    case "Update":
+                        t = main.getSession().get(Trainer.class, trainDialog.code.getText());
+                        break;
+                }
+                
+                t.setTCod(trainDialog.code.getText());
+                t.setTName(trainDialog.name.getText());
+                t.setTIdnumber(trainDialog.id.getText());
+                t.setTPhonenumber(trainDialog.phone.getText());
+                t.setTEmail(trainDialog.email.getText());
+                t.setTDate(v.getDateString(trainDialog.date.getDate()));
+                t.setTNick(trainDialog.nick.getText());
+                
                 ver = v.verify(t);
+                
                 if (ver != null) {
                     main.getDialog().show(-1, ver);
                 } else {
@@ -368,12 +387,19 @@ public class DBControl implements ActionListener {
                 break;
 
             case "Activity":
-                Activity a = null;
-//                Activity a = new Activity(activityDialog.id.getText(),
-//                        activityDialog.name.getText(),
-//                        activityDialog.description.getText(),
-//                        Integer.parseInt(activityDialog.price.getText()),
-//                        activityDialog.trainer.getText());
+                Activity a = new Activity();;
+                switch (action) {
+                    case "Update":
+                        a = main.getSession().get(Activity.class, activityDialog.id.getText());
+                        break;
+                }
+                
+                a.setAId(activityDialog.id.getText());
+                a.setAName(activityDialog.name.getText());
+                a.setADescription(activityDialog.description.getText());
+                a.setAPrice(BigInteger.valueOf(Integer.parseInt(activityDialog.price.getText())));
+                a.setATrainerincharge(main.getSession().get(Trainer.class, activityDialog.trainer.getText()));
+
                 ver = v.verify(a);
                 if (ver != null) {
                     main.getDialog().show(-1, ver);
