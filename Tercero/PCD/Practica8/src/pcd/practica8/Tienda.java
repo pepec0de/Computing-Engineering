@@ -33,7 +33,6 @@ public class Tienda {
         if (!vendedorOcupado) {
             vendedorOcupado = true;
         } else if (mecanicoVendiendo && !mecanicoOcupado) {
-            System.out.println("Mecanico se pone a vender");
             vendedor = 'M';
             mecanicoOcupado = true;
         } else {

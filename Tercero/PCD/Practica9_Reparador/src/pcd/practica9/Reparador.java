@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package pcd.practica9;
 
 import java.rmi.*;
@@ -17,7 +13,12 @@ public class Reparador {
      */
     public static void main(String[] args) throws RemoteException, NotBoundException, InterruptedException {
         Registry r = LocateRegistry.getRegistry("localhost", 1234);
+        String[] oferta = r.list();
+        for (int i = 0; i < oferta.length; i++) {
+        System.out.println("Elemento " + i + " del registro: " + oferta[i]);
+        }
         ICliente cliente = (ICliente) r.lookup("tienda");
+        
         int id = (int) ProcessHandle.current().pid();
         
         System.out.println("Reparador " + id + " entra");

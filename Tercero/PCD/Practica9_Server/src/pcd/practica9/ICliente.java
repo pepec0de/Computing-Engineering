@@ -4,15 +4,18 @@
  */
 package pcd.practica9;
 
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
 /**
  *
  * @author Pepe
  */
-public interface ICliente {
+public interface ICliente extends Remote {
     
-    public char entraComprador(int id) throws InterruptedException;
-    public void entraReparador(int id) throws InterruptedException;
-    public void saleComprador(char vendedor, int id);
-    public void saleReparador(int id);
+    public char entraComprador(int id) throws RemoteException, InterruptedException;
+    public void entraReparador(int id) throws RemoteException, InterruptedException;
+    public void saleComprador(char vendedor, int id) throws RemoteException;
+    public void saleReparador(int id) throws RemoteException;
     
 }
