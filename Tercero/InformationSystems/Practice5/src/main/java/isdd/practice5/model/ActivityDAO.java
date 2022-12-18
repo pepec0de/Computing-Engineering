@@ -50,4 +50,19 @@ public class ActivityDAO {
     public String[] columnNames() {
         return new String[] {"ID", "Name", "Description", "Price", "Trainer in Charge"};
     }
+    
+    public ArrayList<Object[]> listAllMembersFromActivity(String A_ID) {
+        Transaction tr = session.beginTransaction();
+        Query query = session.createNativeQuery("SELECT m.M_NUM, m.M_NAME, m.M_EMAILMEMBER FROM PERFORMS p INNER JOIN \"MEMBER\" m ON p.P_NUM = m.M_NUM WHERE p.P_ID = \'" + A_ID + "\'");
+        
+        ArrayList<Object[]> list = (ArrayList<Object[]>) query.list();
+
+        tr.commit();
+        
+        return list;
+    }
+    
+    public String[] columnNamesActivity() {
+        return new String[]{"Number", "Name", "E-Mail"};
+    }
 }

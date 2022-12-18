@@ -87,58 +87,27 @@ public class DBControl implements ActionListener {
     }
 
     private void refreshMembers() {
-        model.setDataVector(getMembersData(), members.columnNames());
+        model.setDataVector(getTable(members.listAllMembers()), members.columnNames());
     }
 
     private void refreshTrainers() {
-        model.setDataVector(getTrainersData(), trainers.columnNames());
+        model.setDataVector(getTable(trainers.listAllTrainers()), trainers.columnNames());
     }
 
     private void refreshActivities() {
-        model.setDataVector(getActivitiesData(), activities.columnNames());
+        model.setDataVector(getTable(activities.listAllActivities()), activities.columnNames());
     }
     
     private void refreshActivityMembers(String a_id) {
-        //modelMembers.setDataVector(getActivityMembersData(a_id), activityMembers.columnNames());
+        modelMembers.setDataVector(getTable(activities.listAllMembersFromActivity(a_id)), activities.columnNamesActivity());
     }
 
-    private Object[][] getMembersData() {
-        ArrayList<Object[]> arr = members.listAllMembers();
-        if (!arr.isEmpty()) {
-            int rowLength = arr.get(0).length;
-            Object[][] result = new Object[arr.size()][rowLength];
+    private Object[][] getTable(ArrayList<Object[]> rows) {
+        if (!rows.isEmpty()) {
+            int rowLength = rows.get(0).length;
+            Object[][] result = new Object[rows.size()][rowLength];
             int i = 0;
-            for (Object[] row : arr) {
-                System.arraycopy(row, 0, result[i], 0, rowLength);
-                i++;
-            }
-            return result;
-        }
-        return null;
-    }
-
-    private Object[][] getTrainersData() {
-        ArrayList<Object[]> arr = trainers.listAllTrainers();
-        if (!arr.isEmpty()) {
-            int rowLength = arr.get(0).length;
-            Object[][] result = new Object[arr.size()][rowLength];
-            int i = 0;
-            for (Object[] row : arr) {
-                System.arraycopy(row, 0, result[i], 0, rowLength);
-                i++;
-            }
-            return result;
-        }
-        return null;
-    }
-
-    private Object[][] getActivitiesData() {
-        ArrayList<Object[]> arr = activities.listAllActivities();
-        if (!arr.isEmpty()) {
-            int rowLength = arr.get(0).length;
-            Object[][] result = new Object[arr.size()][rowLength];
-            int i = 0;
-            for (Object[] row : arr) {
+            for (Object[] row : rows) {
                 System.arraycopy(row, 0, result[i], 0, rowLength);
                 i++;
             }
@@ -286,7 +255,7 @@ public class DBControl implements ActionListener {
         DefaultComboBoxModel<String> cModel = new DefaultComboBoxModel<>();
         activitiesId = new ArrayList<>();
         cModel.addElement("Select an activity...");
-        Object[][] result = getActivitiesData();
+        Object[][] result = getTable(activities.listAllActivities());
         for (Object[] vec : result) {
             activitiesId.add((String) vec[0]);
             cModel.addElement((String) vec[1]);
