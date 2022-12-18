@@ -38,7 +38,7 @@ public class LoginControl implements ActionListener, ItemListener {
     private boolean connect(String dbms, String ip, String port, String db, String user, String password) {
         try {
             conn = new ConnectionDB(dbms, ip + ":" + port, db, user, password);
-            dbView.setTitle(db + " database (" + ip + ":" + port + ")");
+            dbView.setTitle(db + " database in (" + ip + ":" + port + ")");
             return true;
         } catch (SQLException ex) {
             dialog.show(-1, ex.getMessage());

@@ -5,9 +5,9 @@ import isdd.practice5.view.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigInteger;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import javax.persistence.PersistenceException;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -282,7 +282,7 @@ public class DBControl implements ActionListener {
         }
     }
 
-    private void openActivityMembersDialog() throws SQLException {
+    private void openActivityMembersDialog() {
         DefaultComboBoxModel<String> cModel = new DefaultComboBoxModel<>();
         activitiesId = new ArrayList<>();
         cModel.addElement("Select an activity...");
@@ -418,7 +418,7 @@ public class DBControl implements ActionListener {
         }
     }
 
-    private void execDelete(String ver) throws SQLException {
+    private void execDelete(String ver) {
         switch (current) {
             case "Member":
                 members.deleteMember(ver);
@@ -509,8 +509,8 @@ public class DBControl implements ActionListener {
                     }
                     break;
             }
-        } catch (SQLException ex) {
-            main.getDialog().show(-1, "SQL Error: " + ex.getMessage());
+        } catch (PersistenceException ex) {
+            main.getDialog().show(-1, "SQL error: " + ex.getMessage());
         } catch (Exception ex) {
             main.getDialog().show(-1, "Unexpected error: " + ex.getMessage());
         }

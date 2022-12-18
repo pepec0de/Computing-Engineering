@@ -76,7 +76,7 @@ public class LoginControl implements ActionListener, ItemListener {
     
     public void openDBView() {
         dbCtl.show();
-        dbView.setTitle(session.toString());
+        dbView.setTitle(view.txtName.getText() + " database in (" + view.txtIP.getText() + ":" + view.txtPort.getText() + ")");
     }
     
     
