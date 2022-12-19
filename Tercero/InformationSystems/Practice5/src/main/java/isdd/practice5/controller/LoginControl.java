@@ -1,5 +1,6 @@
 package isdd.practice5.controller;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import isdd.practice5.view.DBView;
 import isdd.practice5.view.DialogView;
 import isdd.practice5.view.LoginView;
@@ -16,7 +17,6 @@ import org.hibernate.Session;
 public class LoginControl implements ActionListener, ItemListener {
 
     // TODO : ADD ERROR MANAGEMENT IN STORED PROCEDURE
-    
     private LoginView view;
     private DialogView dialog;
     private DBView dbView;
@@ -61,25 +61,24 @@ public class LoginControl implements ActionListener, ItemListener {
 
         }
     }
-    
+
     public boolean connect() {
         String configFile = view.comboServer.getSelectedItem().toString().toLowerCase() + ".cfg.xml";
         hibernate = new HibernateUtil(configFile);
         session = hibernate.getSessionFactory().openSession();
-        
+
         return session != null;
     }
-    
+
     public void disconnect() {
         hibernate.close();
     }
-    
+
     public void openDBView() {
         dbCtl.show();
         dbView.setTitle(view.txtName.getText() + " database in (" + view.txtIP.getText() + ":" + view.txtPort.getText() + ")");
     }
-    
-    
+
     @Override
     public void itemStateChanged(ItemEvent e) {
         switch ((String) view.comboServer.getSelectedItem()) {
@@ -90,7 +89,7 @@ public class LoginControl implements ActionListener, ItemListener {
                 view.txtUser.setText("ISDD_003");
                 view.passwd.setText("holaBuenas");
                 break;
-                
+
             case "MariaDB":
                 view.txtIP.setText("172.18.1.241");
                 view.txtPort.setText("3306");
@@ -114,4 +113,3 @@ public class LoginControl implements ActionListener, ItemListener {
     }
 
 }
-

@@ -19,7 +19,7 @@ public class TrainerDAO {
     
     public ArrayList<Object[]> listAllTrainers() {
         Transaction tr = session.beginTransaction();
-        Query query = session.createNativeQuery("SELECT * FROM TRAINER");
+        Query query = session.createNativeQuery("SELECT * FROM TRAINER ORDER BY T_COD");
         
         ArrayList<Object[]> list = (ArrayList<Object[]>) query.list();
 

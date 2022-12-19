@@ -19,7 +19,7 @@ public class MemberDAO {
     
     public ArrayList<Object[]> listAllMembers() {
         Transaction tr = session.beginTransaction();
-        Query query = session.createNativeQuery("SELECT * FROM MEMBER");
+        Query query = session.createNativeQuery("SELECT * FROM MEMBER ORDER BY M_NUM");
         
         ArrayList<Object[]> list = (ArrayList<Object[]>) query.list();
 

@@ -1,5 +1,6 @@
 package isdd.practice5.controller;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import isdd.practice5.model.*;
 import isdd.practice5.view.*;
 import java.awt.event.ActionEvent;
@@ -50,6 +51,7 @@ public class DBControl implements ActionListener {
         view.mTrainManage.addActionListener(this);
         view.mActivManage.addActionListener(this);
         view.mMemInActiv.addActionListener(this);
+        view.mRegisterMem.addActionListener(this);
         view.btnNew.addActionListener(this);
         view.btnDel.addActionListener(this);
         view.btnUpdate.addActionListener(this);
@@ -76,6 +78,7 @@ public class DBControl implements ActionListener {
         actMemberDialog = new ActivityMembersDialog(view, true);
         actMemberDialog.ok.addActionListener(this);
         actMemberDialog.cancel.addActionListener(this);
+        activitiesId = new ArrayList<>();
         modelMembers = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -116,9 +119,9 @@ public class DBControl implements ActionListener {
         return null;
     }
 
-    private void openPanels() {
-        view.pTable.setVisible(true);
-        view.pBtn.setVisible(true);
+    private void showPanels(boolean b) {
+        view.pTable.setVisible(b);
+        view.pBtn.setVisible(b);
     }
 
     private String getNextId() {
@@ -126,8 +129,11 @@ public class DBControl implements ActionListener {
 
         String letter = lastId.replaceAll("[0-9]", "");
         String code = lastId.replaceAll("[\\D]", "");
-
-        return String.format(letter + "%03d", Integer.parseInt(code) + 1);
+        
+        // Cantidad de 0's que debemos incluir
+        int c = 4 - letter.length();
+        
+        return String.format(letter + "%0" + c + "d", Integer.parseInt(code) + 1);
     }
 
     private void setTrainerId(String id) {
@@ -253,7 +259,7 @@ public class DBControl implements ActionListener {
 
     private void openActivityMembersDialog() {
         DefaultComboBoxModel<String> cModel = new DefaultComboBoxModel<>();
-        activitiesId = new ArrayList<>();
+        activitiesId.clear();
         cModel.addElement("Select an activity...");
         Object[][] result = getTable(activities.listAllActivities());
         for (Object[] vec : result) {
@@ -280,6 +286,7 @@ public class DBControl implements ActionListener {
             
             case "ActivityMembers":
                 actMemberDialog.dispose();
+                showPanels(false);
                 break;
         }
     }
@@ -410,8 +417,10 @@ public class DBControl implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         int row;
         String ver;
+        showPanels(true);
         try {
             switch (e.getActionCommand()) {
+                // Menu items
                 case "MembersManage":
                     current = "Member";
                     refreshMembers();
@@ -428,10 +437,17 @@ public class DBControl implements ActionListener {
                     break;
                     
                 case "MemInActiv":
+                    // TODO : arreglar representacion panel
+                    showPanels(false);
                     current = "ActivityMembers";
                     openActivityMembersDialog();
                     break;
+                    
+                case "RegisterMem":
+                    
+                    break;
 
+                // Panel buttons
                 case "Update":
                     // Check if the user has selected any cell
                     row = view.table.getSelectedRow();
@@ -480,10 +496,12 @@ public class DBControl implements ActionListener {
             }
         } catch (PersistenceException ex) {
             main.getDialog().show(-1, "SQL error: " + ex.getMessage());
+        } catch (NullPointerException ex) {
+            main.getDialog().show(-1, "Null value error: " + ex.getMessage());
         } catch (Exception ex) {
+            ex.printStackTrace();
             main.getDialog().show(-1, "Unexpected error: " + ex.getMessage());
         }
-        openPanels();
     }
 
     public void show() {

@@ -19,7 +19,7 @@ public class ActivityDAO {
     
     public ArrayList<Object[]> listAllActivities() {
         Transaction tr = session.beginTransaction();
-        Query query = session.createNativeQuery("SELECT * FROM ACTIVITY");
+        Query query = session.createNativeQuery("SELECT * FROM ACTIVITY ORDER BY A_ID");
         
         ArrayList<Object[]> list = (ArrayList<Object[]>) query.list();
 
