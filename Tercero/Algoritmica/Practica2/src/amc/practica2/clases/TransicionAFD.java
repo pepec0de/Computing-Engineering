@@ -5,7 +5,7 @@ public class TransicionAFD {
 	private int estadoOrigen, estadoDestino;
 	private char simbolo;
 	
-	public TransicionAFD(int estadoOrigen, int estadoDestino, char simbolo) {
+	public TransicionAFD(int estadoOrigen, char simbolo, int estadoDestino) {
 		this.estadoOrigen = estadoOrigen;
 		this.estadoDestino = estadoDestino;
 		this.simbolo = simbolo;
