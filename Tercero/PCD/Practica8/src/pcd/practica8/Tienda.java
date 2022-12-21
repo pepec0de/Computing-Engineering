@@ -8,13 +8,12 @@ public class Tienda {
     
     private int nCompraEsperando;
     private boolean vendedorOcupado;
-    private boolean mecanicoOcupado, mecanicoVendiendo;
+    private boolean mecanicoOcupado;
     
     public Tienda() {
         nCompraEsperando = 0;
         vendedorOcupado = false;
         mecanicoOcupado = false;
-        mecanicoVendiendo = false;
     }
     
     public synchronized char entraComprador() throws InterruptedException {
@@ -22,17 +21,14 @@ public class Tienda {
         
         nCompraEsperando++;
 
-        if (vendedorOcupado || mecanicoVendiendo && mecanicoOcupado) {
+        while (vendedorOcupado && (nCompraEsperando <= 2 || mecanicoOcupado)) {
             System.out.println("Comprador " + Thread.currentThread().getId() + " espera");
             wait();
         }
         
-        if (!mecanicoOcupado && nCompraEsperando > 2)
-            mecanicoVendiendo = true;
-        
         if (!vendedorOcupado) {
             vendedorOcupado = true;
-        } else if (mecanicoVendiendo && !mecanicoOcupado) {
+        } else if (!mecanicoOcupado) {
             vendedor = 'M';
             mecanicoOcupado = true;
         } else {
@@ -46,28 +42,25 @@ public class Tienda {
     
     public synchronized void entraReparador() throws InterruptedException {
         
-        if (mecanicoVendiendo || mecanicoOcupado) {
+        if (mecanicoOcupado) {
             wait();
         }
         
         mecanicoOcupado = true;
     }
     
-    public synchronized void saleComprador() {
-        if (vendedorOcupado)
+    public synchronized void saleComprador(char p) {
+        if (p == 'V') {
             vendedorOcupado = false;
-        else if (mecanicoVendiendo && mecanicoOcupado) {
-            if (nCompraEsperando <= 2) {
-                mecanicoVendiendo = false;
-            }
+        } else if (p == 'M') {
             mecanicoOcupado = false;
         }
-        notify();
+        notifyAll();
     }
     
     public synchronized void saleReparador() {
         mecanicoOcupado = false;
-        notify();
+        notifyAll();
     }
     
     

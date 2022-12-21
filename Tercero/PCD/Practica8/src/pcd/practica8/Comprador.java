@@ -13,16 +13,17 @@ public class Comprador implements Callable<Integer> {
     private CanvasTienda cv;
     private Tienda tienda;
     private Random r;
+    private int id;
     
-    public Comprador(Tienda t, CanvasTienda c) {
+    public Comprador(Tienda t, CanvasTienda c, int i) {
         tienda = t;
         cv = c;
         r = new Random(System.currentTimeMillis());
+        id = i;
     }
     
     @Override
     public Integer call() throws Exception {
-        int id = (int) Thread.currentThread().getId();
         int t = r.nextInt(Const.TMIN, Const.TMAX);
         
         cv.inserta('C', id);
@@ -38,7 +39,7 @@ public class Comprador implements Callable<Integer> {
             System.out.println(id + " : " + e.getMessage());
         }
         
-        tienda.saleComprador();
+        tienda.saleComprador(vendedor);
         cv.finalizado(vendedor, id);
         System.out.println("Comprador " + id + " sale");
         

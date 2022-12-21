@@ -31,10 +31,10 @@ public class Generador {
         Random r = new Random(System.currentTimeMillis());
 
         for (int i = 0; i < 50; i++) {
-            if (r.nextInt(1, 11) > 5) {
-                vCompra.add(hCompra.submit(new Comprador(tienda, cv)));
+            if (r.nextInt(10) > 5) {
+                vCompra.add(hCompra.submit(new Comprador(tienda, cv, i)));
             } else {
-                vRepara.add(hRepara.submit(new Reparador(tienda, cv)));
+                vRepara.add(hRepara.submit(new Reparador(tienda, cv, i)));
             }
 
             try {

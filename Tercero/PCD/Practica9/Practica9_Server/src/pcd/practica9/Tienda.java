@@ -29,7 +29,7 @@ public class Tienda extends UnicastRemoteObject implements ICliente {
         cv.inserta('C', id);
         nCompraEsperando++;        
 
-        if (vendedorOcupado || mecanicoVendiendo && mecanicoOcupado) {
+        if (vendedorOcupado && mecanicoVendiendo && mecanicoOcupado) {
             System.out.println("Comprador " + Thread.currentThread().getId() + " espera");
             wait();
         }

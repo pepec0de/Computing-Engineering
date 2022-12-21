@@ -13,23 +13,24 @@ public class Reparador implements Callable<Integer> {
     private Tienda tienda;
     private CanvasTienda cv;
     private Random r;
+    private int id;
     
-    public Reparador(Tienda t, CanvasTienda c) {
+    public Reparador(Tienda t, CanvasTienda c, int i) {
         tienda = t;
         cv = c;
         r = new Random(System.currentTimeMillis());
+        id = i;
     }
     
     @Override
     public Integer call() throws Exception {
-        int id = (int) Thread.currentThread().getId();
         int t = r.nextInt(Const.TMIN, Const.TMAX);
         
         cv.inserta('R', id);
         tienda.entraReparador();
         cv.quita('R', id);
         
-        System.out.println("Reparador " + Thread.currentThread().getId() + " entra");
+        System.out.println("Reparador " + id + " entra");
         cv.repara('M', id);
         
         try {
@@ -40,7 +41,7 @@ public class Reparador implements Callable<Integer> {
         
         tienda.saleReparador();
         cv.finalizado('M', id);
-        System.out.println("Reparador " + Thread.currentThread().getId() + " sale");
+        System.out.println("Reparador " + id + " sale");
         
         return t;
     }
