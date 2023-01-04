@@ -1,6 +1,5 @@
 package isdd.practice5.controller;
 
-import com.formdev.flatlaf.FlatLightLaf;
 import isdd.practice5.view.DBView;
 import isdd.practice5.view.DialogView;
 import isdd.practice5.view.LoginView;

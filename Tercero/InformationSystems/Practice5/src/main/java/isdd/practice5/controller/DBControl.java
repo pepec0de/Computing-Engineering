@@ -24,15 +24,15 @@ public class DBControl implements ActionListener {
     // View
     private DBView view;
     private DefaultTableModel model;
-    
-    // ActivityMembers dialog
     private DefaultTableModel modelMembers;
-
     private MemberDialog memberDialog;
     private TrainerDialog trainDialog;
     private ActivityDialog activityDialog;
     private ActivityMembersDialog actMemberDialog;
+    private RegisterMemberDialog registerDialog;
+    // aux variable for comboboxes
     private ArrayList<String> activitiesId;
+    private ArrayList<String> membersId;
 
     // Model
     private MemberDAO members;
@@ -41,6 +41,7 @@ public class DBControl implements ActionListener {
     private Verifier v;
 
     public DBControl(LoginControl c, DBView _view) {
+        v = new Verifier();
         current = "";
 
         main = c;
@@ -79,6 +80,7 @@ public class DBControl implements ActionListener {
         actMemberDialog.ok.addActionListener(this);
         actMemberDialog.cancel.addActionListener(this);
         activitiesId = new ArrayList<>();
+        membersId = new ArrayList<>();
         modelMembers = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -86,7 +88,11 @@ public class DBControl implements ActionListener {
             }
         };
         actMemberDialog.table.setModel(modelMembers);
-        v = new Verifier();
+        
+        registerDialog = new RegisterMemberDialog(view, true);
+        registerDialog.btnAddMember.addActionListener(this);
+        registerDialog.btnDelMember.addActionListener(this);
+        registerDialog.btnDeleteAll.addActionListener(this);
     }
 
     private void refreshMembers() {
@@ -257,17 +263,37 @@ public class DBControl implements ActionListener {
         }
     }
 
-    private void openActivityMembersDialog() {
-        DefaultComboBoxModel<String> cModel = new DefaultComboBoxModel<>();
+    private DefaultComboBoxModel<String> getActivityCombo() {
         activitiesId.clear();
+        DefaultComboBoxModel<String> cModel = new DefaultComboBoxModel<>();
         cModel.addElement("Select an activity...");
-        Object[][] result = getTable(activities.listAllActivities());
-        for (Object[] vec : result) {
+        for (Object[] vec : getTable(activities.listAllActivities())) {
             activitiesId.add((String) vec[0]);
             cModel.addElement((String) vec[1]);
         }
-        actMemberDialog.actCombo.setModel(cModel);
+        return cModel;
+    }
+    
+    private DefaultComboBoxModel<String> getMembersCombo() {
+        membersId.clear();
+        DefaultComboBoxModel<String> cModel = new DefaultComboBoxModel<>();
+        cModel.addElement("Select a member...");
+        for (Object[] vec : getTable(members.listAllMembers())) {
+            membersId.add((String) vec[0]);
+            cModel.addElement((String) vec[1]);
+        }
+        return cModel;
+    }
+    
+    private void openActivityMembersDialog() {
+        actMemberDialog.actCombo.setModel(getActivityCombo());
         actMemberDialog.setVisible(true);
+    }
+    
+    private void openRegisterDialog() {
+        registerDialog.actCombo.setModel(getActivityCombo());
+        registerDialog.membersCombo.setModel(getMembersCombo());
+        registerDialog.setVisible(true);
     }
     
     private void closeDialog() {
@@ -417,34 +443,36 @@ public class DBControl implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         int row;
         String ver;
-        showPanels(true);
+        showPanels(false);
         try {
             switch (e.getActionCommand()) {
                 // Menu items
                 case "MembersManage":
                     current = "Member";
                     refreshMembers();
+                    showPanels(true);
                     break;
 
                 case "TrainManage":
                     current = "Trainer";
                     refreshTrainers();
+                    showPanels(true);
                     break;
 
                 case "ActivManage":
                     current = "Activity";
                     refreshActivities();
+                    showPanels(true);
                     break;
                     
                 case "MemInActiv":
-                    // TODO : arreglar representacion panel
-                    showPanels(false);
                     current = "ActivityMembers";
                     openActivityMembersDialog();
                     break;
                     
                 case "RegisterMem":
                     
+                    openRegisterDialog();
                     break;
 
                 // Panel buttons
@@ -492,6 +520,21 @@ public class DBControl implements ActionListener {
                     } else {
                         main.getDialog().show(-1, "Select an activity");
                     }
+                    break;
+                    
+                // Register Dialog buttons
+                case "Add member":
+                    
+                    break;
+                    
+                case "Delete member":
+                    // Delete member from selected activity
+                    
+                    break;
+                    
+                case "Delete all":
+                    // Delete all members from selected activity
+                    
                     break;
             }
         } catch (PersistenceException ex) {

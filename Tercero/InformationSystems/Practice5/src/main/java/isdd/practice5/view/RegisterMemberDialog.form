@@ -41,7 +41,7 @@
                           </Group>
                           <Group type="102" attributes="0">
                               <Component id="btnDelMember" min="-2" pref="129" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="btnDeleteAll" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="147" max="-2" attributes="0"/>
                           </Group>
@@ -63,15 +63,15 @@
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="290" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnDelMember" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnDeleteAll" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnAddMember" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="membersCombo" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnDelMember" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnDeleteAll" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -127,7 +127,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnDelMember">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Delete Member"/>
+        <Property name="text" type="java.lang.String" value="Delete member"/>
         <Property name="toolTipText" type="java.lang.String" value="Select a row to delete member from previously selected activity"/>
       </Properties>
       <AuxValues>
@@ -147,7 +147,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnDeleteAll">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Delete All"/>
+        <Property name="text" type="java.lang.String" value="Delete all"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
