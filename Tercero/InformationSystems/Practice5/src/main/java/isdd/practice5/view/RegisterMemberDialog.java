@@ -12,6 +12,7 @@ public class RegisterMemberDialog extends javax.swing.JDialog {
     public RegisterMemberDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setTitle("Management - Members in activities");
     }
 
     /**

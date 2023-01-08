@@ -1,10 +1,11 @@
 package isdd.practice5.controller;
 
-import com.formdev.flatlaf.FlatLightLaf;
 import isdd.practice5.model.*;
 import isdd.practice5.view.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Pepe
  */
-public class DBControl implements ActionListener {
+public class DBControl implements ActionListener, ItemListener {
 
     private LoginControl main;
     private String current, action;
@@ -93,6 +94,8 @@ public class DBControl implements ActionListener {
         registerDialog.btnAddMember.addActionListener(this);
         registerDialog.btnDelMember.addActionListener(this);
         registerDialog.btnDeleteAll.addActionListener(this);
+        registerDialog.actCombo.addItemListener(this);
+        registerDialog.tableMembersManage.setModel(modelMembers);
     }
 
     private void refreshMembers() {
@@ -286,11 +289,13 @@ public class DBControl implements ActionListener {
     }
     
     private void openActivityMembersDialog() {
+        modelMembers.setRowCount(0);
         actMemberDialog.actCombo.setModel(getActivityCombo());
         actMemberDialog.setVisible(true);
     }
     
     private void openRegisterDialog() {
+        modelMembers.setRowCount(0);
         registerDialog.actCombo.setModel(getActivityCombo());
         registerDialog.membersCombo.setModel(getMembersCombo());
         registerDialog.setVisible(true);
@@ -312,7 +317,6 @@ public class DBControl implements ActionListener {
             
             case "ActivityMembers":
                 actMemberDialog.dispose();
-                showPanels(false);
                 break;
         }
     }
@@ -438,7 +442,7 @@ public class DBControl implements ActionListener {
                 break;
         }
     }
-
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         int row;
@@ -471,7 +475,7 @@ public class DBControl implements ActionListener {
                     break;
                     
                 case "RegisterMem":
-                    
+                    current = "RegisterMembers";
                     openRegisterDialog();
                     break;
 
@@ -513,6 +517,7 @@ public class DBControl implements ActionListener {
                     closeDialog();
                     break;
                     
+                // Activity Members Dialog button
                 case "Members":
                     row = actMemberDialog.actCombo.getSelectedIndex();
                     if (row != 0) {
@@ -524,17 +529,51 @@ public class DBControl implements ActionListener {
                     
                 // Register Dialog buttons
                 case "Add member":
-                    
+                    // Get members combo idx
+                    row = registerDialog.membersCombo.getSelectedIndex();
+                    int actIdx = registerDialog.actCombo.getSelectedIndex();
+                    if (actIdx == 0) {
+                        main.getDialog().show(-1, "You must select an activity");
+                    } else if (row == 0) {
+                        main.getDialog().show(-1, "You must select a member");
+                    } else {
+                        String act_id = activitiesId.get(actIdx - 1);
+                        String mem_id = membersId.get(row - 1);
+                        
+                        System.out.println(act_id + " " + mem_id);
+                        activities.addMemberToActivity(act_id, mem_id);
+                        refreshActivityMembers(act_id);
+                    }
                     break;
                     
                 case "Delete member":
                     // Delete member from selected activity
-                    
+                    row = registerDialog.tableMembersManage.getSelectedRow();
+                    actIdx = registerDialog.actCombo.getSelectedIndex();
+                    if (actIdx == 0) {
+                        main.getDialog().show(-1, "You must select an activity");
+                    } else if (row == -1) {
+                        main.getDialog().show(-1, "You must select a member in the table");
+                    } else {
+                        String act_id = activitiesId.get(actIdx - 1);
+                        String mem_id = (String) modelMembers.getValueAt(row, 0);
+                        
+                        activities.deleteMemberFromActivity(act_id, mem_id);
+                        refreshActivityMembers(act_id);
+                    }
                     break;
                     
                 case "Delete all":
                     // Delete all members from selected activity
-                    
+                    actIdx = registerDialog.actCombo.getSelectedIndex();
+                    if (actIdx == 0) {
+                        main.getDialog().show(-1, "You must select an activity");
+                    } else {
+                        String act_id = activitiesId.get(actIdx - 1);
+                        
+                        activities.deleteAllFromActivity(act_id);
+                        refreshActivityMembers(act_id);
+                    }
                     break;
             }
         } catch (PersistenceException ex) {
@@ -546,11 +585,26 @@ public class DBControl implements ActionListener {
             main.getDialog().show(-1, "Unexpected error: " + ex.getMessage());
         }
     }
-
+    
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        switch (current) {
+            case "RegisterMembers":
+                int idx = registerDialog.actCombo.getSelectedIndex();
+                if (idx != 0) {
+                    refreshActivityMembers(activitiesId.get(idx-1));
+                } else {
+                    modelMembers.setRowCount(0);
+                }
+                break;
+        }
+    }
+    
     public void show() {
         members = new MemberDAO(main.getSession());
         trainers = new TrainerDAO(main.getSession());
         activities = new ActivityDAO(main.getSession());
         view.setVisible(true);
     }
+
 }
