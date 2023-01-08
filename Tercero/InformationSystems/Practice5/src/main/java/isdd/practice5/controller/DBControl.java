@@ -29,7 +29,6 @@ public class DBControl implements ActionListener, ItemListener {
     private MemberDialog memberDialog;
     private TrainerDialog trainDialog;
     private ActivityDialog activityDialog;
-    private ActivityMembersDialog actMemberDialog;
     private RegisterMemberDialog registerDialog;
     // aux variable for comboboxes
     private ArrayList<String> activitiesId;
@@ -52,7 +51,6 @@ public class DBControl implements ActionListener, ItemListener {
         view.mMemManage.addActionListener(this);
         view.mTrainManage.addActionListener(this);
         view.mActivManage.addActionListener(this);
-        view.mMemInActiv.addActionListener(this);
         view.mRegisterMem.addActionListener(this);
         view.btnNew.addActionListener(this);
         view.btnDel.addActionListener(this);
@@ -77,9 +75,6 @@ public class DBControl implements ActionListener, ItemListener {
         activityDialog.ok.addActionListener(this);
         activityDialog.cancel.addActionListener(this);
 
-        actMemberDialog = new ActivityMembersDialog(view, true);
-        actMemberDialog.ok.addActionListener(this);
-        actMemberDialog.cancel.addActionListener(this);
         activitiesId = new ArrayList<>();
         membersId = new ArrayList<>();
         modelMembers = new DefaultTableModel() {
@@ -88,7 +83,6 @@ public class DBControl implements ActionListener, ItemListener {
                 return false;
             }
         };
-        actMemberDialog.table.setModel(modelMembers);
         
         registerDialog = new RegisterMemberDialog(view, true);
         registerDialog.btnAddMember.addActionListener(this);
@@ -288,12 +282,6 @@ public class DBControl implements ActionListener, ItemListener {
         return cModel;
     }
     
-    private void openActivityMembersDialog() {
-        modelMembers.setRowCount(0);
-        actMemberDialog.actCombo.setModel(getActivityCombo());
-        actMemberDialog.setVisible(true);
-    }
-    
     private void openRegisterDialog() {
         modelMembers.setRowCount(0);
         registerDialog.actCombo.setModel(getActivityCombo());
@@ -313,10 +301,6 @@ public class DBControl implements ActionListener, ItemListener {
 
             case "Activity":
                 activityDialog.dispose();
-                break;
-            
-            case "ActivityMembers":
-                actMemberDialog.dispose();
                 break;
         }
     }
@@ -469,11 +453,6 @@ public class DBControl implements ActionListener, ItemListener {
                     showPanels(true);
                     break;
                     
-                case "MemInActiv":
-                    current = "ActivityMembers";
-                    openActivityMembersDialog();
-                    break;
-                    
                 case "RegisterMem":
                     current = "RegisterMembers";
                     openRegisterDialog();
@@ -506,25 +485,18 @@ public class DBControl implements ActionListener, ItemListener {
                             execDelete(ver);
                         }
                     }
+                    showPanels(true);
                     break;
 
                 // Dialog buttons
                 case "OK":
                     execUpdate();
+                    showPanels(true);
                     break;
 
                 case "Cancel":
                     closeDialog();
-                    break;
-                    
-                // Activity Members Dialog button
-                case "Members":
-                    row = actMemberDialog.actCombo.getSelectedIndex();
-                    if (row != 0) {
-                        refreshActivityMembers(activitiesId.get(row-1));
-                    } else {
-                        main.getDialog().show(-1, "Select an activity");
-                    }
+                    showPanels(true);
                     break;
                     
                 // Register Dialog buttons
