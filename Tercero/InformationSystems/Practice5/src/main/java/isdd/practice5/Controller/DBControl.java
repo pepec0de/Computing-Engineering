@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -30,6 +31,10 @@ public class DBControl implements ActionListener, ItemListener {
     private TrainerDialog trainDialog;
     private ActivityDialog activityDialog;
     private RegisterMemberDialog registerDialog;
+    /// DEFENSE CODE
+    private MembershipDialog membershipDialog;
+    /// ---------------------------------------------
+
     // aux variable for comboboxes
     private ArrayList<String> activitiesId;
     private ArrayList<String> membersId;
@@ -62,7 +67,7 @@ public class DBControl implements ActionListener, ItemListener {
             }
         };
         view.table.setModel(model);
-        
+
         trainDialog = new TrainerDialog(view, true);
         trainDialog.ok.addActionListener(this);
         trainDialog.cancel.addActionListener(this);
@@ -83,13 +88,19 @@ public class DBControl implements ActionListener, ItemListener {
                 return false;
             }
         };
-        
+
         registerDialog = new RegisterMemberDialog(view, true);
         registerDialog.btnAddMember.addActionListener(this);
         registerDialog.btnDelMember.addActionListener(this);
         registerDialog.btnDeleteAll.addActionListener(this);
         registerDialog.actCombo.addItemListener(this);
         registerDialog.tableMembersManage.setModel(modelMembers);
+
+        /// DEFENSE CODE
+        view.mMembership.addActionListener(this);
+        membershipDialog = new MembershipDialog(view, true);
+        membershipDialog.btnSelect.addActionListener(this);
+        /// ---------------------------------------------
     }
 
     private void refreshMembers() {
@@ -103,7 +114,7 @@ public class DBControl implements ActionListener, ItemListener {
     private void refreshActivities() {
         model.setDataVector(getTable(activities.listAllActivities()), activities.columnNames());
     }
-    
+
     private void refreshActivityMembers(String a_id) {
         modelMembers.setDataVector(getTable(activities.listAllMembersFromActivity(a_id)), activities.columnNamesActivity());
     }
@@ -132,10 +143,10 @@ public class DBControl implements ActionListener, ItemListener {
 
         String letter = lastId.replaceAll("[0-9]", "");
         String code = lastId.replaceAll("[\\D]", "");
-        
+
         // Cantidad de 0's que debemos incluir
         int c = 4 - letter.length();
-        
+
         return String.format(letter + "%0" + c + "d", Integer.parseInt(code) + 1);
     }
 
@@ -270,7 +281,7 @@ public class DBControl implements ActionListener, ItemListener {
         }
         return cModel;
     }
-    
+
     private DefaultComboBoxModel<String> getMembersCombo() {
         membersId.clear();
         DefaultComboBoxModel<String> cModel = new DefaultComboBoxModel<>();
@@ -281,14 +292,14 @@ public class DBControl implements ActionListener, ItemListener {
         }
         return cModel;
     }
-    
+
     private void openRegisterDialog() {
         modelMembers.setRowCount(0);
         registerDialog.actCombo.setModel(getActivityCombo());
         registerDialog.membersCombo.setModel(getMembersCombo());
         registerDialog.setVisible(true);
     }
-    
+
     private void closeDialog() {
         switch (current) {
             case "Member":
@@ -315,7 +326,7 @@ public class DBControl implements ActionListener, ItemListener {
                         m = main.getSession().get(Member1.class, memberDialog.num.getText());
                         break;
                 }
-                
+
                 m.setMNum(memberDialog.num.getText());
                 m.setMName(memberDialog.name.getText());
                 m.setMId(memberDialog.id.getText());
@@ -324,9 +335,9 @@ public class DBControl implements ActionListener, ItemListener {
                 m.setMEmailmember(memberDialog.email.getText());
                 m.setMStartingdatemember(v.getDateString(memberDialog.startingDate.getDate()));
                 m.setMCathegorymember(memberDialog.cathegory.getText().charAt(0));
-                
+
                 ver = v.verify(m);
-                
+
                 if (ver != null) {
                     main.getDialog().show(-1, ver);
                 } else {
@@ -342,7 +353,6 @@ public class DBControl implements ActionListener, ItemListener {
                 }
                 break;
 
-
             case "Trainer":
                 Trainer t = new Trainer();
                 switch (action) {
@@ -350,7 +360,7 @@ public class DBControl implements ActionListener, ItemListener {
                         t = main.getSession().get(Trainer.class, trainDialog.code.getText());
                         break;
                 }
-                
+
                 t.setTCod(trainDialog.code.getText());
                 t.setTName(trainDialog.name.getText());
                 t.setTIdnumber(trainDialog.id.getText());
@@ -358,9 +368,9 @@ public class DBControl implements ActionListener, ItemListener {
                 t.setTEmail(trainDialog.email.getText());
                 t.setTDate(v.getDateString(trainDialog.date.getDate()));
                 t.setTNick(trainDialog.nick.getText());
-                
+
                 ver = v.verify(t);
-                
+
                 if (ver != null) {
                     main.getDialog().show(-1, ver);
                 } else {
@@ -377,13 +387,14 @@ public class DBControl implements ActionListener, ItemListener {
                 break;
 
             case "Activity":
-                Activity a = new Activity();;
+                Activity a = new Activity();
+                ;
                 switch (action) {
                     case "Update":
                         a = main.getSession().get(Activity.class, activityDialog.id.getText());
                         break;
                 }
-                
+
                 a.setAId(activityDialog.id.getText());
                 a.setAName(activityDialog.name.getText());
                 a.setADescription(activityDialog.description.getText());
@@ -426,7 +437,7 @@ public class DBControl implements ActionListener, ItemListener {
                 break;
         }
     }
-    
+
     @Override
     public void actionPerformed(ActionEvent e) {
         int row;
@@ -452,7 +463,7 @@ public class DBControl implements ActionListener, ItemListener {
                     refreshActivities();
                     showPanels(true);
                     break;
-                    
+
                 case "RegisterMem":
                     current = "RegisterMembers";
                     openRegisterDialog();
@@ -498,7 +509,7 @@ public class DBControl implements ActionListener, ItemListener {
                     closeDialog();
                     showPanels(true);
                     break;
-                    
+
                 // Register Dialog buttons
                 case "Add member":
                     // Get members combo idx
@@ -511,13 +522,13 @@ public class DBControl implements ActionListener, ItemListener {
                     } else {
                         String act_id = activitiesId.get(actIdx - 1);
                         String mem_id = membersId.get(row - 1);
-                        
+
                         System.out.println(act_id + " " + mem_id);
                         activities.addMemberToActivity(act_id, mem_id);
                         refreshActivityMembers(act_id);
                     }
                     break;
-                    
+
                 case "Delete member":
                     // Delete member from selected activity
                     row = registerDialog.tableMembersManage.getSelectedRow();
@@ -529,12 +540,12 @@ public class DBControl implements ActionListener, ItemListener {
                     } else {
                         String act_id = activitiesId.get(actIdx - 1);
                         String mem_id = (String) modelMembers.getValueAt(row, 0);
-                        
+
                         activities.deleteMemberFromActivity(act_id, mem_id);
                         refreshActivityMembers(act_id);
                     }
                     break;
-                    
+
                 case "Delete all":
                     // Delete all members from selected activity
                     actIdx = registerDialog.actCombo.getSelectedIndex();
@@ -542,11 +553,63 @@ public class DBControl implements ActionListener, ItemListener {
                         main.getDialog().show(-1, "You must select an activity");
                     } else {
                         String act_id = activitiesId.get(actIdx - 1);
-                        
+
                         activities.deleteAllFromActivity(act_id);
                         refreshActivityMembers(act_id);
                     }
                     break;
+
+                /// DEFENSE CODE
+                case "Membership":
+                    membershipDialog.lblAct.setText("0");
+                    membershipDialog.lblFee.setText("0");
+                    membershipDialog.txtMemCode.setText("");
+                    membershipDialog.setVisible(true);
+                    break;
+
+                case "Select":
+                    String code = membershipDialog.txtMemCode.getText();
+                    // Check if the code is right
+                    boolean ok = false;
+                    if (!code.equals("")) {
+                        // looking for the code in the member table
+                        for (Object[] orow : members.listAllMembers()) {
+                            if (code.equals(orow[0])) {
+                                ok = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!ok) {
+                        main.getDialog().show(-1, "Member code doesn't exists");
+                    } else {
+                        /*
+                            In MariaDB database the data type of the price it's an Integer while the 
+                            data type in the Oracle database it's a BigDecimal
+                         */
+                        ArrayList<Object> activitiesFee = members.activitiesFeeFromMember(code);
+                        int result = 0;
+                        
+                        switch ((String)main.getLoginView().comboServer.getSelectedItem()) {
+                            case "Oracle":
+                                for (Object o : activitiesFee) {
+                                    BigDecimal price = (BigDecimal) o;
+                                    result += price.intValue();
+                                }
+                                break;
+                                
+                            case "MariaDB":
+                                for (Object o : activitiesFee) {
+                                    Integer price = (Integer) o;
+                                    result += price;
+                                }
+                                break;
+                        }
+                        membershipDialog.lblAct.setText(String.valueOf(activitiesFee.size()));
+                        membershipDialog.lblFee.setText(String.valueOf(result));
+                    }
+                    break;
+                /// ---------------------------------------------
             }
         } catch (PersistenceException ex) {
             main.getDialog().show(-1, "SQL error: " + ex.getMessage());
@@ -557,21 +620,21 @@ public class DBControl implements ActionListener, ItemListener {
             main.getDialog().show(-1, "Unexpected error: " + ex.getMessage());
         }
     }
-    
+
     @Override
     public void itemStateChanged(ItemEvent e) {
         switch (current) {
             case "RegisterMembers":
                 int idx = registerDialog.actCombo.getSelectedIndex();
                 if (idx != 0) {
-                    refreshActivityMembers(activitiesId.get(idx-1));
+                    refreshActivityMembers(activitiesId.get(idx - 1));
                 } else {
                     modelMembers.setRowCount(0);
                 }
                 break;
         }
     }
-    
+
     public void show() {
         members = new MemberDAO(main.getSession());
         trainers = new TrainerDAO(main.getSession());

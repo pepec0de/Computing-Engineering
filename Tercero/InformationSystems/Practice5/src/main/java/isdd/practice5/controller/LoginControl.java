@@ -109,5 +109,9 @@ public class LoginControl implements ActionListener, ItemListener {
     public Session getSession() {
         return session;
     }
+    
+    public LoginView getLoginView() {
+        return view;
+    }
 
 }

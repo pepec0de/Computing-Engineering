@@ -36,8 +36,12 @@ public class DBView extends JFrame {
         mActivities = new JMenu("Activities");
         mActivManage = new JMenuItem("Activities Management");
         mActivManage.setActionCommand("ActivManage");
-        mRegisterMem = new JMenuItem("Members in activities");
+        mRegisterMem = new JMenuItem("Members Management By Activity");
         mRegisterMem.setActionCommand("RegisterMem");
+        
+        mDefense = new JMenu("Defense");
+        mMembership = new JMenuItem("Membership Fee");
+        mMembership.setActionCommand("Membership");
         
         menuBar.add(mMain);
         mMain.add(mExit);
@@ -51,6 +55,9 @@ public class DBView extends JFrame {
         menuBar.add(mActivities);
         mActivities.add(mActivManage);
         mActivities.add(mRegisterMem);
+        
+        menuBar.add(mDefense);
+        mDefense.add(mMembership);
         
         setJMenuBar(menuBar);
     }
@@ -176,4 +183,6 @@ private JMenu mActivities;
 public JMenuItem mActivManage;
 public JMenuItem mRegisterMem;
 
+private JMenu mDefense;
+public JMenuItem mMembership;
 }

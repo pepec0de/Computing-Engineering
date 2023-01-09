@@ -53,7 +53,8 @@ public class ActivityDAO {
     
     public ArrayList<Object[]> listAllMembersFromActivity(String A_ID) {
         Transaction tr = session.beginTransaction();
-        Query query = session.createNativeQuery("SELECT m.M_NUM, m.M_NAME, m.M_EMAILMEMBER FROM PERFORMS p INNER JOIN \"MEMBER\" m ON p.P_NUM = m.M_NUM WHERE p.P_ID = \'" + A_ID + "\'");
+        
+        Query query = session.createNativeQuery("SELECT m.M_NUM, m.M_NAME, m.M_EMAILMEMBER FROM PERFORMS p INNER JOIN MEMBER m ON p.P_NUM = m.M_NUM WHERE p.P_ID = \'" + A_ID + "\'");
 
         ArrayList<Object[]> list = (ArrayList<Object[]>) query.list();
 
