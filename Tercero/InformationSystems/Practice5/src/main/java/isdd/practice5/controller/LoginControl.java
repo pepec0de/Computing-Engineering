@@ -15,7 +15,6 @@ import org.hibernate.Session;
  */
 public class LoginControl implements ActionListener, ItemListener {
 
-    // TODO : ADD ERROR MANAGEMENT IN STORED PROCEDURE
     private LoginView view;
     private DialogView dialog;
     private DBView dbView;

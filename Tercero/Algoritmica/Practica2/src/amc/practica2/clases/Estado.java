@@ -1,6 +1,6 @@
 package amc.practica2.clases;
 
-public class Estado {
+public class Estado implements Cloneable {
 	
 	private String label;
 	private int id;
@@ -16,6 +16,12 @@ public class Estado {
 
 	public int getId() {
 		return id;
+	}
+	
+	@Override
+	public Object clone() {
+		Estado est = new Estado(label);
+		return est;
 	}
 	
 	

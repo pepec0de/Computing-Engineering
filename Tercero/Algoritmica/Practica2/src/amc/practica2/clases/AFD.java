@@ -10,8 +10,9 @@ import java.util.List;
 public class AFD implements Cloneable, IAutomata {
 	
 	private List<Estado> estados;
-	private List<Integer> estadosFinales; // indica cuales son los estados Finales
-	private List<TransicionAFD> transiciones; // indica la lista de transiciones del AFD
+	private List<Integer> estadosFinales; // indica el indice de los estados que son Finales
+	private List<Transicion> transiciones; // transiciones del AFD
+	private Estado inicial;
 
 	public AFD() {
 		estados = new ArrayList<>();
@@ -20,12 +21,12 @@ public class AFD implements Cloneable, IAutomata {
 	}
 
 	public void agregarTransicion(int e1, char simbolo, int e2) {
-		transiciones.add(new TransicionAFD(e1, simbolo, e2));
+		transiciones.add(new Transicion(e1, simbolo, e2));
 	}
 
 	public int transicion(int estado, char simbolo) {
 		// Buscamos la Transicion que corresponda con estado y simbolo
-		for (TransicionAFD transicion : transiciones) {
+		for (Transicion transicion : transiciones) {
 			if (transicion.getEstadoOrigen() == estado && transicion.getSimbolo() == simbolo) {
 				return transicion.getEstadoDestino();
 			}
@@ -71,6 +72,7 @@ public class AFD implements Cloneable, IAutomata {
 			}
 			else if (line.indexOf(lInic) != -1) {
 				// Estado inicial
+				afd.inicial = new Estado(line.substring(lInic.length(), line.length()));
 			}
 			else if (line.indexOf(lFinales) != -1) {
 				String[] estados = line.substring(lEstados.length(), line.length()).split(" ");
@@ -81,7 +83,29 @@ public class AFD implements Cloneable, IAutomata {
 			else if (line.indexOf(lTransic) != -1) {
 				transic = true;
 			} else if (transic) {
+				String[] transicion = line.split(" ");
+				char simbolo = transicion[1].replaceAll("\'", "").charAt(0);
+				int s1, s2;
+				s1 = Integer.parseInt(transicion[0].replaceAll("[^0-9]", ""));
+				s2 = Integer.parseInt(transicion[2].replaceAll("[^0-9]", ""));
+				boolean ok1 = false, ok2 = false;
 				
+				// Comprobamos que los estados esten en la lista de estados
+				for (Estado state : afd.estados) {
+					if (state.getId() == s1) {
+						ok1 = true;
+					} else if (state.getId() == s2) {
+						ok2 = true;
+					}
+				}
+				// Si no estan devolvemos error
+				if (!ok1 || !ok2) {
+					return null;
+				}
+				afd.transiciones.add(new Transicion(s1, simbolo, s2));
+			}
+			else if (line.indexOf(lFin) != -1) {
+				transic = false;
 			}
 		}
 		return afd;
@@ -92,7 +116,24 @@ public class AFD implements Cloneable, IAutomata {
 		return null;
 	}
 	
+	@Override
 	public Object clone() {
-		return null;
+		AFD afd = new AFD();
+		
+		afd.inicial = (Estado) inicial.clone();
+		
+		for (Estado est : estados) {
+			afd.estados.add(est);
+		}
+		
+		for (int est : estadosFinales) {
+			afd.estadosFinales.add(est);
+		}
+		
+		for (Transicion trans : transiciones) {
+			afd.transiciones.add(trans);
+		}
+		
+		return afd;
 	}
 }
