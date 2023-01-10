@@ -2,20 +2,20 @@ package amc.practica2.clases;
 
 public class Transicion {
 
-	private int estadoOrigen, estadoDestino;
+	private Estado estadoOrigen, estadoDestino;
 	private char simbolo;
 	
-	public Transicion(int estadoOrigen, char simbolo, int estadoDestino) {
+	public Transicion(Estado estadoOrigen, char simbolo, Estado estadoDestino) {
 		this.estadoOrigen = estadoOrigen;
 		this.estadoDestino = estadoDestino;
 		this.simbolo = simbolo;
 	}
 	
-	public int getEstadoOrigen() {
+	public Estado getEstadoOrigen() {
 		return estadoOrigen;
 	}
 
-	public int getEstadoDestino() {
+	public Estado getEstadoDestino() {
 		return estadoDestino;
 	}
 

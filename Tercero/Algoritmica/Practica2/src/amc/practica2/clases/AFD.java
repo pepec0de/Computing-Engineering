@@ -10,25 +10,28 @@ import java.util.List;
 public class AFD implements Cloneable, IAutomata {
 	
 	private List<Estado> estados;
-	private List<Integer> estadosFinales; // indica el indice de los estados que son Finales
+	private List<Estado> estadosFinales; // indica el indice de los estados que son Finales
 	private List<Transicion> transiciones; // transiciones del AFD
 	private Estado inicial;
+	private List<Estado> pasos;
 
 	public AFD() {
 		estados = new ArrayList<>();
 		estadosFinales = new ArrayList<>();
 		transiciones = new ArrayList<>();
+		pasos = new ArrayList<>();
 	}
 
-	public void agregarTransicion(int e1, char simbolo, int e2) {
+	public void agregarTransicion(Estado e1, char simbolo, Estado e2) {
 		transiciones.add(new Transicion(e1, simbolo, e2));
 	}
 
 	public int transicion(int estado, char simbolo) {
 		// Buscamos la Transicion que corresponda con estado y simbolo
 		for (Transicion transicion : transiciones) {
-			if (transicion.getEstadoOrigen() == estado && transicion.getSimbolo() == simbolo) {
-				return transicion.getEstadoDestino();
+			if (transicion.getEstadoOrigen().getId() == estado && transicion.getSimbolo() == simbolo) {
+				pasos.add(transicion.getEstadoDestino());
+				return transicion.getEstadoDestino().getId();
 			}
 		}
 		return -1;
@@ -36,8 +39,11 @@ public class AFD implements Cloneable, IAutomata {
 	
 	@Override
 	public boolean esFinal(int estado) {
+		if (estado == -1)
+			return false;
+		
 		for (int i = 0; i < estadosFinales.size(); i++) {
-			if (estadosFinales.get(i) == estado)
+			if (estadosFinales.get(i).getId() == estado)
 				return true;
 		}
 		return false;
@@ -45,6 +51,8 @@ public class AFD implements Cloneable, IAutomata {
 	
 	@Override
 	public boolean reconocer(String cadena) {
+		pasos.clear();
+		pasos.add(inicial);
 		char[] simbolo = cadena.toCharArray();
 		int estado = 0; // El estado inicial es el 0
 		for (int i = 0; i < simbolo.length; i++) {
@@ -53,13 +61,17 @@ public class AFD implements Cloneable, IAutomata {
 		return esFinal(estado);
 	}
 	
+	public List<Estado> getPasos() {
+		return pasos;
+	}
+	
 	public static AFD readAFDFile(File f) throws IOException {
 		AFD afd = new AFD();
 		BufferedReader br = new BufferedReader(new FileReader(f));
 		String line;
-		String lEstados = "ESTADOS: ";
-		String lInic = "INICIAL: ";
-		String lFinales = "FINALES: ";
+		String lEstados = "ESTADOS:";
+		String lInic = "INICIAL:";
+		String lFinales = "FINALES:";
 		String lTransic = "TRANSICIONES:";
 		String lFin = "FIN";
 		boolean transic = false;
@@ -67,7 +79,9 @@ public class AFD implements Cloneable, IAutomata {
 			if (line.indexOf(lEstados) != -1) {
 				String[] strEstados = line.substring(lEstados.length(), line.length()).split(" ");
 				for (String est : strEstados) {
-					afd.estados.add(new Estado(est));
+					if (!est.strip().equals("")) {
+						afd.estados.add(new Estado(est));
+					}
 				}
 			}
 			else if (line.indexOf(lInic) != -1) {
@@ -77,12 +91,18 @@ public class AFD implements Cloneable, IAutomata {
 			else if (line.indexOf(lFinales) != -1) {
 				String[] estados = line.substring(lEstados.length(), line.length()).split(" ");
 				for (String est : estados) {
-					afd.estadosFinales.add(Integer.parseInt(est.replaceAll("[^0-9]", "")));
+					if (!est.strip().equals("")) {
+						afd.estadosFinales.add(new Estado(est));
+					}
 				}
 			}
 			else if (line.indexOf(lTransic) != -1) {
 				transic = true;
-			} else if (transic) {
+			} 
+			else if (line.indexOf(lFin) != -1) {
+				transic = false;
+			}
+			else if (transic) {
 				String[] transicion = line.split(" ");
 				char simbolo = transicion[1].replaceAll("\'", "").charAt(0);
 				int s1, s2;
@@ -94,7 +114,8 @@ public class AFD implements Cloneable, IAutomata {
 				for (Estado state : afd.estados) {
 					if (state.getId() == s1) {
 						ok1 = true;
-					} else if (state.getId() == s2) {
+					}
+					if (state.getId() == s2) {
 						ok2 = true;
 					}
 				}
@@ -102,18 +123,30 @@ public class AFD implements Cloneable, IAutomata {
 				if (!ok1 || !ok2) {
 					return null;
 				}
-				afd.transiciones.add(new Transicion(s1, simbolo, s2));
+				afd.transiciones.add(new Transicion(afd.estados.get(s1), simbolo, afd.estados.get(s2)));
 			}
-			else if (line.indexOf(lFin) != -1) {
-				transic = false;
-			}
+
 		}
 		return afd;
 	}
 	
 	@Override
 	public String toString() {
-		return null;
+		String result = "ESTADOS: ";
+		for (Estado est : estados) {
+			result += est.getLabel() + " ";
+		}
+		result += "\nINICIAL: " + inicial.getLabel();
+		result += "\nFINALES:";
+		for (Estado est : estadosFinales) {
+			result += est.getLabel() + " ";
+		}
+		result += "\nTRANSICIONES:\n";
+		for (Transicion trans : transiciones) {
+			result += " " + trans.getEstadoOrigen().getLabel() + " \'" + trans.getSimbolo() + "\' " + trans.getEstadoDestino().getLabel() + "\n";
+		}
+		
+		return result;
 	}
 	
 	@Override
@@ -126,7 +159,7 @@ public class AFD implements Cloneable, IAutomata {
 			afd.estados.add(est);
 		}
 		
-		for (int est : estadosFinales) {
+		for (Estado est : estadosFinales) {
 			afd.estadosFinales.add(est);
 		}
 		
