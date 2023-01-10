@@ -115,8 +115,8 @@ public class MainVentana extends JFrame {
 	}
 	
 	private void updateEstado() {
-		txtEstado.setText(pasos.get(idx).getLabel());
-		txtSimbolo.setText(idx > cadena.length()-1 ? "" : String.valueOf(cadena.charAt(idx)));
+		txtEstado.setText(idx > pasos.size()-1 ? "" : pasos.get(idx).getLabel());
+		txtSimbolo.setText(idx > cadena.length() - 1 ? "" : String.valueOf(cadena.charAt(idx)));
 		txtResultado.setText("");
 	}
 	
