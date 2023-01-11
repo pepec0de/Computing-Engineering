@@ -1,6 +1,7 @@
 package pcd.examen21.e3;
 
-import pcd.examen21.e1.*;
+import java.util.concurrent.Semaphore;
+
 
 /**
  *
@@ -9,35 +10,43 @@ import pcd.examen21.e1.*;
 public class Furgoneta implements Runnable {
 
     private int id;
-    private Tunel tunel;
+    private Semaphore prelavado, lavado, secado;
 
-    public Furgoneta(int id, Tunel tunel) {
+    public Furgoneta(int id, Semaphore prelavado, Semaphore lavado, Semaphore secado) {
         this.id = id;
-        this.tunel = tunel;
+        this.prelavado = prelavado;
+        this.lavado = lavado;
+        this.secado = secado;
     }
     
     @Override
     public void run() {
         try {
             System.out.println("Furgo " + id + " esperando");
-            tunel.entraFurgo();
+            
+            prelavado.acquire();
             
             // Prelavado
             System.out.println("Furgo " + id + " Pre");
             Thread.sleep(2000);
             
+            lavado.acquire();
+            prelavado.release();
+            
             // Lavado
-            tunel.lavar();
             System.out.println("Furgo " + id + " Lavando");
             Thread.sleep(2000);
             
+            secado.acquire();
+            lavado.release();
+            
             // Secado
-            tunel.secar(true);
             System.out.println("Furgo " + id + " Secando");
             Thread.sleep(2000);
             
+            secado.release();
+            
             System.out.println("Furgo " + id + " sale");
-            tunel.saleFurgo();
         } catch (InterruptedException ex) {
             System.out.println("ERROR: Furgo " + id + ex.getMessage());
         }
