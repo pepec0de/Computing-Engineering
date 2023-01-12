@@ -13,24 +13,20 @@ public class AFD implements Cloneable, IAutomata {
 	private List<Estado> estadosFinales; // indica el indice de los estados que son Finales
 	private List<Transicion> transiciones; // transiciones del AFD
 	private Estado inicial;
-	private List<Estado> pasos;
+	private List<Estado> solucionPasos;
 
 	public AFD() {
 		estados = new ArrayList<>();
 		estadosFinales = new ArrayList<>();
 		transiciones = new ArrayList<>();
-		pasos = new ArrayList<>();
-	}
-
-	public void agregarTransicion(Estado e1, char simbolo, Estado e2) {
-		transiciones.add(new Transicion(e1, simbolo, e2));
+		solucionPasos = new ArrayList<>();
 	}
 
 	public int transicion(int estado, char simbolo) {
 		// Buscamos la Transicion que corresponda con estado y simbolo
 		for (Transicion transicion : transiciones) {
 			if (transicion.getEstadoOrigen().getId() == estado && transicion.getSimbolo() == simbolo) {
-				pasos.add(transicion.getEstadoDestino());
+				solucionPasos.add(transicion.getEstadoDestino());
 				return transicion.getEstadoDestino().getId();
 			}
 		}
@@ -51,8 +47,8 @@ public class AFD implements Cloneable, IAutomata {
 	
 	@Override
 	public boolean reconocer(String cadena) {
-		pasos.clear();
-		pasos.add(inicial);
+		solucionPasos.clear();
+		solucionPasos.add(inicial);
 		char[] simbolo = cadena.toCharArray();
 		int estado = 0; // El estado inicial es el 0
 		for (int i = 0; i < simbolo.length; i++) {
@@ -62,7 +58,7 @@ public class AFD implements Cloneable, IAutomata {
 	}
 	
 	public List<Estado> getPasos() {
-		return pasos;
+		return solucionPasos;
 	}
 	
 	public static AFD readAFDFile(File f) throws IOException {

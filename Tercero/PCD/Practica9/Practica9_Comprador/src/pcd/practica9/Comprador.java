@@ -5,8 +5,6 @@
 package pcd.practica9;
 
 import java.net.MalformedURLException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.*;
 
 /**
@@ -19,7 +17,6 @@ public class Comprador {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws RemoteException, NotBoundException, InterruptedException, MalformedURLException {
-        //Registry r = LocateRegistry.getRegistry("localhost", 1234);
         ICliente cliente = (ICliente) Naming.lookup("rmi://localhost:1234/tienda");
         int id = (int) ProcessHandle.current().pid();
         

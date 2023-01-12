@@ -1,9 +1,12 @@
 package amc.practica2.clases;
 
-public class TransicionL {
-	private Estado e1, e2;
+import java.util.List;
 
-	public TransicionL(Estado e1, Estado e2) {
+public class TransicionL {
+	private Estado e1;
+	private List<Estado> e2;
+
+	public TransicionL(Estado e1, List<Estado> e2) {
 		super();
 		this.e1 = e1;
 		this.e2 = e2;
@@ -13,7 +16,7 @@ public class TransicionL {
 		return e1;
 	}
 
-	public Estado getEstadoDestino() {
+	public List<Estado> getEstadosDestino() {
 		return e2;
 	}
 	

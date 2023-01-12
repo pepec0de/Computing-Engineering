@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import amc.practica2.clases.*;
 
@@ -15,12 +17,17 @@ import amc.practica2.clases.*;
 public class MainVentana extends JFrame {
 	
 	private String cadena;
-	private AFD automata;
-	private List<Estado> pasos;
+	private AFD afd;
+	private AFND afnd;
+	private List<Estado> pasosAFD;
+	private List<int[]> pasosAFND;
 	private int idx;
 	private boolean resultado;
+	private boolean cargado;
 	
 	public MainVentana() {
+		
+		cargado = false;
 		
 		setTitle("Práctica 2");
 		setResizable(false);
@@ -34,6 +41,30 @@ public class MainVentana extends JFrame {
 	}
 	
 	private void initActions() {
+		radioAFD.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if (radioAFND.isSelected())
+					radioAFND.setSelected(false);
+				else
+					radioAFD.setSelected(true);
+			}
+		});
+		
+		radioAFND.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if (radioAFD.isSelected())
+					radioAFD.setSelected(false);
+				else
+					radioAFND.setSelected(true);
+			}
+		});
+		
 		// Abrir
 		itemAbrir.addActionListener(new ActionListener() {
 			
@@ -45,11 +76,20 @@ public class MainVentana extends JFrame {
 				int r = ch.showOpenDialog(null);
 				
 				if (r == JFileChooser.APPROVE_OPTION) {
+					afd = null;
+					afnd = null;
 					File f = ch.getSelectedFile().getAbsoluteFile();
 					// Leer archivo
 					try {
-						automata = AFD.readAFDFile(f);
-						areaAutomata.setText(automata.toString());
+						if (radioAFD.isSelected()) {
+							afd = AFD.readAFDFile(f);
+							areaAutomata.setText(afd.toString());
+						} else {
+							afnd = AFND.readAFNDFile(f);
+							areaAutomata.setText(afnd.toString());
+						}
+						
+						cargado = true;
 					} catch (IOException ex) {
 						showMessage(-1, "No se pudo abrir el fichero: " + ex.getMessage());
 					}
@@ -62,15 +102,19 @@ public class MainVentana extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (automata == null) {
+				if (!cargado) {
 					showMessage(-1, "Abra un autómata");
 				} else if (txtSecuencia.getText().equals("")){
 					showMessage(-1, "Indique una secuencia de simbolos");
 				} else {
 					idx = 0;
 					cadena = txtSecuencia.getText();
-					resultado = automata.reconocer(cadena);
-					pasos = automata.getPasos();
+					resultado = afd != null ? afd.reconocer(cadena) : afnd.reconocer(cadena);
+					if (afd != null) {
+						pasosAFD = afd.getPasos();
+					} else {
+						pasosAFND = afnd.getPasos();
+					}
 					updateEstado();
 				}
 			}
@@ -105,17 +149,33 @@ public class MainVentana extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (pasos != null) {
-					idx = pasos.size() - 1;
-					updateEstado();
-					txtResultado.setText(resultado ? "ACEPTADA" : "RECHAZADA");
+				if (radioAFD.isSelected()) {
+					if (pasosAFD != null) {
+						idx = pasosAFD.size() - 1;
+						updateEstado();
+						txtResultado.setText(resultado ? "ACEPTADA" : "RECHAZADA");
+					}
+				} else {
+					if (pasosAFND != null) {
+						idx = pasosAFND.size()-1;
+						updateEstado();
+						txtResultado.setText(resultado ? "ACEPTADA" : "RECHAZADA");
+					}
 				}
 			}
 		});
 	}
 	
 	private void updateEstado() {
-		txtEstado.setText(idx > pasos.size()-1 ? "" : pasos.get(idx).getLabel());
+		if (radioAFD.isSelected()) {
+			txtEstado.setText(idx > pasosAFD.size()-1 ? "" : pasosAFD.get(idx).getLabel());
+		} else {
+			String estado = "[";
+			for (int i = 0; i < pasosAFND.get(idx).length; i++) {
+				estado += pasosAFND.get(idx)[i] + (i == pasosAFND.get(idx).length-1 ? "]" : ", ");
+			}
+			txtEstado.setText(estado);
+		}
 		txtSimbolo.setText(idx > cadena.length() - 1 ? "" : String.valueOf(cadena.charAt(idx)));
 		txtResultado.setText("");
 	}
@@ -149,6 +209,9 @@ public class MainVentana extends JFrame {
         jLabel5 = new JLabel();
         txtResultado = new JTextField();
         txtResultado.setEditable(false);
+        radioAFD = new JRadioButton();
+        radioAFND = new JRadioButton();
+        jLabel6 = new JLabel();
         
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -173,6 +236,13 @@ public class MainVentana extends JFrame {
         jLabel4.setText("Símbolo actual");
 
         jLabel5.setText("Resultado");
+        
+        radioAFD.setSelected(true);
+        radioAFD.setText("AFD");
+
+        radioAFND.setText("AFND");
+
+        jLabel6.setText("Tipo:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -184,7 +254,8 @@ public class MainVentana extends JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtSecuencia)
@@ -206,7 +277,11 @@ public class MainVentana extends JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtEstado)
                                     .addComponent(txtSimbolo, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
-                                    .addComponent(txtResultado))))
+                                    .addComponent(txtResultado)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(radioAFD, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(radioAFND, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 35, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -217,11 +292,16 @@ public class MainVentana extends JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(radioAFD)
+                            .addComponent(radioAFND)
+                            .addComponent(jLabel6))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(txtSecuencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(btnSimular)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(txtEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -233,7 +313,7 @@ public class MainVentana extends JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
                             .addComponent(txtResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnPasoAnt)
                             .addComponent(jLabel2)
@@ -265,6 +345,8 @@ public class MainVentana extends JFrame {
 	private JTextField txtSimbolo;
 	private JLabel jLabel5;
 	private JTextField txtResultado;
+	private JRadioButton radioAFD, radioAFND;
+	private JLabel jLabel6;
 	
 	public void showMessage(int type, String msg) {
         switch (type) {
