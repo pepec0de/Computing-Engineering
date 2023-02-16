@@ -6,4 +6,4 @@
 */
 
 len(0, []).
-len((X+1), [_ | R]) :- len(X, R).
+len(NX, [_ | R]) :- len(X, R), NX is X + 1.
