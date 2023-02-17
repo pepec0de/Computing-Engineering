@@ -9,4 +9,4 @@ Hint: Use the predefined predicates is_list/1 and append/3
 */
 
 my_flatten([], []).
-my_flatten([Cab | Resto], NX) :- my_flatten(Resto, X), append(X, [Cab], Resto, NX).
+my_flatten([Cab | Resto], NX) :- my_flatten(Resto, X), append(X, [Cab | Resto], NX).
