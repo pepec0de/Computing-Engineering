@@ -9,5 +9,6 @@ X = [a,b,c,a,d,e]
 compress([], []).
 compress([X], [X]).
 compress([H | Resto], [H | X]) :- not(my_first(Resto, H)), compress(Resto, X).
+compress([H | Resto], X) :- my_first(Resto, H), compress(Resto, X).
 
 my_first([X | _], X).
