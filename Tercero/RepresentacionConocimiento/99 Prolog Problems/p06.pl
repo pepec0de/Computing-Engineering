@@ -8,5 +8,4 @@ palindrome([_]).
 palindrome([Cab | Resto]) :- last(Resto, Cab), eliminarUltimo(Resto, NL), palindrome(NL).
 
 eliminarUltimo([_], []).
-%eliminarUltimo([Cab | Resto], NX) :- eliminarUltimo(Resto, X), append([Cab], X, NX).
 eliminarUltimo([Cab | Resto], [Cab | NX]) :- eliminarUltimo(Resto, NX).

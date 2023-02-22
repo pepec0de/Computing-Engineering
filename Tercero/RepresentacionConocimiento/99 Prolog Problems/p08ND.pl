@@ -8,4 +8,6 @@ X = [a,b,c,a,d,e]
 
 compress([], []).
 compress([X], [X]).
-compress([C1, C2 | Resto], [C1 | X]) :- C1 == C2, compress(Resto, X).
+compress([H | Resto], [H | X]) :- not(my_first(Resto, H)), compress(Resto, X).
+
+my_first([X | _], X).
