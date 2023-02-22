@@ -8,4 +8,6 @@ If a list contains repeated elements they should be placed in separate sublists.
 */
 
 my_pack([X], [[X]]).
-my_pack([H | Resto], [Lista | X]) :- .
+my_pack([H | Resto], [Lista | X]) :- hacerLista(H, Resto, Lista, Resto2), my_pack(Resto2, X).
+
+hacerLista(H, [H | Resto], [H | Lista], Resto) :- hacerLista(H, Resto, Lista, Resto).

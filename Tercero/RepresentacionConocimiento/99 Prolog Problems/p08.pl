@@ -8,7 +8,5 @@ X = [a,b,c,a,d,e]
 
 compress([], []).
 compress([X], [X]).
-compress([H | Resto], [H | X]) :- not(my_first(Resto, H)), compress(Resto, X).
-compress([H | Resto], X) :- my_first(Resto, H), compress(Resto, X).
-
-my_first([X | _], X).
+compress([H, H | Resto], X) :- compress([H | Resto], X).
+compress([H1, H2 | Resto], [H1 | X]) :- H1 \= H2, compress([H2 | Resto], X).
