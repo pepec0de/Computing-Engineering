@@ -6,6 +6,8 @@ Duplicate the elements of a list a given number of times.
 
 */
 
-dupli([H | Resto])
+dupli([], _, []).
+dupli([H | Resto], N, NX) :- addntimes(H, N, L), append(L, X, NX), dupli(Resto, N, X).
 
-addntimes(N, E, Lista) :- 
+addntimes(_, 0, []).
+addntimes(E, N, [E | L]) :- N1 is N - 1, N > 0, addntimes(E, N1, L).

@@ -1,21 +1,32 @@
 /*
+my_pack(+Lista, -X).
+
 Pack consecutive duplicates of list elements into sublists.
 If a list contains repeated elements they should be placed in separate sublists.
 
     Example:
     ?- my_pack([a,a,a,a,b,c,c,a,a,d,e,e,e,e],X).
     X = [[a,a,a,a],[b],[c,c],[a,a],[d],[e,e,e,e]]
+
+Es cierto cuando X unifica con una lista que contiene listas agrupando todos los elementos repetidos
+
 */
 
+% Caso base
+my_pack([], []).
 my_pack([X], [[X]]).
-my_pack([H, H | Resto], X) :- my_pack([H | Resto], X).
 
-my_pack([H1, H2 | Resto], [Lista2 | X]) :- H1 \= H2, insertarEenLista(H1, Lista, Lista2), my_pack([H2 | Resto], [Lista | X]).
-
+my_pack(L, X) :- packInList(L, [], X).
 
 /*
-	hacerLista(+E, +N, -L)
-	
+    packInList(+ListaOriginal, +ListaAGenerar, -ListaDeListas).
+
+    Es cierto cuando ListaDeListas unifica con una lista que contiene listas agrupando todos los elementos repetidos de ListaOriginal
 */
-hacerLista(E, 0, []).
-hacerLista(E, N, [E | L]) :- N1 is N - 1, hacerLista(E, N1, L).
+
+% Caso base
+packInList([], _, []).
+packInList([E], Lista, [ [E | Lista] ]). 
+
+packInList([H, H | Resto], L, X) :- packInList([H | Resto], [H | L], X).
+packInList([H1, H2 | Resto], Lista, [[H1 | Lista] | X]) :- H1 \= H2, packInList([H2 | Resto], [], X).

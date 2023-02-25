@@ -7,4 +7,21 @@ Run-length encoding of a list.
     X = [[4,a],[1,b],[2,c],[2,a],[1,d],[4,e]]
 */
 
-encode()
+% Caso base
+my_encode([], []).
+my_encode([X], [[X]]).
+
+my_encode(L, X) :- packEncode(L, 1, X).
+
+/*
+    packEncode(+ListaOriginal, +N, -ListaDeListas).
+
+    Es cierto cuando ListaDeListas unifica con una lista que contiene listas agrupando todos los elementos repetidos de ListaOriginal
+*/
+
+% Caso base
+packEncode([], _, []).
+packEncode([E], N, [ [N, E] ]). 
+
+packEncode([H, H | Resto], N, X) :- N1 is N + 1, packEncode([H | Resto], N1, X).
+packEncode([H1, H2 | Resto], N, [[N, H1] | X]) :- H1 \= H2, packEncode([H2 | Resto], 1, X).
