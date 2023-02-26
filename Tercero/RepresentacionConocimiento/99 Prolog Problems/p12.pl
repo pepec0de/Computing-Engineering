@@ -19,4 +19,4 @@ my_decode([Cab | Resto], NX) :- addToList(Cab, X, NX), my_decode(Resto, X).
 
 addToList(E, X, [E | X]) :- not(is_list(E)).
 addToList([0, _], X, X).
-addToList([N, E], L, [E | L]) :- N > 0, N1 is N - 1, addToList([N1, E], L, _).
+addToList([N, E], L, [E | X]) :- N > 0, N1 is N - 1, addToList([N1, E], L, X).
