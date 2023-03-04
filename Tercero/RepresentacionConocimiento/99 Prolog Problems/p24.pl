@@ -1,4 +1,26 @@
 /*
+Lotto: Draw N different random numbers from the set 1..M.
+    The selected numbers shall be put into a result list.
+    Example:
+    ?- lotto(6,49,L).
+    L = [23,1,17,33,21,37]
+
+    Hint: Combine the solutions of problems P22 and P23.
+*/
+
+lotto(N, M, L) :- range(1, M, LInt), rnd_select(LInt, N, L).
+
+/*
+Create a list containing all integers within a given range.
+    Example:
+    ?- range(4,9,L).
+    L = [4,5,6,7,8,9]
+*/
+
+range(X, X, [X]).
+range(A, B, [A | L]) :- A1 is A + 1, A < B, range(A1, B, L).
+
+/*
     Extract a given number of randomly selected elements from a list.
     The selected items shall be put into a result list.
     Example:
