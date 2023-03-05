@@ -1,6 +1,6 @@
 function [IEtiq, N] = my_etiquetar(Ib)
 
-[nFilas nCol] = size(Ib);
+[nFilas, nCol] = size(Ib);
 IEtiq = double(Ib);
 
 
@@ -57,17 +57,19 @@ N = [];
 for i = 1 : nFilas
     for j = 1 : nCol
         encontrado = false;
-        [D, SZ] = size(N);
+        [~, SZ] = size(N);
         for k = 1 : SZ
             if N(k) == IEtiq(i, j)
                 encontrado = true;
             end
         end
         if ~encontrado
-            N = [N IEtiq(i, j)]
+            N = [N IEtiq(i, j)];
         end
     end
 end
+
+N(1) = [];
 
 end
 
