@@ -6,9 +6,7 @@ imtool(Imagen1)
 %% EJERCICIO 2
 Mbin = logical(double(Imagen1)/255);
 
-%% EJERCICIO 3
-
-%% Etiquetar
+%% EJERCICIO 3 - Etiquetar
 [ImgEtiq, N] = my_etiquetar(Mbin);
 
 [~, SZ] = size(N);
@@ -28,7 +26,16 @@ imtool(Imagen2)
 
 Areas = calcula_areas(ImgEtiq, N);
 Centroides = calcula_centroides(ImgEtiq, N);
+pmax = find(Areas == max(Areas));
+pmin = find(Areas == min(Areas));
+imshow(ImgEtiq), hold on, 
+plot(Centroides(pmax, 1), Centroides(pmax, 2), 'r*'), 
+plot(Centroides(pmin, 1), Centroides(pmin, 2), 'r*');
 
-Imagen3 = Imagen1;
-imshow(Imagen3), hold on, plot(Centroides(5, 1), Centroides(5, 2), 'r*');
+%% EJERCICIO 5
 
+AreasOrd = sort(Areas, 'descend');
+
+IbFilt = filtrar_objetos(Mbin, AreasOrd(2));
+
+imshow(IbFilt);

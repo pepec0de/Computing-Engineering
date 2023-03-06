@@ -7,5 +7,5 @@ areas = [];
 
 for i = 1:SZ
     MatBin = N(i) == IEtiq;
-    areas = [areas sum(MatBin(:))];
+    areas = [areas double(sum(MatBin(:)))];
 end
