@@ -1,4 +1,7 @@
+addpath('..\funciones\');
+
 %% EJERCICIO 1
+
 imfinfo("ImagenBinaria.tif")
 Imagen1 = imread("ImagenBinaria.tif");
 imtool(Imagen1)
