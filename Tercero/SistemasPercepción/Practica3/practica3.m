@@ -33,6 +33,12 @@ end
 
 subplot(2, 2, 1), imshow(I), title('Imagen Original');
 
+
+[IEtiq, N] = bwlabel(ImgBins(:, :, 1));
+Props = regionprops(IEtiq, 'Area', 'Centroid')
+
+subplot(2, 2, 2), imshow(my_visualiza(I, IbFilt, color, false));
+%%
 for i = 1:3
     % Obtenemos la matriz etiquetada
     [IEtiq, N] = bwlabel(ImgBins(:, :, i));
