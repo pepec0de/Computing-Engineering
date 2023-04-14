@@ -10,6 +10,7 @@ video.TriggerRepeat = 3;
 video.FramesPerTrigger = 3;
 video.FrameGrabInterval = 3;
 color = [255, 255, 0];
+
 %% EJERCICIO 1
 I = getsnapshot(video);
 
@@ -33,11 +34,24 @@ end
 
 subplot(2, 2, 1), imshow(I), title('Imagen Original');
 
+i = 1;
 
-[IEtiq, N] = bwlabel(ImgBins(:, :, 1));
-Props = regionprops(IEtiq, 'Area', 'Centroid')
+[IEtiq, N] = bwlabel(ImgBins(:, :, i));
 
-subplot(2, 2, 2), imshow(my_visualiza(I, IbFilt, color, false));
+Areas = zeros(N, 1);
+Centroides = zeros(N, 2);
+
+for j = 1:N
+    Props = regionprops(IEtiq == j, 'Area', 'Centroid');
+    Areas(j) = Props.Area;
+    Centroides(i, :) = Props.Centroid;
+end
+
+
+AreasOrd = sort(Areas, 'descend');
+
+IbFilt = bwareaopen(ImgBins(:, :, i), AreasOrd(5));
+subplot(2, 2, 2), imshow(my_visualiza(I, IbFilt, color, false)), hold on, plot(Centroides(1, 1), Centroides(1, 2), '*r');
 %%
 for i = 1:3
     % Obtenemos la matriz etiquetada
