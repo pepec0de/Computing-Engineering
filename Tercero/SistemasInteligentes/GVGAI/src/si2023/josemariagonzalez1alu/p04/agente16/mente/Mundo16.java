@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import core.game.Observation;
 import core.game.StateObservation;
+import si2023.josemariagonzalez1alu.p04.ia.busqueda.Posicion;
 import si2023.josemariagonzalez1alu.p04.ia.mente.Mundo;
+import tools.Vector2d;
 
 public class Mundo16 implements Mundo {
 	
@@ -18,8 +20,39 @@ public class Mundo16 implements Mundo {
 		COLUMNAS = stateObs.getObservationGrid().length;
 		FILAS = stateObs.getObservationGrid()[0].length;
 		
+		Vector2d pos = so.getAvatarPosition();
+		System.out.println(pos.x / BLOQUE + ", " + pos.y / BLOQUE);
 	}
 
+	// Funcion booleana que devuelve si es posible desplazarse a otra posicion sin perder
+	public boolean movablePosition(int x, int y) {
+		ArrayList<Observation> arr = stateObs.getObservationGrid()[x][y];
+		if (arr.size() == 0) {
+			return true;
+		} else {
+			switch (arr.get(0).itype) {
+			case Objeto.B_UP:
+			case Objeto.B_DOWN:
+			case Objeto.B_LEFT:
+			case Objeto.B_RIGHT:
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public int getTipo(int x, int y) {
+		return stateObs.getObservationGrid()[x][y].get(0).itype;
+	}
+	
+	public boolean esSuelo(int x, int y) {
+		return stateObs.getObservationGrid()[x][y].size() == 0;
+	}
+	
+	public Posicion getVectorPosicion(Vector2d v) {
+		return new Posicion(0, 0);
+	}
+	
 	@Override
 	public void actualizarMundo(StateObservation so) {
 		stateObs = so;
@@ -29,7 +62,7 @@ public class Mundo16 implements Mundo {
 	public StateObservation getMundo() {
 		return stateObs;
 	}
-
+	
 	public void imprimir() {
 		ArrayList<Observation>[][] grid = stateObs.getObservationGrid();
 		
