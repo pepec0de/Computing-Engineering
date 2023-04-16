@@ -12,22 +12,20 @@ import si2023.josemariagonzalez1alu.p04.ia.mente.Mundo;
 public class Busqueda16 extends Busqueda {
 
 	private Mundo16 m;
-	private NodoBusqueda start;
+	private NodoBusqueda start, meta;
 	
 	public Busqueda16(Mundo m) {
 		this.m = (Mundo16) m;
 	}
 	
 	public void pensar() {
-		Posicion initPos = m.getVectorPosicion(m.getMundo().getAvatarPosition());
-		start = new NodoBusqueda(m, Objeto.SUELO, initPos.x, initPos.y);
+		Posicion initPos = m.getAvatarPos();
+		Posicion posMeta = m.getMetaPos();
 		
-		/* TODO :
-		 * + Mundo16.posMeta : Posicion
-		 * funcion para sacar la posicion de la meta
-		 * inicializar correctamente el nodo start y el nodo meta
-		 * probar
-		*/
+		start = new NodoBusqueda(Objeto.SUELO, initPos.x, initPos.y);
+		meta = new NodoBusqueda(Objeto.META, posMeta.x, posMeta.y);
+		
+		
 		
 	}
 	

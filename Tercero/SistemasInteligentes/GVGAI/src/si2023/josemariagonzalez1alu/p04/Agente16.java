@@ -10,11 +10,12 @@ import tools.ElapsedCpuTimer;
 
 public class Agente16 extends AbstractPlayer {
 
-	private Mundo m;
+	private Mundo16 m;
 	private Busqueda16 busqueda;
 	
 	public Agente16(StateObservation arg0, ElapsedCpuTimer arg1) {
 		m = new Mundo16(arg0);
+		m.imprimir();
 		busqueda = new Busqueda16(m);
 		busqueda.pensar();
 	}

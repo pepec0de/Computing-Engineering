@@ -15,6 +15,13 @@ public class NodoBusqueda extends Nodo {
 	public int x, y;
 	public ArrayList<ACTIONS> acciones;
 
+	public NodoBusqueda(int tipo, int x, int y) {
+		this.tipo = tipo;
+		this.x = x;
+		this.y = y;
+		acciones = new ArrayList<>();
+	}
+	
 	public NodoBusqueda(Mundo16 m, int tipo, int x, int y) {
 		this.m = m;
 		this.tipo = tipo;

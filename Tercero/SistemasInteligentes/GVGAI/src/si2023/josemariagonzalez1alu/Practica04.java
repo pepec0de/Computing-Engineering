@@ -22,7 +22,7 @@ public class Practica04 {
 				
 		// Game and level to play
 		int gameIdx  = 16;
-		int levelIdx = 4; // level names from 0 to 4 (game_lvlN.txt).
+		int levelIdx = 0; // level names from 0 to 4 (game_lvlN.txt).
 		
 		String gameName = games[gameIdx][1];
 		String game = games[gameIdx][0];

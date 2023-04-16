@@ -11,8 +11,8 @@ import tools.Vector2d;
 public class Mundo16 implements Mundo {
 	
 	public final int BLOQUE, COLUMNAS, FILAS;
-	
 	private StateObservation stateObs;
+	private Posicion posMeta;
 
 	public Mundo16(StateObservation so) {
 		stateObs = so;
@@ -20,10 +20,25 @@ public class Mundo16 implements Mundo {
 		COLUMNAS = stateObs.getObservationGrid().length;
 		FILAS = stateObs.getObservationGrid()[0].length;
 		
-		Vector2d pos = so.getAvatarPosition();
-		System.out.println(pos.x / BLOQUE + ", " + pos.y / BLOQUE);
+		buscarMeta();
 	}
 
+	private void buscarMeta() {
+		ArrayList<Observation> grid[][] = stateObs.getObservationGrid();
+		
+		for (int i = 0; i < FILAS; i++) {
+			for (int j = 0; j < COLUMNAS; j++) {
+				for (Observation obs : grid[i][j]) {
+					if (obs.itype == Objeto.META) {
+						posMeta = getVectorPosicion(obs.position);
+						return;
+					}
+					break;
+				}
+			}
+		}
+	}
+	
 	// Funcion booleana que devuelve si es posible desplazarse a otra posicion sin perder
 	public boolean movablePosition(int x, int y) {
 		ArrayList<Observation> arr = stateObs.getObservationGrid()[x][y];
@@ -50,7 +65,15 @@ public class Mundo16 implements Mundo {
 	}
 	
 	public Posicion getVectorPosicion(Vector2d v) {
-		return new Posicion(0, 0);
+		return new Posicion((int) (v.x / BLOQUE), (int) (v.y / BLOQUE));
+	}
+	
+	public Posicion getAvatarPos() {
+		return getVectorPosicion(stateObs.getAvatarPosition());
+	}
+	
+	public Posicion getMetaPos() {
+		return posMeta;
 	}
 	
 	@Override
