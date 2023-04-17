@@ -10,7 +10,7 @@ public class Practica04 {
 
     public static void main(String[] args) {
 
-		String p0 = "si2023.josemariagonzalez1alu.p04.Agente16";
+		String p0 = "si2023.josemariagonzalez1alu.p05.Agente16";
 		
 		//Load available games
 		String spGamesCollection =  "examples/all_games_sp.csv";
