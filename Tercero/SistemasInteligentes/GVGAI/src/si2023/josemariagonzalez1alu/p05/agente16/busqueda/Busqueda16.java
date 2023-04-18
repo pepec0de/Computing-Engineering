@@ -16,7 +16,6 @@ public class Busqueda16 extends Busqueda {
 	private Mundo16 m;
 	private NodoBusqueda start;
 	
-	
 	public Busqueda16(Mundo m) {
 		this.m = (Mundo16) m;
 	}
@@ -36,7 +35,6 @@ public class Busqueda16 extends Busqueda {
 		ArrayList<NodoBusqueda> abiertos = new ArrayList<>();
 		abiertos.add(start);
 		HashSet<Posicion> checked = new HashSet<>();
-		
 		
 		while (!abiertos.isEmpty()) {
 			NodoBusqueda nodo = abiertos.remove(0);

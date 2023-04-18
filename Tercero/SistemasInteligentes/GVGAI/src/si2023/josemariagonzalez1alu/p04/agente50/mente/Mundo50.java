@@ -1,42 +1,58 @@
-package si2023.josemariagonzalez1alu.p05.agente16.mente;
+package si2023.josemariagonzalez1alu.p04.agente50.mente;
 
 import java.util.ArrayList;
 
 import core.game.Observation;
 import core.game.StateObservation;
-import si2023.josemariagonzalez1alu.p05.ia.busqueda.Posicion;
-import si2023.josemariagonzalez1alu.p05.ia.mente.Mundo;
+import si2023.josemariagonzalez1alu.p04.ia.busqueda.Posicion;
+import si2023.josemariagonzalez1alu.p04.ia.mente.Mundo;
 import tools.Vector2d;
 
-public class Mundo16 implements Mundo {
+public class Mundo50 implements Mundo {
 	
 	public final int BLOQUE, COLUMNAS, FILAS;
 	private StateObservation stateObs;
-	private Posicion posMeta;
+	private Posicion oligoPos;
 
-	public Mundo16(StateObservation so) {
+	public Mundo50(StateObservation so) {
 		stateObs = so;
 		BLOQUE = stateObs.getBlockSize();
 		COLUMNAS = stateObs.getObservationGrid().length;
 		FILAS = stateObs.getObservationGrid()[0].length;
+	
+		oligoPos = buscarOligoPos();
+	}
+	
+	private Posicion buscarOligoPos() {
+		ArrayList<Observation> grid[][] = stateObs.getObservationGrid();
+		for (int j = 0; j < FILAS; j++) {
+			for (int i = 0; i < COLUMNAS; i++) {
+				ArrayList<Observation> arr = grid[i][j];
+				for (Observation obs : arr)
+					if (obs.itype == Objeto.OLIGOELEMENTOS) {
+						return new Posicion(i, j);
+					}
+			}
+		}
+		return null;
 	}
 	
 	// Funcion booleana que devuelve si es posible desplazarse a otra posicion sin perder
 	public boolean movablePosition(int x, int y) {
 		ArrayList<Observation> arr = stateObs.getObservationGrid()[x][y];
-		if (arr.size() == 0) {
+		if (arr.isEmpty())
 			return true;
-		} else {
-			switch (arr.get(0).itype) {
-			case Objeto.B_UP:
-			case Objeto.B_DOWN:
-			case Objeto.B_LEFT:
-			case Objeto.B_RIGHT:
-			case Objeto.META:
-				return true;
-			}
+			
+		switch (arr.get(0).itype) {
+		case Objeto.META:
+			return true;
+			
+		case Objeto.OLIGOELEMENTOS:
+			return true;
+			
+		default:
+			return false;
 		}
-		return false;
 	}
 	
 	public boolean isWall(int x, int y) {
@@ -48,20 +64,6 @@ public class Mundo16 implements Mundo {
 			return false;
 		
 		return arr.get(0).itype == Objeto.PARED;
-	}
-	
-	public boolean isBooster(int x, int y) {
-		ArrayList<Observation> arr = stateObs.getObservationGrid()[x][y];
-		if (!arr.isEmpty()) {
-			switch (arr.get(0).itype) {
-			case Objeto.B_UP:
-			case Objeto.B_DOWN:
-			case Objeto.B_LEFT:
-			case Objeto.B_RIGHT:
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	public int getTipo(int x, int y) {
@@ -84,8 +86,9 @@ public class Mundo16 implements Mundo {
 		return getVectorPosicion(stateObs.getAvatarPosition());
 	}
 	
-	public Posicion getMetaPos() {
-		return posMeta;
+	// Posicion de los oligoelementos
+	public Posicion getOligoPos() {
+		return oligoPos;
 	}
 	
 	@Override
@@ -114,30 +117,15 @@ public class Mundo16 implements Mundo {
 						case 0:
 							mapa += "#";
 							break;
+						
+						case 3:
+							mapa += "S";
+							break;
 							
-						case 15: // Meta
+						case 4:
 							mapa += "M";
 							break;
 							
-						case 7: // DERECHA
-							mapa += ">";
-							break;
-						
-						case 8: // IZQUIERDA
-							mapa += "<";
-							break;
-						
-						case 6: // ARRIBA
-							mapa += "^";
-							break;
-							
-						case 5: // ABAJO
-							mapa += "|";
-							break;
-						
-						case 3: // AGUA
-							mapa += ".";
-							break;
 							default:
 								mapa += obs.itype;
 						}
