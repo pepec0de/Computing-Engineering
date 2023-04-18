@@ -5,7 +5,7 @@ import java.util.*;
 import tools.Utils;
 import tracks.ArcadeMachine;
 
-public class Practica04 {
+public class Practica05 {
 
 
     public static void main(String[] args) {

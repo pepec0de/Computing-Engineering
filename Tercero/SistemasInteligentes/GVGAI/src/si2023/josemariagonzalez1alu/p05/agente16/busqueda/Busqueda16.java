@@ -1,6 +1,5 @@
 package si2023.josemariagonzalez1alu.p05.agente16.busqueda;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Stack;
@@ -15,7 +14,7 @@ import si2023.josemariagonzalez1alu.p05.ia.mente.Mundo;
 public class Busqueda16 extends Busqueda {
 
 	private Mundo16 m;
-	private NodoBusqueda start, meta;
+	private NodoBusqueda start;
 	
 	
 	public Busqueda16(Mundo m) {
@@ -29,12 +28,6 @@ public class Busqueda16 extends Busqueda {
 		
 		Stack<ACTIONS> pasos = calcStepsBusquedaAnchura(start);
 		
-		//System.out.println("\n\nRESULTADO FINAL\n");
-		
-//		while (!pasos.isEmpty()) {
-//			System.out.println(pasos.pop().toString());
-//		}
-//		System.out.println();
 		return pasos;
 	}
 	
@@ -47,7 +40,6 @@ public class Busqueda16 extends Busqueda {
 		
 		while (!abiertos.isEmpty()) {
 			NodoBusqueda nodo = abiertos.remove(0);
-			//System.out.println(nodo.operador);
 			if (!checked.contains(new Posicion(nodo.x, nodo.y))) {
 				checked.add(new Posicion(nodo.x, nodo.y));
 				if (nodo.tipo == Objeto.META) {
