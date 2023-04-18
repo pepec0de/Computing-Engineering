@@ -25,12 +25,11 @@ public class Agente16 extends AbstractPlayer {
 	
 	@Override
 	public ACTIONS act(StateObservation arg0, ElapsedCpuTimer arg1) {
-		if (arg0.getAvatarType() == 9)
+		if (!pasos.isEmpty() && arg0.getAvatarType() == 9) {
 			return pasos.pop();
-		else {
-			System.out.println(arg0.getAvatarType());
-			return ACTIONS.ACTION_NIL;
 		}
+		
+		return ACTIONS.ACTION_NIL;
 	}
 
 }

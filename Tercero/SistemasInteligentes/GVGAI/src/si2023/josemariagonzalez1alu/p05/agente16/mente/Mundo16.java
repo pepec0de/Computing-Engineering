@@ -57,6 +57,31 @@ public class Mundo16 implements Mundo {
 		return false;
 	}
 	
+	public boolean isWall(int x, int y) {
+		if ( (x < 0 || x >= COLUMNAS) || (y < 0 || y >= FILAS))
+			return true;
+		
+		ArrayList<Observation> arr = stateObs.getObservationGrid()[x][y];
+		if (arr.isEmpty())
+			return false;
+		
+		return arr.get(0).itype == Objeto.PARED;
+	}
+	
+	public boolean isBooster(int x, int y) {
+		ArrayList<Observation> arr = stateObs.getObservationGrid()[x][y];
+		if (!arr.isEmpty()) {
+			switch (arr.get(0).itype) {
+			case Objeto.B_UP:
+			case Objeto.B_DOWN:
+			case Objeto.B_LEFT:
+			case Objeto.B_RIGHT:
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public int getTipo(int x, int y) {
 		ArrayList<Observation> arr = stateObs.getObservationGrid()[x][y];
 		if (arr.size() == 0)

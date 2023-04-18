@@ -16,7 +16,7 @@ public class Busqueda16 extends Busqueda {
 
 	private Mundo16 m;
 	private NodoBusqueda start, meta;
-	private HashSet<Posicion> checked;
+	
 	
 	public Busqueda16(Mundo m) {
 		this.m = (Mundo16) m;
@@ -24,72 +24,67 @@ public class Busqueda16 extends Busqueda {
 	
 	public Stack<ACTIONS> pensar() {
 		Posicion initPos = m.getAvatarPos();
-		checked = new HashSet<>();
 		
 		start = new NodoBusqueda(null, null, Objeto.SUELO, initPos.x, initPos.y);
 		
-		Stack<ACTIONS> pasos = new Stack<>();
-		expandirArbolDeBusqueda(pasos, start);
+		Stack<ACTIONS> pasos = calcStepsBusquedaAnchura(start);
 		
-//		System.out.println("\n\nRESULTADO FINAL\n");
+		//System.out.println("\n\nRESULTADO FINAL\n");
 		
-		while (!pasos.isEmpty()) {
-			System.out.println(pasos.pop().toString());
-		}
-		System.out.println();
+//		while (!pasos.isEmpty()) {
+//			System.out.println(pasos.pop().toString());
+//		}
+//		System.out.println();
 		return pasos;
 	}
 	
-	public void expandirArbolDeBusqueda(Stack<ACTIONS> pasos, NodoBusqueda nodo) {
-//		for (Posicion pos : checked) {
-//			System.out.println(pos.x + ", " + pos.y);
-//		}
-		if (!checked.contains(new Posicion(nodo.x, nodo.y))) {
-			checked.add(new Posicion(nodo.x, nodo.y));
-			if (nodo.tipo == Objeto.META) {
-				// Rescatamos los pasos
-				NodoBusqueda nodoRecorrer = nodo;
-				while (nodoRecorrer.padre != null) {
-					pasos.push(nodoRecorrer.operador);
-					nodoRecorrer = nodoRecorrer.padre;
-				}
-			} else {
-				if (nodo.operador != null) {
-					System.out.println(nodo.operador.toString() + " : " + nodo.x + ", " + nodo.y);
-//					try {
-//						System.in.read();
-//					} catch (IOException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-				}
-				
-				nodo.siguientes = calculoAccionesPosibles(nodo);
-				if (nodo.siguientes != null) {
-					for (NodoBusqueda n : nodo.siguientes) {
-						expandirArbolDeBusqueda(pasos, n);
-						if (pasos.size() > 0)
-							break;
+	public Stack<ACTIONS> calcStepsBusquedaAnchura(NodoBusqueda start) {
+		Stack<ACTIONS> pasos = new Stack<>();
+		ArrayList<NodoBusqueda> abiertos = new ArrayList<>();
+		abiertos.add(start);
+		HashSet<Posicion> checked = new HashSet<>();
+		
+		
+		while (!abiertos.isEmpty()) {
+			NodoBusqueda nodo = abiertos.remove(0);
+			//System.out.println(nodo.operador);
+			if (!checked.contains(new Posicion(nodo.x, nodo.y))) {
+				checked.add(new Posicion(nodo.x, nodo.y));
+				if (nodo.tipo == Objeto.META) {
+					// Rescatamos los pasos
+					NodoBusqueda nodoRecorrer = nodo;
+					while (nodoRecorrer.padre != null) {
+						pasos.push(nodoRecorrer.operador);
+						nodoRecorrer = nodoRecorrer.padre;
+					}
+					return pasos;
+				} else {	
+					nodo.siguientes = calculoAccionesPosibles(nodo);
+					if (nodo.siguientes != null) {
+						for (NodoBusqueda n : nodo.siguientes) {
+							abiertos.add(n);
+						}
 					}
 				}
 			}
 		}
+		return null;
 	}
 	
 	public ArrayList<NodoBusqueda> calculoAccionesPosibles(NodoBusqueda padre) {
 		switch (padre.tipo) {
 		case Objeto.SUELO:
 			ArrayList<NodoBusqueda> nodosPosibles = new ArrayList<>();
-			if (m.movablePosition(padre.x, padre.y - 1) && !checked.contains(new Posicion(padre.x, padre.y - 1)))
+			if (m.movablePosition(padre.x, padre.y - 1))
 				nodosPosibles.add(new NodoBusqueda(padre, ACTIONS.ACTION_UP, m.getTipo(padre.x, padre.y - 1), padre.x, padre.y - 1));
 			
-			if (m.movablePosition(padre.x, padre.y + 1) && !checked.contains(new Posicion(padre.x, padre.y + 1)))
+			if (m.movablePosition(padre.x, padre.y + 1))
 				nodosPosibles.add(new NodoBusqueda(padre, ACTIONS.ACTION_DOWN, m.getTipo(padre.x, padre.y + 1), padre.x, padre.y + 1));
 			
-			if (m.movablePosition(padre.x - 1, padre.y) && !checked.contains(new Posicion(padre.x - 1, padre.y)))
+			if (m.movablePosition(padre.x - 1, padre.y))
 				nodosPosibles.add(new NodoBusqueda(padre, ACTIONS.ACTION_LEFT, m.getTipo(padre.x - 1, padre.y), padre.x - 1, padre.y));
 			
-			if (m.movablePosition(padre.x + 1, padre.y) && !checked.contains(new Posicion(padre.x + 1, padre.y)))
+			if (m.movablePosition(padre.x + 1, padre.y))
 				nodosPosibles.add(new NodoBusqueda(padre, ACTIONS.ACTION_RIGHT, m.getTipo(padre.x + 1, padre.y), padre.x + 1, padre.y));
 			
 			return nodosPosibles;
@@ -117,57 +112,49 @@ public class Busqueda16 extends Busqueda {
 		switch (tipo) {
 		case Objeto.B_UP:
 			for (int j = y - 1; j >= 0; j--) {
-				if (m.movablePosition(x, j)) {
-					if (m.esSuelo(x, j)) {
-						// Posicion valida
-						return new Posicion(x, j);
-					} else {
-						// Posicion de otro booster por tanto se recalcula
-						return getBoosterFinalPos(m.getTipo(x, j), x, j);
-					}					
-				}
+				if (m.isBooster(x, j))
+					// Posicion de otro booster por tanto se recalcula
+					return getBoosterFinalPos(m.getTipo(x, j), x, j);
+					
+				if (m.isWall(x, j - 1) && m.esSuelo(x, j))
+					// Posicion valida
+					return new Posicion(x, j);
 			}
 			break;
 			
 		case Objeto.B_DOWN:
 			for (int j = y + 1; j < m.FILAS; j++) {
-				if (m.movablePosition(x, j)) {
-					if (m.esSuelo(x, j)) {
-						// Posicion valida
-						return new Posicion(x, j);
-					} else {
-						// Posicion de otro booster por tanto se recalcula
-						return getBoosterFinalPos(m.getTipo(x, j), x, j);
-					}					
-				}
+				if (m.isBooster(x, j))
+					// Posicion de otro booster por tanto se recalcula
+					return getBoosterFinalPos(m.getTipo(x, j), x, j);
+					
+				if (m.isWall(x, j + 1) && m.esSuelo(x, j))
+					// Posicion valida
+					return new Posicion(x, j);
 			}
 			break;
 			
 		case Objeto.B_LEFT:
 			for (int i = x - 1; i >= 0; i--) {
-				if (m.movablePosition(i, y)) {
-					if (m.esSuelo(i, y)) {
-						// Posicion valida
-						return new Posicion(i, y);
-					} else {
-						// Posicion de otro booster por tanto se recalcula
-						return getBoosterFinalPos(m.getTipo(i, y), i, y);
-					}					
-				}
+				if (m.isBooster(i, y))
+					// Posicion de otro booster por tanto se recalcula
+					return getBoosterFinalPos(m.getTipo(i, y), i, y);
+					
+				if (m.isWall(i - 1, y) && m.esSuelo(i, y))
+					// Posicion valida
+					return new Posicion(i, y);
 			}
 			break;
 			
 		case Objeto.B_RIGHT:
 			for (int i = x + 1; i < m.COLUMNAS; i++) {
-				if (m.movablePosition(i, y)) {
-					if (m.esSuelo(i, y)) {
-						// Posicion valida
-						return new Posicion(i, y);
-					} else {
-						// Posicion de otro booster por tanto se recalcula
-						return getBoosterFinalPos(m.getTipo(i, y), i, y);
-					}					
-				}
+				if (m.isBooster(i, y))
+					// Posicion de otro booster por tanto se recalcula
+					return getBoosterFinalPos(m.getTipo(i, y), i, y);
+					
+				if (m.isWall(i + 1, y) && m.esSuelo(i, y))
+					// Posicion valida
+					return new Posicion(i, y);
 			}
 			break;
 		}
