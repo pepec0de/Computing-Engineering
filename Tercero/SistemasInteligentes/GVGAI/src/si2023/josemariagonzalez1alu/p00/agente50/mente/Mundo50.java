@@ -1,11 +1,11 @@
-package si2023.josemariagonzalez1alu.p04.agente50.mente;
+package si2023.josemariagonzalez1alu.p00.agente50.mente;
 
 import java.util.ArrayList;
 
 import core.game.Observation;
 import core.game.StateObservation;
-import si2023.josemariagonzalez1alu.p04.ia.busqueda.Posicion;
-import si2023.josemariagonzalez1alu.p04.ia.mente.Mundo;
+import si2023.josemariagonzalez1alu.p00.ia.busqueda.Posicion;
+import si2023.josemariagonzalez1alu.p00.ia.mente.Mundo;
 import tools.Vector2d;
 
 public class Mundo50 implements Mundo {

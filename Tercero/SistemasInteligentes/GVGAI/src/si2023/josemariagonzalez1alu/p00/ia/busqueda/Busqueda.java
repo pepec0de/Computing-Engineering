@@ -1,9 +1,9 @@
-package si2023.josemariagonzalez1alu.p04.ia.busqueda;
+package si2023.josemariagonzalez1alu.p00.ia.busqueda;
 
 import java.util.Stack;
 
 import ontology.Types.ACTIONS;
-import si2023.josemariagonzalez1alu.p04.ia.mente.Mundo;
+import si2023.josemariagonzalez1alu.p00.ia.mente.Mundo;
 
 public abstract class Busqueda {
 	

@@ -8,7 +8,7 @@ import tracks.ArcadeMachine;
 public class Practica04 {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
 		String p0 = "si2023.josemariagonzalez1alu.p04.MasterAgent";
 		
@@ -22,22 +22,28 @@ public class Practica04 {
 		
 		// Game to play
 		int gameIdx  = 50;
-		int lastLevel = 4; // max 4
+		int lastLevel = 3; // max 4
 
-		// 1. This starts a game, in a level, played by a human.
-		//ArcadeMachine.playOneGame(game, level1, null, seed);
+		
 		
 		String gameName = games[gameIdx][1];
 		String game = games[gameIdx][0];
 		
-		String level1;
+		int levelIdx = 0;
+		String level1 = game.replace(gameName, gameName + "_lvl" + levelIdx);
 		
-		for (int levelIdx = 3; levelIdx <= lastLevel; levelIdx++) {
+		// 1. This starts a game, in a level, played by a human.
+		//ArcadeMachine.playOneGame(game, level1, null, seed);
+		
+		double s = 0;
+		for (levelIdx = 0; levelIdx <= lastLevel; levelIdx++) {
 			level1 = game.replace(gameName, gameName + "_lvl" + levelIdx);
 			// 2. This plays a game in a level by the controller.
-			ArcadeMachine.runOneGame(game, level1, visuals, p0, null, seed, 0);
+			double r[] = ArcadeMachine.runOneGame(game, level1, false, p0, null, seed, 0);
+			s += r[2];
 		}
 		
+		//System.out.println(s);
 		System.exit(0);
 
     }

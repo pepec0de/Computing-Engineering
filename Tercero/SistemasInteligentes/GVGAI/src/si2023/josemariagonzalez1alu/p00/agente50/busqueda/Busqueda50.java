@@ -1,16 +1,16 @@
-package si2023.josemariagonzalez1alu.p04.agente50.busqueda;
+package si2023.josemariagonzalez1alu.p00.agente50.busqueda;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Stack;
 
 import ontology.Types.ACTIONS;
-import si2023.josemariagonzalez1alu.p04.agente50.mente.Mundo50;
-import si2023.josemariagonzalez1alu.p04.agente50.mente.Objeto;
-import si2023.josemariagonzalez1alu.p04.ia.busqueda.Busqueda;
-import si2023.josemariagonzalez1alu.p04.ia.busqueda.Nodo;
-import si2023.josemariagonzalez1alu.p04.ia.busqueda.Posicion;
-import si2023.josemariagonzalez1alu.p04.ia.mente.Mundo;
+import si2023.josemariagonzalez1alu.p00.agente50.mente.Mundo50;
+import si2023.josemariagonzalez1alu.p00.agente50.mente.Objeto;
+import si2023.josemariagonzalez1alu.p00.ia.busqueda.Busqueda;
+import si2023.josemariagonzalez1alu.p00.ia.busqueda.Nodo;
+import si2023.josemariagonzalez1alu.p00.ia.busqueda.Posicion;
+import si2023.josemariagonzalez1alu.p00.ia.mente.Mundo;
 
 public class Busqueda50 extends Busqueda {
 	

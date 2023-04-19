@@ -1,23 +1,24 @@
-package si2023.josemariagonzalez1alu.p04;
+package si2023.josemariagonzalez1alu.p00;
 
 import java.util.Stack;
 
 import core.game.StateObservation;
 import core.player.AbstractPlayer;
+import ontology.Types;
 import ontology.Types.ACTIONS;
-import si2023.josemariagonzalez1alu.p04.agente50.busqueda.Busqueda50;
-import si2023.josemariagonzalez1alu.p04.agente50.mente.Mundo50;
-import si2023.josemariagonzalez1alu.p04.ia.busqueda.Busqueda;
-import si2023.josemariagonzalez1alu.p04.ia.mente.Mundo;
+import si2023.josemariagonzalez1alu.p00.agente50.busqueda.Busqueda50;
+import si2023.josemariagonzalez1alu.p00.agente50.mente.Mundo50;
+import si2023.josemariagonzalez1alu.p00.ia.busqueda.Busqueda;
+import si2023.josemariagonzalez1alu.p00.ia.mente.Mundo;
 import tools.ElapsedCpuTimer;
 
-public class MasterAgent extends AbstractPlayer {
-
+public class NonHarcodedMF extends AbstractPlayer {
+	
 	private Mundo m;
 	private Busqueda busqueda;
 	private Stack<ACTIONS> pasos;
 	
-	public MasterAgent(StateObservation arg0, ElapsedCpuTimer arg1) {
+	public NonHarcodedMF(StateObservation arg0, ElapsedCpuTimer arg1) {
 		m = new Mundo50(arg0);
 		//m.imprimir();
 		
@@ -34,5 +35,4 @@ public class MasterAgent extends AbstractPlayer {
 		
 		return ACTIONS.ACTION_NIL;
 	}
-
 }
