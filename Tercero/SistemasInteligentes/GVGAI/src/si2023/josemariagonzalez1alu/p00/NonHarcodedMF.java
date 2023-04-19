@@ -4,7 +4,6 @@ import java.util.Stack;
 
 import core.game.StateObservation;
 import core.player.AbstractPlayer;
-import ontology.Types;
 import ontology.Types.ACTIONS;
 import si2023.josemariagonzalez1alu.p00.agente50.busqueda.Busqueda50;
 import si2023.josemariagonzalez1alu.p00.agente50.mente.Mundo50;

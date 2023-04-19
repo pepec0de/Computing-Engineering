@@ -28,9 +28,10 @@ public class MasterAgent extends AbstractPlayer {
 	
 	@Override
 	public ACTIONS act(StateObservation arg0, ElapsedCpuTimer arg1) {
-		if (!pasos.isEmpty()) {
-			return pasos.pop();
-		}
+		// Para nivel 4 descomentar: -> if (arg0.getGameTick() > 0)
+			if (!pasos.isEmpty()) {
+				return pasos.pop();
+			}
 		
 		return ACTIONS.ACTION_NIL;
 	}
