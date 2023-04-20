@@ -7,21 +7,20 @@ public class Restriccion {
 
 	ArrayList<Condicion> condiciones;
 	int amigo;
-	HashSet<Integer> senoras;
+	HashSet<Character> senoras;
 	
 	public Restriccion() {
 		condiciones = new ArrayList<>();
 	}
 	
-	public Restriccion(ArrayList<Condicion> condiciones, int amigo, HashSet<Integer> senoras) {
+	public Restriccion(ArrayList<Condicion> condiciones, int amigo, HashSet<Character> senoras) {
 		super();
 		this.condiciones = condiciones;
 		this.amigo = amigo;
 		this.senoras = senoras;
 	}
 
-	public boolean aplica(Estado estado) {
-		
+	public boolean esAplicable(Estado estado) {
 		for (Condicion c : condiciones) 
 			if (!c.seCumple(estado))
 				return false;
@@ -29,12 +28,8 @@ public class Restriccion {
 		return true;
 	}
 
-	public int getAmigo() {
-		return amigo;
-	}
-
-	public HashSet<Integer> getSenoras() {
-		return senoras;
+	public Estado aplica(Estado estado) {
+		return null;
 	}
 
 }

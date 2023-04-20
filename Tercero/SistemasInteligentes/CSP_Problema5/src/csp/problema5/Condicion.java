@@ -4,21 +4,21 @@ import java.util.HashSet;
 
 public class Condicion {
 
-	private int amigo;
-	public HashSet<Integer> senoras;
+	private char amigo;
+	public HashSet<Character> senoras;
 	
-	public Condicion(int amigo, HashSet<Integer> senoras) {
+	public Condicion(char amigo, HashSet<Character> senoras) {
 		super();
 		this.amigo = amigo;
 		this.senoras = senoras;
 	}
 
 	public boolean seCumple(Estado estado) {
-		HashSet<Integer> senorasEstado = estado.valores.get(amigo);
+		HashSet<Character> senorasEstado = estado.valores.get(amigo);
 		
 		// Comprobamos que algun valor del conjunto de señoras de ese amigo (del estado actual) 
 		// este en el conjunto de nuestra condicion
-		for (Integer i : senoras) {
+		for (char i : senoras) {
 			if (senorasEstado.contains(i))
 				return true;
 		}
