@@ -22,6 +22,13 @@ public class MultiMeta implements Apilable {
 		metas.add(meta);
 	}
 
+	public String toString() {
+		String str = "";
+		for (Meta m : metas) {
+			str += m.toString() + ", ";
+		}
+		return str;
+	}
 	@Override
 	public boolean esMultiMeta() {
 		// TODO Auto-generated method stub

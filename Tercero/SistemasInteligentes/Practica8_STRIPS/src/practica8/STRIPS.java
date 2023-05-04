@@ -1,42 +1,45 @@
 package practica8;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class STRIPS {
 
 	private Estado inicial;
-	private ArrayList<Estado> estadosAbiertos;
-	private ArrayList<Operador> plan, operadores;
+	private ArrayList<Estado> estados;
+	private ArrayList<Operador> operadores;
 	private Apilable meta;
-	
-	private int cont = 0;
 	
 	public STRIPS(Estado inicial, Apilable meta, ArrayList<Operador> operadores) {
 		this.inicial = inicial;
 		this.meta = meta;
 		this.operadores = operadores;
-		estadosAbiertos = new ArrayList<>();
-		plan = new ArrayList<>();
+		estados = new ArrayList<>();
 	}
 	
 	public void solucionar() {
-		estadosAbiertos.add(inicial);
-		while (!estadosAbiertos.isEmpty()) {
-			System.out.println(cont++);
-			Estado actual = estadosAbiertos.remove(0);
+		estados.add(inicial);
+		Estado actual = null;
+		while (!estados.isEmpty()) {
+			actual = estados.remove(0);
 			
 			if (esObjetivo(actual)) {
 				return;
 			}
+
+// DEBUG
+//			System.out.println(actual.toString());
+//			System.out.println("Plan: ");
+//			for (Operador op : actual.plan) {
+//				System.out.print(op.toString() + ", ");
+//			}
 			
-			actual.sucesores = BusquedaSTRIPS(actual);
-			estadosAbiertos.addAll(actual.sucesores);
+			BusquedaSTRIPS(actual);
+			estados.addAll(actual.sucesores);
 		}
 		
-		System.out.println("Plan: ");
-		for (Operador op : plan) {
-			System.out.print(op.getNombre() + ", ");
+		System.out.println("\n\nSOLUCION: ");
+		for (Operador op : actual.plan) {
+			System.out.print(op.toString() + ", ");
 		}
 		System.out.println();
 		
@@ -45,7 +48,7 @@ public class STRIPS {
 	private boolean esObjetivo(Estado actual) {
 		if (meta.esMeta()) {
 			Meta m = (Meta) meta;
-			if (actual.abiertos.contains(m))
+			if (actual.abiertos.contains(m.getMeta()))
 				return true;
 		} else { // Es multimeta
 			MultiMeta mm = (MultiMeta) meta;
@@ -54,55 +57,64 @@ public class STRIPS {
 		return false;
 	}
 
-	public ArrayList<Estado> BusquedaSTRIPS(Estado padre) {
+	public void BusquedaSTRIPS(Estado actual) {
 		ArrayList<Estado> sucesores = new ArrayList<>();
-		while (!padre.pila.isEmpty() || !estadosAbiertos.isEmpty()) {
-			System.out.println("while");
-			if (padre.pila.peek().esOperador()) {
-				Operador op = (Operador) padre.pila.peek();
-				if (op.ejecutable(padre)) {
-					padre.pila.pop();
-					plan.add(op);
-				} else {
-					// Introducir precondiciones del operador en la pila
-					padre.pila.push(castPrecondiciones(op.precondiciones));
+		if (actual.pila.peek().esOperador()) {
+			Operador op = (Operador) actual.pila.peek();
+			if (op.ejecutable(actual)) {
+				actual.pila.pop();
+				
+				Estado e = (Estado) actual.clone();
+				e.plan.add(op);
+				
+				for (char c : op.supresiones) {
+					e.abiertos.remove((Object) c);
 				}
-			} else if (padre.pila.peek().esMeta()) {
-				Meta meta = (Meta) padre.pila.peek();
-				if (meta.esCierta(padre)) {
-					padre.pila.pop();
-				} else {
-					// Comprobar si es bucle
-					
-					// else generar un sucesor por cada instanciacion de operador que añade la meta
-					for (Operador op : operadores) {
-						if (op.adiciones.contains(meta.getMeta())) {
-							Estado e = (Estado) padre.clone();
-							e.pila.add(op);
-							sucesores.add(e);
-						}
-					}
-					// Si hay sucesores elegir uno
-					// else retroceder
+				for (char c : op.adiciones) {
+					e.abiertos.add(c);
 				}
-			} else if (padre.pila.peek().esMultiMeta()) {
-				MultiMeta mmeta = (MultiMeta) padre.pila.peek();
-				if (mmeta.esCierta(padre)) {
-					padre.pila.pop();
-				} else {
-					// Generar como sucesores todas las posibles combinaciones de las metas
-					ArrayList<ArrayList<Meta>> metas = permutate(mmeta.metas);
-					for (ArrayList<Meta> arr : metas) {
-						Estado e = (Estado) padre.clone();
-						for (Meta m : arr) {
-							e.pila.add(m);
-						}
+				sucesores.add(e);
+			} else {
+				// Introducir precondiciones del operador en la pila
+				Estado e = (Estado) actual.clone();
+				e.pila.push(castPrecondiciones(op.precondiciones));
+				sucesores.add(e);
+			}
+		} else if (actual.pila.peek().esMeta()) {
+			Meta meta = (Meta) actual.pila.peek();
+			if (meta.esCierta(actual)) {
+				Estado e = (Estado) actual.clone();
+				e.pila.pop();
+				sucesores.add(e);
+			} else {
+				// else generar un sucesor por cada instanciacion de operador que añade la meta
+				for (Operador op : operadores) {
+					if (op.adiciones.contains(meta.getMeta())) {
+						Estado e = (Estado) actual.clone();
+						e.pila.add(op);
 						sucesores.add(e);
 					}
 				}
+				// Si hay sucesores elegir uno
+				// else retroceder
+			}
+		} else if (actual.pila.peek().esMultiMeta()) {
+			MultiMeta mmeta = (MultiMeta) actual.pila.peek();
+			if (mmeta.esCierta(actual)) {
+				actual.pila.pop();
+			} else {
+				// Generar como sucesores todas las posibles combinaciones de las metas
+				ArrayList<ArrayList<Meta>> metas = permutate(mmeta.metas);
+				for (ArrayList<Meta> arr : metas) {
+					Estado e = (Estado) actual.clone();
+					for (Meta m : arr) {
+						e.pila.add(m);
+					}
+					sucesores.add(e);
+				}
 			}
 		}
-		return sucesores;
+		actual.sucesores = sucesores;
 	}
 	
 	public Apilable castPrecondiciones(ArrayList<Character> precondiciones) {

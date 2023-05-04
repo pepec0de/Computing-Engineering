@@ -12,6 +12,10 @@ public class Meta implements Apilable {
 		return meta;
 	}
 	
+	public String toString() {
+		return ""+meta;
+	}
+	
 	@Override
 	public boolean esMultiMeta() {
 		// TODO Auto-generated method stub

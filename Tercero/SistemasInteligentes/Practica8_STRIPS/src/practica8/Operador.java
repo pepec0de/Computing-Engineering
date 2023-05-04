@@ -18,7 +18,7 @@ public class Operador implements Apilable {
 		return e.abiertos.containsAll(precondiciones);
 	}
 
-	public String getNombre() {
+	public String toString() {
 		return nombre;
 	}
 
