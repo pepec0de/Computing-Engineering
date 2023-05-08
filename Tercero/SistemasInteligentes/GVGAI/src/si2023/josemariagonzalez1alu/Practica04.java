@@ -8,7 +8,7 @@ import tracks.ArcadeMachine;
 public class Practica04 {
 
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
 
 		String p0 = "si2023.josemariagonzalez1alu.p04.MasterAgent";
 		
