@@ -1,118 +1,67 @@
 package si2023.josemariagonzalez1alu.p05.ia.strips;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
-public class STRIPS<T> {
+public abstract class STRIPS<T> {
 
-	private Estado<T> inicial;
-	private ArrayList<Estado<T>> estados;
-	private ArrayList<Operador<T>> operadores;
-	private IApilable meta;
+	protected Estado<T> inicial;
+	protected Stack<Estado<T>> estados;
+	protected ArrayList<Operador<T>> operadores;
+	protected Meta<T> meta;
+	protected Estado<T> actual;
 	
-	public STRIPS(Estado<T> inicial, IApilable meta, ArrayList<Operador<T>> operadores) {
-		this.inicial = inicial;
-		this.meta = meta;
-		this.operadores = operadores;
-		estados = new ArrayList<>();
+	public STRIPS() {
+		this.inicial = new Estado<>();
+		this.meta = new Meta<>();
+		this.operadores = new ArrayList<>();
+		this.estados = new Stack<>();
 	}
 	
 	public void solucionar() {
-		estados.add(inicial);
-		Estado<T> actual = null;
+		estados.push(inicial);
 		while (!estados.isEmpty()) {
-			actual = estados.remove(0);
+			actual = estados.pop();
 			
-			if (esObjetivo(actual)) {
-				return;
-			}
+			if (esObjetivo(actual))
+				break;
 			
+			System.out.println(actual);
 			BusquedaSTRIPS(actual);
-			estados.addAll(actual.sucesores);
+			for (Estado<T> e : actual.sucesores) {
+				estados.push(e);
+			}
 		}
-		
-		System.out.println("\n\nSOLUCION: ");
-		for (Operador<T> op : actual.plan) {
-			System.out.print(op.toString() + ", ");
-		}
-		System.out.println();
-		
 	}
 	
-	@SuppressWarnings("unchecked")
 	private boolean esObjetivo(Estado<T> actual) {
-		if (meta.esMeta()) {
-			Meta<T> m = (Meta<T>) meta;
-			if (actual.abiertos.contains(m.getMeta()))
-				return true;
-		} else { // Es multimeta
-			MultiMeta<T> mm = (MultiMeta<T>) meta;
-			return actual.abiertos.containsAll(mm.metas);
+		return actual.abiertos.contains(meta.getMeta());
+	}
+
+	public abstract void BusquedaSTRIPS(Estado<T> actual);
+
+	@SuppressWarnings("unchecked")
+	protected boolean existeBucle(Estado<T> actual) {
+		Stack<IApilable> pila = (Stack<IApilable>) actual.pila.clone();
+		ArrayList<Meta<T>> metas = new ArrayList<>();
+		
+		while (!pila.isEmpty()) {
+			IApilable head = pila.pop();
+			if (head.esMeta()) {
+				metas.add((Meta<T>) head);
+			}
+		}
+
+		for (int i = 0; i < metas.size(); i++) {
+			for (int j = i + 1; j < metas.size(); j++) {
+				if (metas.get(i).equals(metas.get(j)))
+					return true;
+			}
 		}
 		return false;
 	}
-
-	@SuppressWarnings("unchecked")
-	public void BusquedaSTRIPS(Estado<T> actual) {
-		ArrayList<Estado<T>> sucesores = new ArrayList<>();
-		if (actual.pila.peek().esOperador()) {
-			Operador<T> op = (Operador<T>) actual.pila.peek();
-			if (op.ejecutable(actual)) {
-				actual.pila.pop();
-				
-				Estado<T> e = new Estado<T>(actual);
-				e.plan.add(op);
-				
-				for (T c : op.supresiones) {
-					e.abiertos.remove((Object) c);
-				}
-				for (T c : op.adiciones) {
-					e.abiertos.add(c);
-				}
-				sucesores.add(e);
-			} else {
-				// Introducir precondiciones del operador en la pila
-				Estado<T> e = new Estado<T>(actual);
-				e.pila.push(castPrecondiciones(op.precondiciones));
-				sucesores.add(e);
-			}
-		} else if (actual.pila.peek().esMeta()) {
-			Meta<T> meta = (Meta<T>) actual.pila.peek();
-			if (meta.esCierta(actual)) {
-				Estado<T> e = new Estado<T>(actual);
-				e.pila.pop();
-				sucesores.add(e);
-			} else {
-				// else generar un sucesor por cada instanciacion de operador que añade la meta
-				for (Operador<T> op : operadores) {
-					if (op.adiciones.contains(meta.getMeta())) {
-						Estado<T> e = new Estado<T>(actual);
-						e.pila.add(op);
-						sucesores.add(e);
-					}
-				}
-				// Si hay sucesores elegir uno
-				// else retroceder
-			}
-		} else if (actual.pila.peek().esMultiMeta()) {
-			MultiMeta<T> mmeta = (MultiMeta<T>) actual.pila.peek();
-			if (mmeta.esCierta(actual)) {
-				actual.pila.pop();
-			} else {
-				// Generar como sucesores todas las posibles combinaciones de las metas
-				ArrayList<ArrayList<Meta<T>>> metas = permutate(mmeta.metas);
-				for (ArrayList<Meta<T>> arr : metas) {
-					Estado<T> e = new Estado<T>(actual);
-					for (Meta<T> m : arr) {
-						e.pila.add(m);
-					}
-					sucesores.add(e);
-				}
-			}
-		}
-		actual.sucesores = sucesores;
-	}
 	
-	public IApilable castPrecondiciones(ArrayList<T> precondiciones) {
+	protected IApilable castPrecondiciones(ArrayList<T> precondiciones) {
 		if (precondiciones.size() == 1) {
 			Meta<T> m = new Meta<T>(precondiciones.get(0));
 			return m;
@@ -126,7 +75,7 @@ public class STRIPS<T> {
 	}
 
 	// Metodo de stackOverflow @ mike-elofson
-	public <A> ArrayList<ArrayList<A>> permutate(ArrayList<A> list) {
+	protected <A> ArrayList<ArrayList<A>> permutate(ArrayList<A> list) {
 	    ArrayList<ArrayList<A>> result = new ArrayList<ArrayList<A>>();
 
 	    result.add(new ArrayList<A>());

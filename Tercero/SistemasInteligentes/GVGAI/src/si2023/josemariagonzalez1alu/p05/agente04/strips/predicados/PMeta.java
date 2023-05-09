@@ -1,6 +1,7 @@
 package si2023.josemariagonzalez1alu.p05.agente04.strips.predicados;
 
 import si2023.josemariagonzalez1alu.p05.agente04.strips.IPredicado;
+import si2023.josemariagonzalez1alu.p05.agente04.strips.Posicion;
 
 public class PMeta implements IPredicado {
 
@@ -9,7 +10,7 @@ public class PMeta implements IPredicado {
 	}
 
 	public String toString() {
-		return "Meta";
+		return "Puerta";
 	}
 	
 	public int hashCode() {
@@ -24,5 +25,11 @@ public class PMeta implements IPredicado {
 			return true;
 		
 		return false;
+	}
+
+	@Override
+	public Posicion getPos() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

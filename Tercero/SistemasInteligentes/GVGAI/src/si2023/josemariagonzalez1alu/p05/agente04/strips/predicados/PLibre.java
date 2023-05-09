@@ -14,7 +14,11 @@ public class PLibre implements IPredicado {
 	public PLibre(int x, int y) {
 		this.pos = new Posicion(x, y);
 	}
-
+	
+	public Posicion getPos() {
+		return pos;
+	}
+	
 	public String toString() {
 		return "Libre(" + pos.toString() + ")";
 	}
@@ -27,7 +31,11 @@ public class PLibre implements IPredicado {
 		if (o == this)
 			return true;
 		
-		PLibre c = (PLibre) o;
-		return pos.equals(c.pos);
+		if (o.getClass() == PLibre.class) {
+			PLibre c = (PLibre) o;
+			return pos.equals(c.pos);
+		}
+		
+		return false;
 	}
 }

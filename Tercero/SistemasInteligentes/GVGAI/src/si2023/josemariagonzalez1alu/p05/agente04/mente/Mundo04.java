@@ -78,6 +78,10 @@ public class Mundo04 implements Mundo {
 		return posList;
 	}
 	
+	public boolean isWall(Posicion pos) {
+		return isWall(pos.x, pos.y);
+	}
+
 	public boolean isWall(int x, int y) {
 		if ( (x < 0 || x >= COLUMNAS) || (y < 0 || y >= FILAS))
 			return true;
@@ -173,5 +177,4 @@ public class Mundo04 implements Mundo {
 		
 		System.out.println("FILAS: " + FILAS + "\nCOLUMNAS: " + COLUMNAS + "\n" + mapa);
 	}
-
 }

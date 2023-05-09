@@ -15,9 +15,23 @@ public abstract class Operador<T> implements IApilable {
 	public boolean ejecutable(Estado<T> e) {
 		return e.abiertos.containsAll(precondiciones);
 	}
+	
+	public Estado<T> ejecutar(Estado<T> e) {
+		Estado<T> sucesor = new Estado<T>(e);
+		sucesor.plan.add(this);
+		
+		for (T t : supresiones) {
+			sucesor.abiertos.remove((Object) t);
+		}
+		
+		for (T t : adiciones) {
+			sucesor.abiertos.add(t);
+		}
+		return sucesor;
+	}
 
 	public abstract String toString();
-
+	
 	@Override
 	public boolean esMultiMeta() {
 		return false;

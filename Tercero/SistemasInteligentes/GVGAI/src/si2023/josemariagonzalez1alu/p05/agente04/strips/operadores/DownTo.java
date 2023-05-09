@@ -1,30 +1,37 @@
 package si2023.josemariagonzalez1alu.p05.agente04.strips.operadores;
 
+import ontology.Types.ACTIONS;
 import si2023.josemariagonzalez1alu.p05.agente04.strips.IPredicado;
 import si2023.josemariagonzalez1alu.p05.agente04.strips.Posicion;
 import si2023.josemariagonzalez1alu.p05.agente04.strips.predicados.PAvatarEn;
 import si2023.josemariagonzalez1alu.p05.agente04.strips.predicados.PLibre;
 import si2023.josemariagonzalez1alu.p05.ia.strips.Operador;
 
-public class DownTo extends Operador<IPredicado> {
+public class DownTo extends Operador<IPredicado> implements IMov {
 
-	public DownTo() {
+	private Posicion P;
+	public DownTo(Posicion P) {
 		super();
-	}
-
-	public void setP(Posicion P) {
+		this.P = P;
+		
+		precondiciones.add(new PAvatarEn(P.x, P.y - 1));
 		precondiciones.add(new PLibre(P));
-		precondiciones.add(new PAvatarEn(P.x - 1, P.y));
 		
 		adiciones.add(new PAvatarEn(P));
 		
-		supresiones.add(new PAvatarEn(P.x - 1, P.y));
+		supresiones.add(new PAvatarEn(P.x, P.y - 1));
 	}
 	
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "DownTo";
+		return "DownTo(" + P + ")";
+	}
+
+	@Override
+	public ACTIONS getAction() {
+		// TODO Auto-generated method stub
+		return ACTIONS.ACTION_DOWN;
 	}
 
 }

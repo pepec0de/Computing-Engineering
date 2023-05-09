@@ -17,6 +17,7 @@ public class Estado<T> {
 		plan = new ArrayList<>();
 	}
 
+	@SuppressWarnings("unchecked")
 	public Estado(Estado<T> e) {
 		pila = (Stack<IApilable>) e.pila.clone();
 		abiertos = (ArrayList<T>) e.abiertos.clone();
@@ -32,16 +33,22 @@ public class Estado<T> {
 		abiertos.add(c);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public String toString() {
 		String str = "ESTADO\nAbiertos: ";
 		for (T c : abiertos) {
 			str += c + ", ";
 		}
-		str += "\nPila: ";
-		Stack<IApilable> copia = (Stack<IApilable>) pila.clone();
-		while (!copia.isEmpty()) str += "{" + copia.pop().toString() + "}, ";
 		str += "\n";
+		Stack<IApilable> copia = (Stack<IApilable>) pila.clone();
+		while (!copia.isEmpty()) str += "{" + copia.pop().toString() + "}\n";
+		str += "******************";
+		System.out.print("Plan: ");
+		for (Operador<T> op : plan) {
+			System.out.print(op + ", ");
+		}
+		System.out.println("\n");
 		return str;
 	}
 	

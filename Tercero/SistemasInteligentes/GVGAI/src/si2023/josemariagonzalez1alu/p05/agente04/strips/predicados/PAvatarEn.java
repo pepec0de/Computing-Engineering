@@ -15,6 +15,10 @@ public class PAvatarEn implements IPredicado {
 		this.pos = new Posicion(x, y);
 	}
 	
+	public Posicion getPos() {
+		return pos;
+	}
+	
 	public String toString() {
 		return "En(" + pos.toString() + ")";
 	}
@@ -27,7 +31,11 @@ public class PAvatarEn implements IPredicado {
 		if (o == this)
 			return true;
 		
-		PAvatarEn c = (PAvatarEn) o;
-		return pos.equals(c.pos);
+		if (o.getClass() == PAvatarEn.class) {
+			PAvatarEn c = (PAvatarEn) o;
+			return pos.equals(c.pos);
+		}
+		
+		return false;
 	}
 }
