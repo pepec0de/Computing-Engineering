@@ -2,6 +2,8 @@ package si2023.josemariagonzalez1alu.p05.ia.strips;
 
 import java.util.ArrayList;
 
+import ontology.Types.ACTIONS;
+
 public abstract class Operador<T> implements IApilable {
 	
 	public ArrayList<T> precondiciones, adiciones, supresiones;
@@ -16,31 +18,19 @@ public abstract class Operador<T> implements IApilable {
 		return e.abiertos.containsAll(precondiciones);
 	}
 	
-	public Estado<T> ejecutar(Estado<T> e) {
-		Estado<T> sucesor = new Estado<T>(e);
-		sucesor.plan.add(this);
+	public void ejecutar(Estado<T> e) {
+		e.plan.add(this);
 		
 		for (T t : supresiones) {
-			sucesor.abiertos.remove((Object) t);
+			e.abiertos.remove((Object) t);
 		}
 		
 		for (T t : adiciones) {
-			sucesor.abiertos.add(t);
+			e.abiertos.add(t);
 		}
-		return sucesor;
 	}
-
-	public abstract String toString();
 	
-	@Override
-	public boolean esMultiMeta() {
-		return false;
-	}
-
-	@Override
-	public boolean esMeta() {
-		return false;
-	}
+	public abstract ACTIONS getAction();
 
 	@Override
 	public boolean esOperador() {

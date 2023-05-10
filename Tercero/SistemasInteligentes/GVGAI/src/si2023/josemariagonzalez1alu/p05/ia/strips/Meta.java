@@ -26,6 +26,7 @@ public class Meta<T> implements IApilable {
 		return "" + meta.toString();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public boolean equals(Object o) {
 		if (o == this)
 			return true;
@@ -38,19 +39,7 @@ public class Meta<T> implements IApilable {
 	}
 	
 	@Override
-	public boolean esMultiMeta() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public boolean esMeta() {
 		return true;
-	}
-
-	@Override
-	public boolean esOperador() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

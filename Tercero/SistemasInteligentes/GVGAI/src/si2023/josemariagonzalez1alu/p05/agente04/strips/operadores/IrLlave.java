@@ -7,7 +7,7 @@ import si2023.josemariagonzalez1alu.p05.agente04.strips.predicados.PAvatarEn;
 import si2023.josemariagonzalez1alu.p05.agente04.strips.predicados.PLlave;
 import si2023.josemariagonzalez1alu.p05.ia.strips.Operador;
 
-public class IrLlave extends Operador<IPredicado> implements IMov {
+public class IrLlave extends Operador<IPredicado> {
 
 	public IrLlave(Mundo04 m) {
 		super();

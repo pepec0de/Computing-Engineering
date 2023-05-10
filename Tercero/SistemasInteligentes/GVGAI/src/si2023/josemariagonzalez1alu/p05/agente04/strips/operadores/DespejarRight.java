@@ -7,7 +7,7 @@ import si2023.josemariagonzalez1alu.p05.agente04.strips.predicados.PAvatarEn;
 import si2023.josemariagonzalez1alu.p05.agente04.strips.predicados.PLibre;
 import si2023.josemariagonzalez1alu.p05.ia.strips.Operador;
 
-public class DespejarRight extends Operador<IPredicado> implements IMov {
+public class DespejarRight extends Operador<IPredicado> {
 
 	private Posicion P;
 	

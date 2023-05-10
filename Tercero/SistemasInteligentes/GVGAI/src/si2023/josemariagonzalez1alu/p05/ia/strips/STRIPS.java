@@ -1,12 +1,14 @@
 package si2023.josemariagonzalez1alu.p05.ia.strips;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Stack;
 
 public abstract class STRIPS<T> {
 
 	protected Estado<T> inicial;
 	protected Stack<Estado<T>> estados;
+	protected HashSet<Estado<T>> visitados;
 	protected ArrayList<Operador<T>> operadores;
 	protected Meta<T> meta;
 	protected Estado<T> actual;
@@ -16,6 +18,7 @@ public abstract class STRIPS<T> {
 		this.meta = new Meta<>();
 		this.operadores = new ArrayList<>();
 		this.estados = new Stack<>();
+		this.visitados = new HashSet<>();
 	}
 	
 	public void solucionar() {
@@ -27,7 +30,8 @@ public abstract class STRIPS<T> {
 				break;
 			
 			System.out.println(actual);
-			BusquedaSTRIPS(actual);
+			BusquedaSTRIPS();
+			
 			for (Estado<T> e : actual.sucesores) {
 				estados.push(e);
 			}
@@ -38,7 +42,7 @@ public abstract class STRIPS<T> {
 		return actual.abiertos.contains(meta.getMeta());
 	}
 
-	public abstract void BusquedaSTRIPS(Estado<T> actual);
+	public abstract void BusquedaSTRIPS();
 
 	@SuppressWarnings("unchecked")
 	protected boolean existeBucle(Estado<T> actual) {

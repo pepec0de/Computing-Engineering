@@ -52,4 +52,20 @@ public class Estado<T> {
 		return str;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		
+		if (o.getClass() == Estado.class) {
+			Estado<T> e = (Estado<T>) o;
+			return abiertos.equals(e.abiertos) && plan.equals(e.plan);
+		}
+		return false;
+	}
+	
+	public int hashCode() {
+		return abiertos.hashCode() * plan.hashCode();
+	}
+	
 }

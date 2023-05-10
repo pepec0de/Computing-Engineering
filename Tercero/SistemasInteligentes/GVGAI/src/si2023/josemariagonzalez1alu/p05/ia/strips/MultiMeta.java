@@ -34,16 +34,4 @@ public class MultiMeta<T> implements IApilable {
 		// TODO Auto-generated method stub
 		return true;
 	}
-
-	@Override
-	public boolean esMeta() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean esOperador() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

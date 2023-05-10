@@ -36,7 +36,9 @@ public class Agente007 extends AbstractPlayer {
 	@Override
 	public ACTIONS act(StateObservation arg0, ElapsedCpuTimer arg1) {
 		//m.imprimir();
+		if (!acciones.isEmpty())
 		return acciones.remove(0);
+		return null;
 	}
 
 }

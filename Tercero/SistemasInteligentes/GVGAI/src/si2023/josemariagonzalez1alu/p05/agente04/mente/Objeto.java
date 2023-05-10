@@ -7,7 +7,7 @@ public class Objeto {
 							PLAYER = 4,
 							LLAVE = 7,
 							META = 8,
-							BLOQUE = 9,
+							ROCA = 9,
 							SUELO = -1;
 
 }

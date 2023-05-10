@@ -55,7 +55,6 @@ public class Mundo04 implements Mundo {
 	public boolean canMoveTo(int x, int y) {
 		
 		switch (getTipo(x, y)) {
-		//case Objeto.BLOQUE: Nos podemos mover a la posicion del bloque pero esa casilla en realidad está "ocupada"
 		case Objeto.PLAYER:
 		case Objeto.LLAVE:
 		case Objeto.META:
@@ -71,6 +70,18 @@ public class Mundo04 implements Mundo {
 		for (int j = 0; j < FILAS; j++) {
 			for (int i = 0; i < COLUMNAS; i++) {
 				if (canMoveTo(i, j)) {
+					posList.add(new Posicion(i, j));
+				}
+			}
+		}
+		return posList;
+	}
+	
+	public ArrayList<Posicion> findPosicionesRocas() {
+		ArrayList<Posicion> posList = new ArrayList<>();
+		for (int j = 0; j < FILAS; j++) {
+			for (int i = 0; i < COLUMNAS; i++) {
+				if (getTipo(i, j) == Objeto.ROCA) {
 					posList.add(new Posicion(i, j));
 				}
 			}
@@ -152,7 +163,7 @@ public class Mundo04 implements Mundo {
 							mapa += "K";
 							break;
 							
-						case Objeto.BLOQUE:
+						case Objeto.ROCA:
 							mapa += "B";
 							break;
 							
