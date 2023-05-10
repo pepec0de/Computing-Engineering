@@ -21,16 +21,16 @@ public class Agente007 extends AbstractPlayer {
 		strips = new STRIPS04(m);
 		acciones = strips.getSolucion();
 		
-		acciones = new ArrayList<>();
-		acciones.add(ACTIONS.ACTION_DOWN);
-		acciones.add(ACTIONS.ACTION_RIGHT);
-		acciones.add(ACTIONS.ACTION_DOWN);
-		acciones.add(ACTIONS.ACTION_LEFT);
-		acciones.add(ACTIONS.ACTION_DOWN);
-		acciones.add(ACTIONS.ACTION_UP);
-		acciones.add(ACTIONS.ACTION_UP);
-		acciones.add(ACTIONS.ACTION_UP);
-		acciones.add(ACTIONS.ACTION_LEFT);
+//		acciones = new ArrayList<>();
+//		acciones.add(ACTIONS.ACTION_DOWN);
+//		acciones.add(ACTIONS.ACTION_RIGHT);
+//		acciones.add(ACTIONS.ACTION_DOWN);
+//		acciones.add(ACTIONS.ACTION_LEFT);
+//		acciones.add(ACTIONS.ACTION_DOWN);
+//		acciones.add(ACTIONS.ACTION_UP);
+//		acciones.add(ACTIONS.ACTION_UP);
+//		acciones.add(ACTIONS.ACTION_UP);
+//		acciones.add(ACTIONS.ACTION_LEFT);
 	}
 
 	@Override
