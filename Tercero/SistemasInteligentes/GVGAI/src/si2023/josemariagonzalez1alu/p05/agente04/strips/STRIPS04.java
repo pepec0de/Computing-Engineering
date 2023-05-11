@@ -23,10 +23,10 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 		for (Posicion pos : poses) {
 			inicial.abiertos.add(new PLibre(pos));
 		}
-		poses = m.findPosicionesRocas();
-		for (Posicion pos : poses) {
-			inicial.abiertos.add(new PRoca(pos));
-		}
+//		poses = m.findPosicionesRocas();
+//		for (Posicion pos : poses) {
+//			inicial.abiertos.add(new PRoca(pos));
+//		}
 		
 	}
 
@@ -50,35 +50,37 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void BusquedaSTRIPS() {
+	public void BusquedaSTRIPS(Estado<IPredicado> current) {
 		boolean estadoValido = false;
 		
-		for (IPredicado p : actual.abiertos) {
+		for (IPredicado p : current.abiertos) {
 			Posicion pos = p.getPos();
 			if (pos != null && pos.equals(m.getKeyPos())) {
 				estadoValido = true;
 			}
 		}
-		
+
 		if (estadoValido)
-		if (actual.pila.peek().esOperador()) {
-			Operador<IPredicado> op = (Operador<IPredicado>) actual.pila.peek();
-			if (op.ejecutable(actual)) {				
-				op.ejecutar(actual);
-				actual.pila.pop();
+		if (current.pila.peek().esOperador()) {
+			Operador<IPredicado> op = (Operador<IPredicado>) current.pila.peek();
+			Estado<IPredicado> e = new Estado<>(current);
+			if (op.ejecutable(current)) {
+				op.ejecutar(e);
+				e.pila.pop();
 			} else {
 				// Introducir precondiciones del operador en la pila
-				actual.pila.push(castPrecondiciones(op.precondiciones));
+				e.pila.push(castPrecondiciones(op.precondiciones));
 			}
-			estados.push(actual);
-		} else if (actual.pila.peek().esMeta()) {
-			Meta<IPredicado> meta = (Meta<IPredicado>) actual.pila.peek();
-			if (meta.esCierta(actual)) {
-				actual.pila.pop();
-				estados.push(actual);
+			current.sucesores.add(e);
+		} else if (current.pila.peek().esMeta()) {
+			Meta<IPredicado> meta = (Meta<IPredicado>) current.pila.peek();
+			if (meta.esCierta(current)) {
+				Estado<IPredicado> e = new Estado<>(current);
+				e.pila.pop();
+				current.sucesores.add(e);
 			} else {
 				// Comprobar si existe bucle
-				if (!existeBucle(actual)) {
+				if (!existeBucle(current)) {
 					// else generar un sucesor por cada instanciacion de operador que añade la meta
 					Posicion P = null;
 					initOperadores();
@@ -102,38 +104,30 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 						operadores.add(new DespejarUp(P));
 					}
 					
-					ArrayList<Operador<IPredicado>> posiblesOps = new ArrayList<>();
 					for (Operador<IPredicado> op : operadores) {
 						if (op.adiciones.contains(meta.getMeta())) {
-							posiblesOps.add(op);
-						}
-					}
-					if (posiblesOps.size() == 1) {
-						actual.pila.push(posiblesOps.get(0));
-						estados.push(actual);
-					} else {
-						for (Operador<IPredicado> op : posiblesOps) {
-							Estado<IPredicado> e = new Estado<>(actual);
+							Estado<IPredicado> e = new Estado<>(current);
 							e.pila.push(op);
-							actual.sucesores.add(e);
+							current.sucesores.add(e);
 						}
 					}
 				}
 			}
-		} else if (actual.pila.peek().esMultiMeta()) {
-			MultiMeta<IPredicado> mmeta = (MultiMeta<IPredicado>) actual.pila.peek();
-			if (mmeta.esCierta(actual)) {
-				actual.pila.pop();
-				estados.push(actual);
+		} else if (current.pila.peek().esMultiMeta()) {
+			MultiMeta<IPredicado> mmeta = (MultiMeta<IPredicado>) current.pila.peek();
+			if (mmeta.esCierta(current)) {
+				Estado<IPredicado> e = new Estado<>(current);
+				e.pila.pop();
+				current.sucesores.add(e);
 			} else {
 				// Generar como sucesores todas las posibles combinaciones de las metas
-				ArrayList<ArrayList<Meta<IPredicado>>> metas = permutate(mmeta.metas);
-				for (ArrayList<Meta<IPredicado>> arr : metas) {
-					Estado<IPredicado> e = new Estado<>(actual);
-					for (Meta<IPredicado> m : arr) {
+				ArrayList<ArrayList<Meta<IPredicado>>> permutacionesMetas = permutate(mmeta.metas);
+				for (ArrayList<Meta<IPredicado>> permutacion : permutacionesMetas) {
+					Estado<IPredicado> e = new Estado<>(current);
+					for (Meta<IPredicado> m : permutacion) {
 						e.pila.push(m);
 					}
-					actual.sucesores.add(e);
+					current.sucesores.add(e);
 				}
 			}
 		}

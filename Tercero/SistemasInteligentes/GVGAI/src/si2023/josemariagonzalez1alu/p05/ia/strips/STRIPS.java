@@ -22,27 +22,34 @@ public abstract class STRIPS<T> {
 	}
 	
 	public void solucionar() {
+		long ini = System.currentTimeMillis();
 		estados.push(inicial);
 		while (!estados.isEmpty()) {
 			actual = estados.pop();
 			
+			//System.out.println(actual);
+//			if (visitados.contains(actual))
+//				continue;
+//			
 			if (esObjetivo(actual))
 				break;
 			
-			System.out.println(actual);
-			BusquedaSTRIPS();
+			BusquedaSTRIPS(actual);
+			
+			visitados.add(actual);
 			
 			for (Estado<T> e : actual.sucesores) {
 				estados.push(e);
 			}
 		}
+		System.out.println("Tiempo: " + (System.currentTimeMillis() - ini));
 	}
 	
-	private boolean esObjetivo(Estado<T> actual) {
+	public boolean esObjetivo(Estado<T> actual) {
 		return actual.abiertos.contains(meta.getMeta());
 	}
 
-	public abstract void BusquedaSTRIPS();
+	public abstract void BusquedaSTRIPS(Estado<T> e);
 
 	@SuppressWarnings("unchecked")
 	protected boolean existeBucle(Estado<T> actual) {

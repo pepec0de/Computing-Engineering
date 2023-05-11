@@ -16,7 +16,7 @@ public class DespejarDown extends Operador<IPredicado> {
 		this.P = P;
 
 		precondiciones.add(new PAvatarEn(P.x, P.y - 1));
-		precondiciones.add(new PLibre(P.x, P.y + 1));
+		//precondiciones.add(new PLibre(P.x, P.y + 1));
 		
 		
 		adiciones.add(new PLibre(P));

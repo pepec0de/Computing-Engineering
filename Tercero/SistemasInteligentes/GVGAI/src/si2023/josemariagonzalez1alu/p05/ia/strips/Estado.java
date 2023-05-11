@@ -52,6 +52,17 @@ public class Estado<T> {
 		return str;
 	}
 	
+	public boolean abiertosEquals(ArrayList<T> a1, ArrayList<T> a2) {
+		if (a1.size() != a2.size())
+			return false;
+		
+		for (T t : a1) {
+			if (!a2.contains(t))
+				return false;
+		}
+		return true;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public boolean equals(Object o) {
 		if (o == this)
@@ -59,13 +70,14 @@ public class Estado<T> {
 		
 		if (o.getClass() == Estado.class) {
 			Estado<T> e = (Estado<T>) o;
-			return abiertos.equals(e.abiertos) && plan.equals(e.plan);
+			
+			return abiertosEquals(abiertos, e.abiertos);
 		}
 		return false;
 	}
 	
 	public int hashCode() {
-		return abiertos.hashCode() * plan.hashCode();
+		return abiertos.hashCode();
 	}
 	
 }

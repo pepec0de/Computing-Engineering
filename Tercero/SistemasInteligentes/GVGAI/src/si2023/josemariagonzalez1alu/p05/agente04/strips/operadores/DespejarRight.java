@@ -16,7 +16,7 @@ public class DespejarRight extends Operador<IPredicado> {
 		this.P = P;
 		
 		precondiciones.add(new PAvatarEn(P.x - 1, P.y));
-		precondiciones.add(new PLibre(P.x + 1, P.y));
+		//precondiciones.add(new PLibre(P.x + 1, P.y));
 		
 		adiciones.add(new PLibre(P));
 		adiciones.add(new PAvatarEn(P));
