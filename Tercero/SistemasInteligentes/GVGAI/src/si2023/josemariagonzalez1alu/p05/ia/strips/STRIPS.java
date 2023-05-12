@@ -1,11 +1,9 @@
 package si2023.josemariagonzalez1alu.p05.ia.strips;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Stack;
 
-import si2023.josemariagonzalez1alu.p05.agente04.strips.IPredicado;
 
 public abstract class STRIPS<T> {
 
@@ -36,7 +34,6 @@ public abstract class STRIPS<T> {
 			if (esObjetivo(actual))
 				break;
 			
-			System.out.println(actual);
 			BusquedaSTRIPS(actual);
 			
 			
@@ -44,7 +41,6 @@ public abstract class STRIPS<T> {
 				estados.push(e);
 			}
 		}
-		System.out.println("Visitados: " + visitados.size());
 	}
 	
 	public void solucionarAnchura() {
@@ -68,29 +64,28 @@ public abstract class STRIPS<T> {
 				estados.add(e);
 			}
 		}
-		System.out.println(visitados.size());
 	}
 	
-	@SuppressWarnings("unused")
-	public void expandirEstado(Estado<T> e) {
-		if (e.pila.peek().esOperador()) {
-			Operador<T> op = (Operador<T>) e.pila.peek();
-			if (op.ejecutable(e)) {
-				op.ejecutar(e);
-				e.pila.pop();
-			} else {
-				// Introducir precondiciones del operador en la pila
-				e.pila.push(castPrecondiciones(op.precondiciones));
-			}
-			expandirEstado(e);
-		} else if (e.pila.peek().esMeta()) {
-			Meta<T> meta = (Meta<T>) e.pila.peek();
-			if (meta.esCierta(e)) {
-				e.pila.pop();
-				expandirEstado(e);
-			}
-		}
-	}
+//	@SuppressWarnings("unused")
+//	public void expandirEstado(Estado<T> e) {
+//		if (e.pila.peek().esOperador()) {
+//			Operador<T> op = (Operador<T>) e.pila.peek();
+//			if (op.ejecutable(e)) {
+//				op.ejecutar(e);
+//				e.pila.pop();
+//			} else {
+//				// Introducir precondiciones del operador en la pila
+//				e.pila.push(castPrecondiciones(op.precondiciones));
+//			}
+//			expandirEstado(e);
+//		} else if (e.pila.peek().esMeta()) {
+//			Meta<T> meta = (Meta<T>) e.pila.peek();
+//			if (meta.esCierta(e)) {
+//				e.pila.pop();
+//				expandirEstado(e);
+//			}
+//		}
+//	}
 	
 	public boolean esObjetivo(Estado<T> e) {
 		return e.abiertos.contains(meta.getMeta());

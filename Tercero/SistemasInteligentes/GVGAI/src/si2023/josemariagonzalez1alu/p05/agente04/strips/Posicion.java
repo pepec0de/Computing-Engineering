@@ -5,12 +5,14 @@ public class Posicion {
 	public int x, y;
 	
 	public Posicion(int x, int y) {
-		super();
 		this.x = x;
 		this.y = y;
 	}
 
-	public Posicion() {}
+	public Posicion(Posicion p) {
+		this.x = p.x;
+		this.y = p.y;
+	}
 
 	@Override
 	public boolean equals(Object o) {
@@ -44,8 +46,8 @@ public class Posicion {
 		case LEFT:
 			return new Posicion(p.x - 1, p.y);
 			
-			default:
-				return null;
+		default:
+			return new Posicion(p);
 		}
 	}
 }

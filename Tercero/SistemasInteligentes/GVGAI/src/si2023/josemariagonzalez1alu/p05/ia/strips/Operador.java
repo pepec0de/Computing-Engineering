@@ -30,9 +30,7 @@ public abstract class Operador<T> implements IApilable {
 		}
 	}
 	
-	public ACTIONS getAction() {
-		return null;
-	}
+	public abstract ACTIONS getAction();
 
 	@Override
 	public boolean esOperador() {
