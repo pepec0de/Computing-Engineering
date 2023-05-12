@@ -3,15 +3,15 @@ package si2023.josemariagonzalez1alu.p05.agente04.strips.predicados;
 import si2023.josemariagonzalez1alu.p05.agente04.strips.IPredicado;
 import si2023.josemariagonzalez1alu.p05.agente04.strips.Posicion;
 
-public class PRoca implements IPredicado {
-
+public class PFoso implements IPredicado {
+	
 	private Posicion pos;
 	
-	public PRoca(Posicion pos) {
+	public PFoso(Posicion pos) {
 		this.pos = pos;
 	}
 	
-	public PRoca(int x, int y) {
+	public PFoso(int x, int y) {
 		this.pos = new Posicion(x, y);
 	}
 	
@@ -20,7 +20,7 @@ public class PRoca implements IPredicado {
 	}
 	
 	public String toString() {
-		return "Roca(" + pos.toString() + ")";
+		return "Foso(" + pos.toString() + ")";
 	}
 	
 	public int hashCode() {
@@ -31,11 +31,12 @@ public class PRoca implements IPredicado {
 		if (o == this)
 			return true;
 		
-		if (o.getClass() == PRoca.class) {
-			PRoca c = (PRoca) o;
+		if (o.getClass() == PFoso.class) {
+			PFoso c = (PFoso) o;
 			return pos.equals(c.pos);
 		}
 		
 		return false;
 	}
+
 }

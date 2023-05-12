@@ -89,6 +89,18 @@ public class Mundo04 implements Mundo {
 		return posList;
 	}
 	
+	public ArrayList<Posicion> findPosicionesFosos() {
+		ArrayList<Posicion> posList = new ArrayList<>();
+		for (int j = 0; j < FILAS; j++) {
+			for (int i = 0; i < COLUMNAS; i++) {
+				if (getTipo(i, j) == Objeto.FOSO) {
+					posList.add(new Posicion(i, j));
+				}
+			}
+		}
+		return posList;
+	}
+	
 	public boolean isWall(Posicion pos) {
 		return isWall(pos.x, pos.y);
 	}

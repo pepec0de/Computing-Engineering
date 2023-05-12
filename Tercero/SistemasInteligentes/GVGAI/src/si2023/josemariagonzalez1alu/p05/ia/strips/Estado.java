@@ -48,7 +48,7 @@ public class Estado<T> {
 		for (Operador<T> op : plan) {
 			System.out.print(op + ", ");
 		}
-		System.out.println("\n");
+		System.out.println("\n\n");
 		return str;
 	}
 	
@@ -71,13 +71,30 @@ public class Estado<T> {
 		if (o.getClass() == Estado.class) {
 			Estado<T> e = (Estado<T>) o;
 			
-			return abiertosEquals(abiertos, e.abiertos);
+			return abiertosEquals(abiertos, e.abiertos) && pila.equals(e.pila);
 		}
 		return false;
 	}
 	
 	public int hashCode() {
-		return abiertos.hashCode();
+		return abiertos.hashCode() * pila.hashCode();
 	}
+	
+//	@SuppressWarnings("unchecked")
+//	public boolean equals(Object o) {
+//		if (o == this)
+//			return true;
+//		
+//		if (o.getClass() == Estado.class) {
+//			Estado<T> e = (Estado<T>) o;
+//			
+//			return abiertosEquals(abiertos, e.abiertos);
+//		}
+//		return false;
+//	}
+//	
+//	public int hashCode() {
+//		return abiertos.hashCode();
+//	}
 	
 }

@@ -16,6 +16,10 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 		super();
 		this.m = m;
 		this.meta.setMeta(new PMeta());
+		//Nivel 1
+		//this.meta.setMeta(new PAvatarEn(11, 4));
+		//this.meta.setMeta(new PMeta());
+		//this.meta.setMeta(new PRoca(6, 4));
 		
 		inicial.apilar(this.meta);
 		inicial.abiertos.add(new PAvatarEn(m.getAvatarPos()));
@@ -23,15 +27,21 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 		for (Posicion pos : poses) {
 			inicial.abiertos.add(new PLibre(pos));
 		}
-//		poses = m.findPosicionesRocas();
-//		for (Posicion pos : poses) {
-//			inicial.abiertos.add(new PRoca(pos));
-//		}
+		poses = m.findPosicionesRocas();
+		for (Posicion pos : poses) {
+			inicial.abiertos.add(new PRoca(pos));
+		}
+		poses = m.findPosicionesFosos();
+		for (Posicion pos : poses) {
+			inicial.abiertos.add(new PFoso(pos));
+		}
 		
 	}
 
 	public ArrayList<ACTIONS> getSolucion() {
-		solucionar();
+		long ini = System.currentTimeMillis();
+		solucionarAnchura();
+		System.out.println("Tiempo: " + (System.currentTimeMillis() - ini));
 		ArrayList<ACTIONS> acciones = new ArrayList<>();
 		for (Operador<IPredicado> op : actual.plan) {
 			if (op.getAction() != null) {
@@ -42,6 +52,7 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 		
 		return acciones;
 	}
+	
 	private void initOperadores() {
 		operadores.clear();
 		operadores.add(new IrMeta(m));
@@ -51,7 +62,7 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void BusquedaSTRIPS(Estado<IPredicado> current) {
-		boolean estadoValido = false;
+		boolean estadoValido = true;
 		
 		for (IPredicado p : current.abiertos) {
 			Posicion pos = p.getPos();
@@ -60,71 +71,83 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 			}
 		}
 
-		if (estadoValido)
-		if (current.pila.peek().esOperador()) {
-			Operador<IPredicado> op = (Operador<IPredicado>) current.pila.peek();
-			Estado<IPredicado> e = new Estado<>(current);
-			if (op.ejecutable(current)) {
-				op.ejecutar(e);
-				e.pila.pop();
-			} else {
-				// Introducir precondiciones del operador en la pila
-				e.pila.push(castPrecondiciones(op.precondiciones));
-			}
-			current.sucesores.add(e);
-		} else if (current.pila.peek().esMeta()) {
-			Meta<IPredicado> meta = (Meta<IPredicado>) current.pila.peek();
-			if (meta.esCierta(current)) {
+		if (estadoValido) {
+			if (current.pila.peek().esOperador()) {
+				Operador<IPredicado> op = (Operador<IPredicado>) current.pila.peek();
 				Estado<IPredicado> e = new Estado<>(current);
-				e.pila.pop();
+				if (op.ejecutable(current)) {
+					op.ejecutar(e);
+					e.pila.pop();
+				} else {
+					// Introducir precondiciones del operador en la pila
+					e.pila.push(castPrecondiciones(op.precondiciones));
+				}
 				current.sucesores.add(e);
-			} else {
-				// Comprobar si existe bucle
-				if (!existeBucle(current)) {
-					// else generar un sucesor por cada instanciacion de operador que añade la meta
-					Posicion P = null;
-					initOperadores();
-					if (meta.getMeta().getClass() == PAvatarEn.class) {
-						PAvatarEn p = (PAvatarEn) meta.getMeta();
-						P = p.getPos();
-						if (m.isWall(P)) 
+			} else if (current.pila.peek().esMeta()) {
+				Meta<IPredicado> meta = (Meta<IPredicado>) current.pila.peek();
+				if (meta.esCierta(current)) {
+					Estado<IPredicado> e = new Estado<>(current);
+					e.pila.pop();
+					current.sucesores.add(e);
+				} else {
+					// Comprobar si existe bucle
+					if (!existeBucle(current)) {
+						// else generar un sucesor por cada instanciacion de operador que añade la meta
+						Posicion P = meta.getMeta().getPos();
+						if (P != null && m.isWall(P)) 
 							return;
-						operadores.add(new LeftTo(P));
-						operadores.add(new RightTo(P));
-						operadores.add(new DownTo(P));
-						operadores.add(new UpTo(P));
-					} else if (meta.getMeta().getClass() == PLibre.class) {
-						PLibre p = (PLibre) meta.getMeta();
-						P = p.getPos();
-						if (m.isWall(P)) 
-							return;
-						operadores.add(new DespejarLeft(P));
-						operadores.add(new DespejarRight(P));
-						operadores.add(new DespejarDown(P));
-						operadores.add(new DespejarUp(P));
-					}
-					
-					for (Operador<IPredicado> op : operadores) {
-						if (op.adiciones.contains(meta.getMeta())) {
-							Estado<IPredicado> e = new Estado<>(current);
-							e.pila.push(op);
-							current.sucesores.add(e);
+						
+						initOperadores();
+//						if (P != null) {
+//							operadores.add(new MLeftTo(P));
+//							operadores.add(new MRightTo(P));
+//							operadores.add(new MDownTo(P));
+//							operadores.add(new MUpTo(P));							
+//							operadores.add(new RocaLeft(P));
+//							operadores.add(new RocaRight(P));
+//							operadores.add(new RocaDown(P));
+//							operadores.add(new RocaUp(P));
+//							operadores.add(new TaparDown(P));
+//						}
+						if (meta.getMeta().getClass() == PAvatarEn.class) {
+							operadores.add(new MLeftTo(P));
+							operadores.add(new MRightTo(P));
+							operadores.add(new MDownTo(P));
+							operadores.add(new MUpTo(P));
+							
+							operadores.add(new RocaLeft(P));
+							operadores.add(new RocaRight(P));
+							operadores.add(new RocaDown(P));
+							operadores.add(new RocaUp(P));
+							operadores.add(new TaparDown(P));
+						} else if (meta.getMeta().getClass() == PLibre.class) {							
+							operadores.add(new MLeftTo(P));
+							operadores.add(new MRightTo(P));
+							operadores.add(new MDownTo(P));
+							operadores.add(new MUpTo(P));
+							operadores.add(new TaparDown(P));
+							
+						}
+						
+						for (Operador<IPredicado> op : operadores) {
+							if (op.adiciones.contains(meta.getMeta())) {
+								Estado<IPredicado> e = new Estado<>(current);
+								e.pila.push(op);
+								current.sucesores.add(e);
+							}
 						}
 					}
 				}
-			}
-		} else if (current.pila.peek().esMultiMeta()) {
-			MultiMeta<IPredicado> mmeta = (MultiMeta<IPredicado>) current.pila.peek();
-			if (mmeta.esCierta(current)) {
-				Estado<IPredicado> e = new Estado<>(current);
-				e.pila.pop();
-				current.sucesores.add(e);
-			} else {
-				// Generar como sucesores todas las posibles combinaciones de las metas
-				ArrayList<ArrayList<Meta<IPredicado>>> permutacionesMetas = permutate(mmeta.metas);
-				for (ArrayList<Meta<IPredicado>> permutacion : permutacionesMetas) {
+			} else if (current.pila.peek().esMultiMeta()) {
+				MultiMeta<IPredicado> mmeta = (MultiMeta<IPredicado>) current.pila.peek();
+				if (mmeta.esCierta(current)) {
 					Estado<IPredicado> e = new Estado<>(current);
-					for (Meta<IPredicado> m : permutacion) {
+					e.pila.pop();
+					current.sucesores.add(e);
+				} else {
+					// Generar como sucesores todas las posibles combinaciones de las metas
+					Estado<IPredicado> e = new Estado<>(current);
+					for (Meta<IPredicado> m : mmeta.metas) {
 						e.pila.push(m);
 					}
 					current.sucesores.add(e);

@@ -3,7 +3,7 @@ package si2023.josemariagonzalez1alu.p05.agente04.strips;
 public class Posicion {
 
 	public int x, y;
-
+	
 	public Posicion(int x, int y) {
 		super();
 		this.x = x;
@@ -28,5 +28,24 @@ public class Posicion {
 	
 	public String toString() {
 		return x + ", " + y;
+	}
+	
+	public static Posicion getPosicion(Posicion p, Direccion d) {
+		switch (d) {
+		case UP:
+			return new Posicion(p.x, p.y - 1);
+			
+		case DOWN:
+			return new Posicion(p.x, p.y + 1);
+
+		case RIGHT:
+			return new Posicion(p.x + 1, p.y);
+			
+		case LEFT:
+			return new Posicion(p.x - 1, p.y);
+			
+			default:
+				return null;
+		}
 	}
 }

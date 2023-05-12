@@ -1,13 +1,15 @@
 package si2023.josemariagonzalez1alu.p05.ia.strips;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Stack;
 
+import si2023.josemariagonzalez1alu.p05.agente04.strips.IPredicado;
+
 public abstract class STRIPS<T> {
 
 	protected Estado<T> inicial;
-	protected Stack<Estado<T>> estados;
 	protected HashSet<Estado<T>> visitados;
 	protected ArrayList<Operador<T>> operadores;
 	protected Meta<T> meta;
@@ -17,20 +19,44 @@ public abstract class STRIPS<T> {
 		this.inicial = new Estado<>();
 		this.meta = new Meta<>();
 		this.operadores = new ArrayList<>();
-		this.estados = new Stack<>();
 		this.visitados = new HashSet<>();
 	}
 	
-	public void solucionar() {
-		long ini = System.currentTimeMillis();
+	public void solucionarProfundidad() {
+		Stack<Estado<T>> estados = new Stack<>();
 		estados.push(inicial);
 		while (!estados.isEmpty()) {
 			actual = estados.pop();
 			
+			if (visitados.contains(actual))
+				continue;
+			
+			visitados.add(actual);
+			
+			if (esObjetivo(actual))
+				break;
+			
+			System.out.println(actual);
+			BusquedaSTRIPS(actual);
+			
+			
+			for (Estado<T> e : actual.sucesores) {
+				estados.push(e);
+			}
+		}
+		System.out.println("Visitados: " + visitados.size());
+	}
+	
+	public void solucionarAnchura() {
+		ArrayList<Estado<T>> estados = new ArrayList<>();
+		estados.add(inicial);
+		while (!estados.isEmpty()) {
+			actual = estados.remove(0);
+						
+			if (visitados.contains(actual))
+				continue;
+			
 			//System.out.println(actual);
-//			if (visitados.contains(actual))
-//				continue;
-//			
 			if (esObjetivo(actual))
 				break;
 			
@@ -39,14 +65,35 @@ public abstract class STRIPS<T> {
 			visitados.add(actual);
 			
 			for (Estado<T> e : actual.sucesores) {
-				estados.push(e);
+				estados.add(e);
 			}
 		}
-		System.out.println("Tiempo: " + (System.currentTimeMillis() - ini));
+		System.out.println(visitados.size());
 	}
 	
-	public boolean esObjetivo(Estado<T> actual) {
-		return actual.abiertos.contains(meta.getMeta());
+	@SuppressWarnings("unused")
+	public void expandirEstado(Estado<T> e) {
+		if (e.pila.peek().esOperador()) {
+			Operador<T> op = (Operador<T>) e.pila.peek();
+			if (op.ejecutable(e)) {
+				op.ejecutar(e);
+				e.pila.pop();
+			} else {
+				// Introducir precondiciones del operador en la pila
+				e.pila.push(castPrecondiciones(op.precondiciones));
+			}
+			expandirEstado(e);
+		} else if (e.pila.peek().esMeta()) {
+			Meta<T> meta = (Meta<T>) e.pila.peek();
+			if (meta.esCierta(e)) {
+				e.pila.pop();
+				expandirEstado(e);
+			}
+		}
+	}
+	
+	public boolean esObjetivo(Estado<T> e) {
+		return e.abiertos.contains(meta.getMeta());
 	}
 
 	public abstract void BusquedaSTRIPS(Estado<T> e);
