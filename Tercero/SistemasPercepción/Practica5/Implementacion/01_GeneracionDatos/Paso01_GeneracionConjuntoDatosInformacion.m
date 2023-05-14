@@ -1,6 +1,6 @@
 clc, clear;
-addpath('Funciones/')
-addpath('../Entrenamiento/')
+addpath('Funciones01/')
+addpath('../../Entrenamiento/')
 
 %% Descripcion del problema
 nClases = 3;
@@ -90,5 +90,3 @@ end
 
 save('DatosGenerados\conjunto_datos.mat', 'X', 'Y');
 save('DatosGenerados\datosProblema.mat', 'datosProblema');
-
-clc, clear all;
