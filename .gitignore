@@ -31,3 +31,8 @@ obj/
 .vscode/
 target/
 build/
+
+*.pdf
+
+# Matlab data
+*.mat
