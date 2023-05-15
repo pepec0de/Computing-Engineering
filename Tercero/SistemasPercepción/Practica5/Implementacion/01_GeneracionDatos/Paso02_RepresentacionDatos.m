@@ -32,7 +32,7 @@ funcion_representa_datos(X, Y, espacioCcas, datosProblema);
 
 numClases = length(datosProblema.clases);
 numDescriptores = length(datosProblema.descriptores);
-[numMuestras ~] = size(X);
+[numMuestras, ~] = size(X);
 for j=1:numDescriptores
     % Valores máximo y mínimos para representar en la misma escala
     vMin = min(X(:,j));

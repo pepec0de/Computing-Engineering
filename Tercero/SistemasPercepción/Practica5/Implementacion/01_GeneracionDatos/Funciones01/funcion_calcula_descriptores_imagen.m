@@ -31,12 +31,12 @@ X(:, DF) = desc_four;
 for i = 1:N
     Ib = IEtiq == i;
     
-    propiedades = regionprops(Ib, 'Solidity', 'Extent', 'EulerNumber', 'Eccentricity', 'Area');
-    X(i, EULER)          = propiedades.EulerNumber;
-    X(i, EXTENSION_BB)   = propiedades.Extent;
-    X(i, SOLIDEZ)        = propiedades.Solidity;
-    X(i, EXCENTRICIDAD)  = propiedades.Eccentricity;
-    X(i, COMPACTICIDAD) = sum(sum(Ib)).^2 / propiedades.Area;
+    stats = regionprops(Ib, 'Solidity', 'Extent', 'EulerNumber', 'Eccentricity', 'Area', 'Perimeter');
+    X(i, EULER)          = stats.EulerNumber;
+    X(i, EXTENSION_BB)   = stats.Extent;
+    X(i, SOLIDEZ)        = stats.Solidity;
+    X(i, EXCENTRICIDAD)  = stats.Eccentricity;
+    X(i, COMPACTICIDAD) = ((stats.Perimeter).^2) / stats.Area;
 end
 
 end

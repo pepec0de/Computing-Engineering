@@ -108,3 +108,29 @@ nombresProblemaOI.clases = nombresProblema.clases(posClasesOI);
 nombresProblemaOI.simbolos = nombresProblema.simbolos(posClasesOI);
 
 funcion_representa_datos(XoI, YoI, 1:3, nombresProblemaOI)
+
+%{
+    Hierarchy del proyecto:
+
+    Implementacion
+        |
+        |---> 01_GeneracionDatos
+        |       |
+        |       |--> DatosGenerados
+        |       |       |
+        |       |       |--> conjunto_datos.mat
+        |       |       |--> conjunto_datos_estandarizados.mat
+        |       |       |--> datos_estandarizacion.mat
+        |       |       +--> nombres_problema.mat
+        |       | 
+        |       |--> Funciones
+        |       |--> Paso1_GeneracionConjuntoDatosInformacion
+        |       |--> Paso2_RepresentacionDatos
+        |       +--> Paso3_EstandarizacionDatos
+        |
+        |
+        |
+        |---> 02_FaseEntrenamiento
+        |---> 03_FaseTest
+        +---> Imagenes
+}

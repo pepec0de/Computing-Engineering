@@ -47,10 +47,10 @@ for img = 1:nImagenesClase
     nombreImagen = [datosProblema.clases{clase} num2str(img, "%02d") '.jpg'];
     %nombreImagen = 'Triangulo01.jpg';
     I = imread(nombreImagen);
-    umbral = graythresh(I)*255;
+    umbral = graythresh(I)*255; 
     % umbral = funcion_otsu(imhist(I));
     
-    % Los objetos a seleccionar son más oscuros que el fondo
+    % Los objetos a seleccionar son más oscu    ros que el fondo
     Ibin = I <= umbral;
     
     % Más claros que el fondo
