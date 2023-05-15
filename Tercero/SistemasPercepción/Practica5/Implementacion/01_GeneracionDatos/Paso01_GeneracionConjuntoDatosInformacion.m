@@ -1,12 +1,12 @@
 clc, clear;
-addpath('Funciones01/')
+addpath('Funciones/')
 addpath('../../Entrenamiento/')
 
 %% Descripcion del problema
 nClases = 3;
 nImagenesClase = 2;
-codifClases = [3, 4, 8];
-nombresClases = {'Triangulo', 'Cuadrado', 'Circulo'};
+codifClases = [8, 4, 3];
+nombresClases = {'Circulo', 'Cuadrado', 'Triangulo'};
 simbolosClases = {'*r', '*g', '*b'};
 
 nombresDescriptores = {'COMPACTICIDAD', 'EXCENTRICIDAD', 'SOLIDEZ_CHULL', 'EXTENSION_BB', 'EXTENSION_BB_INV'};

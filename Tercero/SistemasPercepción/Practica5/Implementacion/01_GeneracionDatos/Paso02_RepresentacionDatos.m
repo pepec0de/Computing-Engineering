@@ -1,7 +1,7 @@
 clc, clear;
 
 addpath('DatosGenerados\');
-addpath('Funciones02');
+addpath('Funciones');
 
 load('conjunto_datos.mat');
 load('datosProblema.mat');
