@@ -133,4 +133,11 @@ funcion_representa_datos(XoI, YoI, 1:3, nombresProblemaOI)
         |---> 02_FaseEntrenamiento
         |---> 03_FaseTest
         +---> Imagenes
-}
+%}
+
+clases = [];
+filasOI = false(numDatos, 1);
+for i = 1:length(clases)
+    filasOI = or(filasOI, Y == clases(i));
+end
+filasOI_C1 = filasOI;
