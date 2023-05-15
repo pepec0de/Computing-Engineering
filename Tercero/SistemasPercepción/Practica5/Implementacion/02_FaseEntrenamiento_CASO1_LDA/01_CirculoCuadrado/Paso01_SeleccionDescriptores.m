@@ -1,6 +1,6 @@
 %% CIRCULOS VS CUADRADOS
 
-%% Carga de datos
+% Carga de datos
 
 load('../../01_GeneracionDatos/DatosGenerados/datosProblema.mat');
 load('../../01_GeneracionDatos/DatosGenerados/conjunto_datos_estandarizados.mat');
