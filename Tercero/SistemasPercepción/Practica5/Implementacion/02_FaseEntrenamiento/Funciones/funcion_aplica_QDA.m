@@ -16,31 +16,29 @@ nClases = length(valoresClases);
 % Declaracion de p variables simbolicas
 Xsym = sym('Xsym', [p 1]);
 
-% Obtenemos las funciones de decision de cada clase
-dClases = [];
-for i = 1:nClases
-    Mi = vectorMedias(i, :)';
-    MCovi = matricesCovarianzas(:, :, i);
-    Probai = probabilidadPriori(i);
-    dClases = [dClases; expand(-0.5*(Xsym - Mi)' * inv(MCovi) * (Xsym - Mi) -0.5*log(det(MCovi))...
-    + log(Probai) )];
-end
-
 % Vector auxiliar para obtener el valor de decision de todas las clases
-valoresClases = zeros(nClases, 1);
+evalClases = zeros(nClases, 1);
 for i = 1:n
     % Cargamos la muestra en Xsym
     for compo = 1:p
         Xsym(compo) = X(i, compo);
     end
-
+    
+    % Obtenemos las funciones de decision de cada clase
+    dClases = [];
     for clase = 1:nClases
-        valoresClases(clase) = eval(dClases(clase));
+        Mi = vectorMedias(clase, :)';
+        MCovi = matricesCovarianzas(:, :, clase);
+        Probai = probabilidadPriori(clase);
+        dClases = [dClases; expand(-0.5*(Xsym - Mi)' * inv(MCovi) * (Xsym - Mi) -0.5*log(det(MCovi))...
+        + log(Probai) )];
+
+        evalClases(clase) = eval(dClases(clase));
     end
 
-    [valoresOrd, idxs] = sort(valoresClases, 'descend');
+    [evalClasesOrd, idxs] = sort(evalClases, 'descend');
     YQDA(i) = valoresClases(idxs(1));
-    d(i) =  valoresOrd(1);
+    d(i) =  evalClasesOrd(1);
 end
 
 end
