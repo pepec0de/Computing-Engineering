@@ -10,11 +10,10 @@ function [YQDA, d] = funcion_aplica_QDA(X, vectorMedias,...
 
 [n, p] = size(X);
 YQDA = zeros(n, 1);
-d = zeros(n, 1);
 nClases = length(valoresClases);
 
 % Declaracion de p variables simbolicas
-Xsym = sym('Xsym', [p 1]);
+Xsym = sym('Xsym', [1 p]);
 
 % Obtenemos las funciones de decision de cada clase
 dClases = [];
@@ -31,7 +30,7 @@ valoresClases = zeros(nClases, 1);
 for i = 1:n
     % Cargamos la muestra en Xsym
     for compo = 1:p
-        Xsym(compo) = X(i, compo);
+        Xsym(compo) = XoI(i, compo);
     end
 
     for clase = 1:nClases
@@ -39,8 +38,8 @@ for i = 1:n
     end
 
     [valoresOrd, idxs] = sort(valoresClases, 'descend');
-    YQDA(i) = valoresClases(idxs(1));
-    d(i) =  valoresOrd(1);
+    YQDA(i)
+
 end
 
 end

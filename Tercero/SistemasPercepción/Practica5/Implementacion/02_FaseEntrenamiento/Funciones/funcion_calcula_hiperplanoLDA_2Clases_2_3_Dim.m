@@ -14,7 +14,7 @@ end
 
 [M, MCov, PPriori] = funcion_ajusta_LDA(X, Y);
 
-% Conjuntos balanceados
+% Conjuntos desbalanceados
 M1 = M(1, :)';
 Pi1 = PPriori(1);
 d1 = expand( -0.5*(Xsym - M1)' * inv(MCov) * (Xsym - M1 ) + log(Pi1) );

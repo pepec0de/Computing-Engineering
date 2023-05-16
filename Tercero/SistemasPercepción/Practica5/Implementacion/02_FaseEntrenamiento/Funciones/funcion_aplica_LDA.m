@@ -5,4 +5,3 @@ function [YLDA, d] = funcion_aplica_LDA(...
 outputArg1 = inputArg1;
 outputArg2 = inputArg2;
 end
-
