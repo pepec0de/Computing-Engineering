@@ -1,5 +1,5 @@
 clc, clear;
-addpath('../../02_FaseEntrenamiento/Funciones/');
+addpath('../../02_Funciones/');
 %addpath('../../01_GeneracionDatos/Funciones/');
 
 %% CARGAMOS LOS  DATOS DE INTERES

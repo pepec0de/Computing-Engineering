@@ -5,7 +5,7 @@ clc, clear;
 
 load('../../01_GeneracionDatos/DatosGenerados/datosProblema.mat');
 load('../../01_GeneracionDatos/DatosGenerados/conjunto_datos_estandarizados.mat');
-addpath('../../02_FaseEntrenamiento/Funciones/');
+addpath('../../02_Funciones/');
 addpath('../../01_GeneracionDatos/Funciones/');
 
 %% GENERACION XOI
@@ -24,7 +24,7 @@ end
 
 XoI = X(filasOI, 1:numDescriptores-1);
 YoI = Y(filasOI);
-% 4 descriptores
+% 5 descriptores
 dim = 5;
 [espacioCcas, JespacioCcas] = funcion_selecciona_vector_ccas(XoI, YoI, dim);
 
@@ -38,4 +38,4 @@ datosProblemaOI.codificacion = datosProblema.codificacion(clasesOI);
 
 %% Guardamos los datos
 
-save('DatosGenerados\espacio_ccas_circ_cuad.mat', 'espacioCcas', 'JespacioCcas', 'XoI', 'YoI', 'dim', 'datosProblemaOI');
+save('DatosGenerados\espacio_ccas.mat', 'espacioCcas', 'JespacioCcas', 'XoI', 'YoI', 'dim', 'datosProblemaOI');

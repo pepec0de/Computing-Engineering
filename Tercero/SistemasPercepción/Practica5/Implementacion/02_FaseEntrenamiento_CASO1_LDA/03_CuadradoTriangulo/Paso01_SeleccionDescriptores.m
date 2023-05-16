@@ -5,7 +5,7 @@ clc, clear;
 
 load('../../01_GeneracionDatos/DatosGenerados/datosProblema.mat');
 load('../../01_GeneracionDatos/DatosGenerados/conjunto_datos_estandarizados.mat');
-addpath('../../02_FaseEntrenamiento/Funciones/');
+addpath('../../02_Funciones/');
 addpath('../../01_GeneracionDatos/Funciones/');
 
 %% GENERACION XOI
