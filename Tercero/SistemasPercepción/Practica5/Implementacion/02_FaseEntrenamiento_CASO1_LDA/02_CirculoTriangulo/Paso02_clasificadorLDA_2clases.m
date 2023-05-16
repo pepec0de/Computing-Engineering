@@ -12,7 +12,7 @@ load('DatosGenerados\espacio_ccas_circ_cuad.mat');
 
 %% Representacion
 
-x1 = linspace(min(XoI(1, :)), max(XoI(1, :)), size(XoI, 1));
+x1 = linspace(min(XoI(1, :))-2, max(XoI(1, :))+2, size(XoI, 1));
 x2 = x1';
 A = coeficientes_d12(1);
 B = coeficientes_d12(2);

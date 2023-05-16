@@ -17,11 +17,11 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 	public STRIPS04(Mundo04 m) {
 		super();
 		this.m = m;
-//		this.meta.setMeta(new PMeta());
+		this.meta.setMeta(new PMeta());
 		//Nivel 1
 		//this.meta.setMeta(new PAvatarEn(11, 4));
 		//this.meta.setMeta(new PMeta());
-		this.meta.setMeta(new PRoca(6, 4));
+		//this.meta.setMeta(new PRoca(6, 4));
 		
 		inicial.apilar(this.meta);
 		inicial.abiertos.add(new PAvatarEn(m.getAvatarPos()));
@@ -45,10 +45,11 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 	public ArrayList<ACTIONS> getSolucion() {
 		long ini = System.currentTimeMillis();
 		//if (m.FILAS == 6 && m.COLUMNAS == 5)
-			solucionarProfundidad();
+			solucionarAnchura();
 		System.out.println("Visitados: " + visitados.size());
 		System.out.println("Tiempo: " + (System.currentTimeMillis() - ini));
 		ArrayList<ACTIONS> acciones = new ArrayList<>();
+		System.out.println("Plan: ");
 		if (actual != null)
 			for (Operador<IPredicado> op : actual.plan) {
 				if (op.getAction() != null) {
@@ -109,6 +110,7 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 						if (P != null) {
 							operadores.addAll(opMover.getOperadores(P));
 							operadores.addAll(opMoverPiedra.getOperadores(P, meta.getMeta()));
+							operadores.add(new TaparDown(P));
 						}
 						
 //						if (meta.getMeta().getClass() == PAvatarEn.class) {
