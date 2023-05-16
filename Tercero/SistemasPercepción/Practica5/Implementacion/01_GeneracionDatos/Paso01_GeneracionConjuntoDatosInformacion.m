@@ -5,7 +5,7 @@ addpath('../../Entrenamiento/')
 %% Descripcion del problema
 nClases = 3;
 nImagenesClase = 2;
-codifClases = [8, 4, 3];
+codifClases = [8, 40, 333];
 nombresClases = {'Circulo', 'Cuadrado', 'Triangulo'};
 simbolosClases = {'*r', '*g', '*b'};
 

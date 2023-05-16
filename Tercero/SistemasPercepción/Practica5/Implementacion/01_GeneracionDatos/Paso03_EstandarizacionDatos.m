@@ -25,8 +25,6 @@ end
 save('DatosGenerados\conjunto_datos_estandarizados.mat', 'Z', 'Y');
 save('DatosGenerados\medias_desviaciones_estandarizacion.mat', 'medias_desviaciones');
 
-clc, clear;
-
 %% Seleccionar el conjunto de descriptores con mejor valorJ
 %load('DatosGenerados\conjunto_datos_estandarizados.mat');
 [espacioCcas, valorJ] = funcion_selecciona_vector_ccas(Z, Y, 3);

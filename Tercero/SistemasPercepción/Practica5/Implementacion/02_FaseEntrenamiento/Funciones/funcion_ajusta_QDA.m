@@ -9,7 +9,7 @@ codifClases = unique(Y);
 nClases = length(codifClases);
 
 nK = zeros(nClases, 1);
-vectorMedias = zeros(nClases, 1);
+vectorMedias = zeros(nClases, p);
 matricesCovarianzas = zeros(p, p, nClases);
 probabilidadPriori = zeros(nClases, 1);
 
@@ -19,13 +19,13 @@ for i = 1:nClases
     nK(i) = sum(bin);
 
     % Calcula vectorMedias
-    vectorMedias(i) = sum(X(bin, :))/nK;
+    vectorMedias(i, :) = sum(X(bin, :))/nK(i);
 
     % Calcula matrices covarianzas
     matricesCovarianzas(:, :, i) = cov(X(bin, :));
 
     % Calculo probabilidadPrior
-    probabilidadPriori(i) = nK / n;
+    probabilidadPriori(i) = nK(i) / n;
 end
 
 end
