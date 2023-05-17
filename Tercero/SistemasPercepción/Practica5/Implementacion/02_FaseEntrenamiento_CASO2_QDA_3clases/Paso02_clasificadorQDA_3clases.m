@@ -1,6 +1,5 @@
 clc, clear;
-addpath('../../02_Funciones/');
-%addpath('../../01_GeneracionDatos/Funciones/');
+addpath('../02_Funciones/');
 
 %% CARGAMOS LOS  DATOS DE INTERES
 

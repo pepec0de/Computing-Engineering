@@ -1,7 +1,7 @@
 clc, clear;
-addpath('..\..\01_GeneracionDatos\Funciones\')
-load('..\..\01_GeneracionDatos\DatosGenerados\medias_desviaciones_estandarizacion.mat');
-addpath('..\..\..\Test\')
+addpath('01_GeneracionDatos\Funciones\')
+load('01_GeneracionDatos\DatosGenerados\medias_desviaciones_estandarizacion.mat');
+addpath('..\Test\')
 
 
 %% Inicializamos los conjuntos X e Y
@@ -57,4 +57,4 @@ end
 XTest = Z;
 
 %% Guardado
-save('DatosGenerados\conjunto_datos_test.mat', 'XTest');
+save('conjunto_datos_test.mat', 'XTest');
