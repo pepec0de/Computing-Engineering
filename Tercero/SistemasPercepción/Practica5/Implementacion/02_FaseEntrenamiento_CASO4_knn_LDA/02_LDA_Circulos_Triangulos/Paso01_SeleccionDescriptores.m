@@ -1,4 +1,4 @@
-%% CIRCULOS-TRIANGULOS VS CUADRADOS
+%% CIRCULOS vs TRIANGULOS
 
 clc, clear;
 % Carga de datos
@@ -16,16 +16,19 @@ clear Z;
 [numDatos, numDescriptores] = size(X);
 codifClases = unique(Y);
 
-circ_trian = codifClases(1);
-triangulo = codifClases(3);
+clasesOI = [1, 3];
+codifClasesOI = codifClases(clasesOI);
 
-clasesOI = [1, 2];
+filasOI = false(numDatos, 1);
+for i = 1:length(clasesOI)
+    filasOI = or(filasOI, Y == codifClasesOI(i));
+end
 
-XoI = X(:, 1:numDescriptores-1);
-YoI = Y;
-YoI(YoI == triangulo) = circ_trian;
-% 4 DESCRIPTORES
-dim = 4;
+XoI = X(filasOI, 1:numDescriptores-1);
+YoI = Y(filasOI);
+
+% 3 DESCRIPTORES
+dim = 3;
 [espacioCcas, JespacioCcas] = funcion_selecciona_vector_ccas(XoI, YoI, dim);
 
 XoI = XoI(:, espacioCcas);
@@ -38,4 +41,4 @@ datosProblemaOI.codificacion = datosProblema.codificacion(clasesOI);
 
 %% Guardamos los datos
 
-save('DatosGenerados\espacio_ccas.mat', 'espacioCcas', 'JespacioCcas', 'XoI', 'YoI', 'dim', 'datosProblemaOI');
+save('DatosGenerados\espacio_ccas_circ_trian.mat', 'espacioCcas', 'JespacioCcas', 'XoI', 'YoI', 'dim', 'datosProblemaOI');
