@@ -14,21 +14,26 @@ end
 
 [M, MCov, PPriori] = funcion_ajusta_LDA(X, Y);
 
-% Conjuntos desbalanceados
 M1 = M(1, :)';
 Pi1 = PPriori(1);
-d1 = expand( -0.5*(Xsym - M1)' * inv(MCov) * (Xsym - M1 ) + log(Pi1) );
-
 M2 = M(2, :)';
 Pi2 = PPriori(2);
-d2 = expand( -0.5 * (Xsym - M2)' * inv(MCov) * (Xsym- M2) + log(Pi2) );
+
+if Pi1 == Pi2 % Conjuntos balanceados
+    d1 = expand( -0.5*(Xsym - M1)' * inv(MCov) * (Xsym - M1 ) );
+    d2 = expand( -0.5 * (Xsym - M2)' * inv(MCov) * (Xsym - M2) );
+else % Conjuntos desbalanceados
+    d1 = expand( -0.5*(Xsym - M1)' * inv(MCov) * (Xsym - M1 ) + log(Pi1) );
+    d2 = expand( -0.5 * (Xsym - M2)' * inv(MCov) * (Xsym- M2) + log(Pi2) );
+end
+
 
 d12 = d1 - d2;
 
 if numAtributos == 2
     x1 = 0; x2 = 0; C = eval(d12);
-    x1 = 1; x2 = 0; A = eval(d12);
     x1 = 0; x2 = 1; B = eval(d12);
+    x1 = 1; x2 = 0; A = eval(d12);
     coeficientes_d12 = [A, B, C];
 else
     x1 = 0; x2 = 0; x3 = 0; D = eval(d12);

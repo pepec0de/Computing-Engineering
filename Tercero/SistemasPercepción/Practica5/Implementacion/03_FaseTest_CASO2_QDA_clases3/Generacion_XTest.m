@@ -1,7 +1,6 @@
 clc, clear;
-addpath('..\..\01_GeneracionDatos\Funciones\')
-load('..\..\01_GeneracionDatos\DatosGenerados\medias_desviaciones_estandarizacion.mat');
-addpath('..\..\..\Test\')
+addpath('..\01_GeneracionDatos\Funciones\')
+addpath('..\..\Test\')
 
 
 %% Inicializamos los conjuntos X e Y
@@ -11,7 +10,7 @@ addpath('..\..\..\Test\')
 % umbral vistas en el tema anterior: 
 % funcion_min_entre_max, funcion_isodata, funcion_otsu.
 
-% TODO: Meterle un bucle para todo el fichero
+% TODO: Meterle un bucle para cargar todos los ficheros
 I = imread('Test1.JPG');
 umbral = graythresh(I)*255; 
 % umbral = funcion_otsu(imhist(I));
@@ -26,8 +25,7 @@ Ibin = I <= umbral;
 % Para ello, se debe programar la siguiente funcion:
 % IbinFilt = funcion_elimina_regiones_ruidosas(Ibin);
 
-IbinFilt = Ibin;
-%IbinFilt = funcion_elimina_regiones_ruidosas(Ibin);
+IbinFilt = funcion_elimina_regiones_ruidosas(Ibin);
 %figure, imshow(IbinFilt);
 
 
@@ -43,10 +41,13 @@ IbinFilt = Ibin;
 
 XTest = funcion_calcula_descriptores_imagen(IEtiq, N);
 
-%% Estandarizacion de X
+%% Estandarizacion de XTest
+
+% Cargamos las medias y desviaciones calculadas del conjunto de
+% entrenamiento
+load('..\01_GeneracionDatos\DatosGenerados\medias_desviaciones_estandarizacion.mat');
 
 Z = zeros(size(XTest));
-
 numDescriptores = size(XTest, 2);
 for i = 1:numDescriptores
     mu = medias_desviaciones(1, i);

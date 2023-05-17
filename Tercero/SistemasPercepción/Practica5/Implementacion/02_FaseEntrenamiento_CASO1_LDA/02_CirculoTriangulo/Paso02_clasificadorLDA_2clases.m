@@ -21,6 +21,6 @@ D = coeficientes_d12(4);
 
 x3 = -(A*x1 + B*x2 + D)/C;
 
-funcion_representa_datos(XoI, YoI, 1:dim, datosProblemaOI);
+figure, funcion_representa_datos(XoI, YoI, 1:dim, datosProblemaOI);
 hold on;
 surf(x1,x2, x3), legend([datosProblemaOI.clases "d12 LDA"]);

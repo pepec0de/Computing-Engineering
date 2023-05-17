@@ -11,5 +11,7 @@ load('DatosGenerados\espacio_ccas_circ_cuad.mat');
 
 [vectorMedias, matricesCovarianzas, probabilidadPriori] = funcion_ajusta_QDA(XoI, YoI);
 
-[YQDA, d] = funcion_aplica_QDA(XoI, vectorMedias, matricesCovarianzas,...
-    probabilidadPriori, datosProblemaOI.codificacion);
+
+%% Guardamos los datos
+save('DatosGenerados\QDA_circ_cuad_trian.mat', 'XoI', 'YoI', 'espacioCcas', 'matricesCovarianzas',...
+    'vectorMedias', 'probabilidadPriori', 'datosProblemaOI');

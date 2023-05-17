@@ -12,15 +12,9 @@ load('DatosGenerados\espacio_ccas_circ_cuad.mat');
 
 %% Representacion
 
-x1 = linspace(min(XoI(1, :)), max(XoI(1, :)), size(XoI, 1));
-x2 = x1';
-A = coeficientes_d12(1);
-B = coeficientes_d12(2);
-C = coeficientes_d12(3);
-D = coeficientes_d12(4);
+funcion_representa_muestras_clasificacion_binaria_frontera(XoI, YoI, datosProblemaOI, coeficientes_d12);
 
-x3 = -(A*x1 + B*x2 + D)/C;
 
-funcion_representa_datos(XoI, YoI, 1:dim, datosProblemaOI);
-hold on;
-surf(x1,x2, x3), legend([datosProblemaOI.clases "d12 LDA"]);
+%% Guardamos los datos
+save('DatosGenerados\LDA_circ_cuad.mat', 'd12', 'coeficientes_d12',...
+    'espacioCcas', 'XoI', 'YoI')

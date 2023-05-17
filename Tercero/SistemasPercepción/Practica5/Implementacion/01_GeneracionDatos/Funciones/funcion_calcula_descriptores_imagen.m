@@ -39,5 +39,6 @@ for i = 1:N
     X(i, COMPACTICIDAD) = ((stats.Perimeter).^2) / stats.Area;
 end
 
+
 end
 

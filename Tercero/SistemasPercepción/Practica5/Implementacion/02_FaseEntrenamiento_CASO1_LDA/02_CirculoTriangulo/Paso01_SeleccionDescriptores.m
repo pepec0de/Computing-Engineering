@@ -35,7 +35,7 @@ datosProblemaOI.clases = datosProblema.clases(clasesOI);
 datosProblemaOI.simbolos = datosProblema.simbolos(clasesOI);
 datosProblemaOI.codificacion = datosProblema.codificacion(clasesOI);
 
-funcion_representa_datos(XoI, YoI, 1:dim, datosProblemaOI);
+figure, funcion_representa_datos(XoI, YoI, 1:dim, datosProblemaOI);
 
 %% Guardamos los datos
 

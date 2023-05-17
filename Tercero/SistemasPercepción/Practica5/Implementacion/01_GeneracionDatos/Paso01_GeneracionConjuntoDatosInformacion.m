@@ -9,7 +9,7 @@ codifClases = [8, 40, 333];
 nombresClases = {'Circulo', 'Cuadrado', 'Triangulo'};
 simbolosClases = {'*r', '*g', '*b'};
 
-nombresDescriptores = {'COMPACTICIDAD', 'EXCENTRICIDAD', 'SOLIDEZ_CHULL', 'EXTENSION_BB', 'EXTENSION_BB_INV'};
+nombresDescriptores = {'COMPACTICIDAD', 'EXCENTRICIDAD', 'SOLIDEZCHULL', 'EXTENSIONBB', 'EXTENSIONBBINV'};
 
 nDescript = length(nombresDescriptores);
 sHu = 'HU';
@@ -61,6 +61,7 @@ for img = 1:nImagenesClase
     % IbinFilt = funcion_elimina_regiones_ruidosas(Ibin);
     
     IbinFilt = funcion_elimina_regiones_ruidosas(Ibin);
+    %IbinFilt = Ibin;
     %figure, imshow(IbinFilt);
     
     

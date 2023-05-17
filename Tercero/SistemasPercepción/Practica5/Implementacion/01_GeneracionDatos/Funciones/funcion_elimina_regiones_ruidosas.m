@@ -17,7 +17,7 @@ end
 
 [F, C] = size(Ibin);
 pixelesCond1 = round(F*C*(0.1/100));
-pixelesCond2 = max(areas)/5;
+pixelesCond2 = round(max(areas)/5);
 
 for i = 1:N
     if not(areas(i) < pixelesCond1 || areas(i) < pixelesCond2)
