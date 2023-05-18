@@ -15,6 +15,7 @@ Xsym = sym('Xsym', [p 1]);
 evalClases = zeros(nClases, 1);
 for i = 1:n
     % Cargamos la muestra en Xsym
+    % No se puede hacer Xsym(:) = X(i, :);
     for compo = 1:p
         Xsym(compo) = X(i, compo);
     end

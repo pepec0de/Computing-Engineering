@@ -1,6 +1,6 @@
 clc, clear;
 addpath('Funciones/')
-addpath('../../Entrenamiento/')
+addpath('../Imagenes/Entrenamiento/')
 
 %% Descripcion del problema
 nClases = 3;
@@ -51,10 +51,10 @@ for img = 1:nImagenesClase
     % umbral = funcion_otsu(imhist(I));
     
     % Los objetos a seleccionar son más oscu    ros que el fondo
-    Ibin = I <= umbral;
+    Ibin = I < umbral;
     
     % Más claros que el fondo
-    %Ibin = I >= umbral;
+    %Ibin = I > umbral;
     
     % 1.2.- ELIMINAR POSIBLES COMPONENTES CONECTADAS RUIDOSAS:
     % Para ello, se debe programar la siguiente funcion:

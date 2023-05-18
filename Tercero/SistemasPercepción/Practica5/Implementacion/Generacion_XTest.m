@@ -1,7 +1,7 @@
 clc, clear;
 addpath('01_GeneracionDatos\Funciones\')
 load('01_GeneracionDatos\DatosGenerados\medias_desviaciones_estandarizacion.mat');
-addpath('..\Test\')
+addpath('Imagenes\Test\')
 
 
 %% Inicializamos los conjuntos X e Y
