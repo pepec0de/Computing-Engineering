@@ -11,11 +11,11 @@ import si2023.josemariagonzalez1alu.p05.agente04.strips.predicados.PLibre;
 import si2023.josemariagonzalez1alu.p05.agente04.strips.predicados.PRoca;
 import si2023.josemariagonzalez1alu.p05.ia.strips.Operador;
 
-public class MoverPiedra {
+public class MoverRoca {
 
 	private IPredicado meta;
 	
-	public MoverPiedra() {}
+	public MoverRoca() {}
 	
 	public ArrayList<Operador<IPredicado>> getOperadores(Posicion P, IPredicado meta) {
 		this.meta = meta;

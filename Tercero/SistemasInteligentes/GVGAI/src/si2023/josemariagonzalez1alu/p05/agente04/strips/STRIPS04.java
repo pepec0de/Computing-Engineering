@@ -12,7 +12,7 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 
 	private Mundo04 m;
 	private Mover opMover;
-	private MoverPiedra opMoverPiedra;
+	private MoverRoca opMoverPiedra;
 	
 	public STRIPS04(Mundo04 m) {
 		super();
@@ -39,7 +39,7 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 		}
 		
 		opMover = new Mover();
-		opMoverPiedra = new MoverPiedra();
+		opMoverPiedra = new MoverRoca();
 	}
 
 	public ArrayList<ACTIONS> getSolucion() {

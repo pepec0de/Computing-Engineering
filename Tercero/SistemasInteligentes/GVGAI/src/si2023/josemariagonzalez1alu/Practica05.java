@@ -21,7 +21,7 @@ public class Practica05 {
 				
 		// Game and level to play
 		int gameIdx  = 4;
-		int levelIdx = 1; // level names from 0 to 4 (game_lvlN.txt).
+		int levelIdx = 0; // level names from 0 to 4 (game_lvlN.txt).
 		
 		String gameName = games[gameIdx][1];
 		String game = games[gameIdx][0];
@@ -29,7 +29,7 @@ public class Practica05 {
 
 		
 		// 1. This starts a game, in a level, played by a human.
-//		ArcadeMachine.playOneGame(game, level1, null, seed);
+		ArcadeMachine.playOneGame(game, level1, null, seed);
 
 		// 2. This plays a game in a level by the controller.
 		ArcadeMachine.runOneGame(game, level1, visuals, p0, null, seed, 0);

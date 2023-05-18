@@ -19,13 +19,9 @@ Pi1 = PPriori(1);
 M2 = M(2, :)';
 Pi2 = PPriori(2);
 
-if Pi1 == Pi2 % Conjuntos balanceados
-    d1 = expand( -0.5*(Xsym - M1)' * inv(MCov) * (Xsym - M1 ) );
-    d2 = expand( -0.5 * (Xsym - M2)' * inv(MCov) * (Xsym - M2) );
-else % Conjuntos desbalanceados
-    d1 = expand( -0.5*(Xsym - M1)' * inv(MCov) * (Xsym - M1 ) + log(Pi1) );
-    d2 = expand( -0.5 * (Xsym - M2)' * inv(MCov) * (Xsym- M2) + log(Pi2) );
-end
+
+d1 = expand( -0.5*(Xsym - M1)' * inv(MCov) * (Xsym - M1 ) + log(Pi1) );
+d2 = expand( -0.5 * (Xsym - M2)' * inv(MCov) * (Xsym- M2) + log(Pi2) );
 
 
 d12 = d1 - d2;
