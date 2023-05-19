@@ -44,16 +44,15 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 
 	public ArrayList<ACTIONS> getSolucion() {
 		long ini = System.currentTimeMillis();
-		//if (m.FILAS == 6 && m.COLUMNAS == 5)
 			solucionarAnchura();
-		System.out.println("Visitados: " + visitados.size());
-		System.out.println("Tiempo: " + (System.currentTimeMillis() - ini));
+		//System.out.println("Visitados: " + visitados.size());
+		System.out.println((System.currentTimeMillis() - ini));
 		ArrayList<ACTIONS> acciones = new ArrayList<>();
-		System.out.println("Plan: ");
+//		System.out.println("Plan: ");
 		if (actual != null)
 			for (Operador<IPredicado> op : actual.plan) {
 				if (op.getAction() != null) {
-					System.out.println(op.getAction());
+					//System.out.println(op.getAction());
 					acciones.add(op.getAction());
 				}
 			}
@@ -70,12 +69,14 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void BusquedaSTRIPS(Estado<IPredicado> current) {
-		boolean estadoValido = true;
+		boolean estadoValido = false;
 		
 		for (IPredicado p : current.abiertos) {
-			Posicion pos = p.getPos();
-			if (pos != null && pos.equals(m.getKeyPos())) {
-				estadoValido = true;
+			if (p.getClass() == PLibre.class || p.getClass() == PAvatarEn.class) {
+				Posicion pos = p.getPos();
+				if (pos != null && pos.equals(m.getKeyPos())) {
+					estadoValido = true;
+				}
 			}
 		}
 
@@ -149,7 +150,6 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 					e.pila.pop();
 					current.sucesores.add(e);
 				} else {
-					// Generar como sucesores todas las posibles combinaciones de las metas
 					Estado<IPredicado> e = new Estado<>(current);
 					for (Meta<IPredicado> m : mmeta.metas) {
 						e.pila.push(m);

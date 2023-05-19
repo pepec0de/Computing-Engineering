@@ -17,7 +17,7 @@ public class Agente007 extends AbstractPlayer {
 	
 	public Agente007(StateObservation arg0, ElapsedCpuTimer arg1) {
 		m = new Mundo04(arg0);
-		m.imprimir();
+		//m.imprimir();
 		strips = new STRIPS04(m);
 		acciones = strips.getSolucion();
 		

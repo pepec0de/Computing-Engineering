@@ -66,27 +66,6 @@ public abstract class STRIPS<T> {
 		}
 	}
 	
-//	@SuppressWarnings("unused")
-//	public void expandirEstado(Estado<T> e) {
-//		if (e.pila.peek().esOperador()) {
-//			Operador<T> op = (Operador<T>) e.pila.peek();
-//			if (op.ejecutable(e)) {
-//				op.ejecutar(e);
-//				e.pila.pop();
-//			} else {
-//				// Introducir precondiciones del operador en la pila
-//				e.pila.push(castPrecondiciones(op.precondiciones));
-//			}
-//			expandirEstado(e);
-//		} else if (e.pila.peek().esMeta()) {
-//			Meta<T> meta = (Meta<T>) e.pila.peek();
-//			if (meta.esCierta(e)) {
-//				e.pila.pop();
-//				expandirEstado(e);
-//			}
-//		}
-//	}
-	
 	public boolean esObjetivo(Estado<T> e) {
 		return e.abiertos.contains(meta.getMeta());
 	}

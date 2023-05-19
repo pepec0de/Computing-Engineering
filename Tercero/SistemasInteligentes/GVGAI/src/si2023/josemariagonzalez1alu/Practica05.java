@@ -29,10 +29,13 @@ public class Practica05 {
 
 		
 		// 1. This starts a game, in a level, played by a human.
-		ArcadeMachine.playOneGame(game, level1, null, seed);
+		//ArcadeMachine.playOneGame(game, level1, null, seed);
 
-		// 2. This plays a game in a level by the controller.
-		ArcadeMachine.runOneGame(game, level1, visuals, p0, null, seed, 0);
+		for (int i = 0; i < 100; i++) {
+			// 2. This plays a game in a level by the controller.
+			double data[] = ArcadeMachine.runOneGame(game, level1, false, p0, null, seed, 0);
+			
+		}
 
 		System.exit(0);
 
