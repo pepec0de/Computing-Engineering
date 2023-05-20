@@ -47,6 +47,7 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 			solucionarAnchura();
 		//System.out.println("Visitados: " + visitados.size());
 		System.out.println((System.currentTimeMillis() - ini));
+		System.out.println(visitados.size());
 		ArrayList<ACTIONS> acciones = new ArrayList<>();
 //		System.out.println("Plan: ");
 		if (actual != null)
@@ -80,7 +81,7 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 			}
 		}
 
-		if (estadoValido) {
+		if (estadoValido) { // Generación de los sucesores
 			if (current.pila.peek().esOperador()) {
 				Operador<IPredicado> op = (Operador<IPredicado>) current.pila.peek();
 				Estado<IPredicado> e = new Estado<>(current);
@@ -105,7 +106,7 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 						Posicion P = meta.getMeta().getPos();
 						if (P != null && m.isWall(P)) 
 							return;
-						
+
 						initOperadores();
 						
 						if (P != null) {
@@ -113,26 +114,6 @@ public class STRIPS04 extends STRIPS<IPredicado> {
 							operadores.addAll(opMoverPiedra.getOperadores(P, meta.getMeta()));
 							operadores.add(new TaparDown(P));
 						}
-						
-//						if (meta.getMeta().getClass() == PAvatarEn.class) {
-////							operadores.add(new MLeftTo(P));
-////							operadores.add(new MRightTo(P));
-////							operadores.add(new MDownTo(P));
-////							operadores.add(new MUpTo(P));
-//							
-//							operadores.add(new RocaLeft(P));
-//							operadores.add(new RocaRight(P));
-//							operadores.add(new RocaDown(P));
-//							operadores.add(new RocaUp(P));
-//							operadores.add(new TaparDown(P));
-//						} else if (meta.getMeta().getClass() == PLibre.class) {							
-////							operadores.add(new MLeftTo(P));
-////							operadores.add(new MRightTo(P));
-////							operadores.add(new MDownTo(P));
-////							operadores.add(new MUpTo(P));
-//							operadores.add(new TaparDown(P));
-//							
-//						}
 						
 						for (Operador<IPredicado> op : operadores) {
 							if (op.adiciones.contains(meta.getMeta())) {
