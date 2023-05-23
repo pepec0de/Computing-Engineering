@@ -1,4 +1,4 @@
-function funcion_representa_muestras_clasificacion_binaria_frontera(...
+function funcion_representa_frontera(...
     X, Y, nombresProblema, coeficientes, varargin)
 %FUNCION_REPRESENTA_MUESTRAS_CLASIFICACION_BINARIA_FRONTERA Summary of this function goes here
 %   Detailed explanation goes here
@@ -11,7 +11,7 @@ dim = length(nombresProblema.descriptores);
 funcion_representa_datos(X, Y, 1:dim, nombresProblema);
 if nargin == 4
     % Representa datos e hiperplano
-    x1 = linspace(min(X(1, :)), max(X(1, :)), size(X, 1));
+    x1 = linspace(min(X(1, :))-1, max(X(1, :))+1, size(X, 1));
     A = coeficientes(1);
     B = coeficientes(2);
     C = coeficientes(3);
