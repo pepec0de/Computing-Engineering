@@ -53,23 +53,6 @@ while cambio
     end
 end
 
-N = [];
-for i = 1 : nFilas
-    for j = 1 : nCol
-        encontrado = false;
-        [~, SZ] = size(N);
-        for k = 1 : SZ
-            if N(k) == IEtiq(i, j)
-                encontrado = true;
-            end
-        end
-        if ~encontrado
-            N = [N IEtiq(i, j)];
-        end
-    end
-end
-
-N(1) = [];
 
 end
 

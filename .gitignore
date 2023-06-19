@@ -36,3 +36,5 @@ build/
 
 # Matlab data
 *.mat
+*.avi
+*.asv
