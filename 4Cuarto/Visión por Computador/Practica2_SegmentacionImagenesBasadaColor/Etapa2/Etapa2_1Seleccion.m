@@ -62,4 +62,17 @@ xlabel('R'), ylabel('S'), zlabel('L');
 
 %% Guardar
 
-save("VariablesEtapa2.mat", "mejor_J", "mejor_vct_caracs", "mejor_J_3caracs", "mejor_vct_3caracs");
+NOMBRES = 'RGBHSIYUVLab';
+CLASIFICADORES = {'Mahalanobis' 'KNN' 'SVM' 'NN'};
+
+% descriptores ->  RGB, Lab, mejor 3 caracs, mejor any caracs
+descriptores = {[1 2 3], [10 11 12], mejor_vct_3caracs, mejor_vct_caracs}; 
+N_DESC = length(descriptores);
+NOMBRES_DESC = {1, N_DESC};
+for i_desc = 1:N_DESC
+    NOMBRES_DESC{i_desc} = NOMBRES(descriptores{i_desc});
+end
+
+save("VariablesEtapa2.mat", "mejor_J", "mejor_vct_caracs", ...
+    "mejor_J_3caracs", "mejor_vct_3caracs", "NOMBRES", "CLASIFICADORES",...
+    "NOMBRES_DESC", "descriptores", "N_DESC");

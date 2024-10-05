@@ -39,7 +39,6 @@ for i_img = 1:nImgs
     I = (R + G + B)/3;
     
     % IMPORTANTE: normalizar primero RGB, para obtener YUV
-    % TODO: user mat2gray para normalizar
     R = R/255;
     G = G/255;
     B = B/255;
@@ -56,20 +55,20 @@ for i_img = 1:nImgs
     
     % NORMALIZAR (RGB ya normalizado)
     H = H/360;
-    S = normalizar(S);
+    S = mat2gray(S);
     I = I/255;
     %Y = normalizar(Y);
-    U = normalizar(U);
-    V = normalizar(V);
+    U = mat2gray(U);
+    V = mat2gray(V);
     
-    L = normalizar(L);
-    a = normalizar(a);
-    b = normalizar(b);
+    L = mat2gray(L);
+    a = mat2gray(a);
+    b = mat2gray(b);
 
 
     % OBTENCION DE ValoresColores y CodifValoresColores
 
-    Ietiq = double(ImgsBin{i_img});
+    Ietiq = double(ImgsBin{i_img}); % TODO: repasar este codigo
 
     etiquetas = unique(Ietiq);
 
@@ -172,6 +171,6 @@ verde planta (mostrarlos en azul)
 y negro lona (mostrarlos en negro).
 %}
 
-grafica2d(ValoresColores, CodifValoresColores, 4:5, 'HS', 'H', 'S');
+representa2caracs(ValoresColores, CodifValoresColores, 4:5, 'HS', 'H', 'S');
 
-save("VariablesEtapa1", "ValoresColores", "CodifValoresColores", "Imgs", "ImgsBin");
+save("VariablesEtapa1", "ValoresColores", "CodifValoresColores");
