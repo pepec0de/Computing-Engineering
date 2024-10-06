@@ -4,7 +4,6 @@ close all
 load("../Etapa1/VariablesEtapa1.mat");
 load("VariablesEtapa2.mat");
 load("NN/RedNeuronal.mat");
-addpath("../FuncionesMatlabMaterialAyuda");
 addpath("../Etapa1/Material_Imagenes/02_MuestrasRojo/");
 
 clear mejor_J mejor_vct_caracs mejor_J_3caracs mejor_vct_3caracs ...

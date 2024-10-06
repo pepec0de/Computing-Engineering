@@ -2,7 +2,6 @@ clc, clear
 close all
 
 load("../Etapa1/VariablesEtapa1.mat");
-addpath("../FuncionesMatlabMaterialAyuda");
 %%%% PASO 2.1: SEGMENTACIÓN DEL COLOR ROJO FRESA
 
 %{

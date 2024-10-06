@@ -4,7 +4,6 @@ close all
 load("../Etapa1/VariablesEtapa1.mat");
 load("VariablesEtapa2.mat");
 load("NN/RedNeuronal.mat");
-addpath("../FuncionesMatlabMaterialAyuda");
 %%%% PASO 2.1: SEGMENTACIÓN DEL COLOR ROJO FRESA
 
 %{
