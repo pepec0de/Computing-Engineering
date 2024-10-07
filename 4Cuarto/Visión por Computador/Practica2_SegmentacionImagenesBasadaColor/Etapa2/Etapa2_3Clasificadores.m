@@ -14,7 +14,8 @@ R G B H S I Y U V L a b
 % Acierto = Número de pixeles correctamente detectados (rojo fresa + fondo) 
 %           ////////////////////////////////////////// 
 %           Número total de píxeles de la imagen.
-tablaAcc = array2table(zeros(N_DESC, length(CLASIFICADORES)), 'VariableNames', CLASIFICADORES, 'RowNames', NOMBRES_DESC);
+tablaAcc = array2table(zeros(N_DESC, length(CLASIFICADORES)),...
+    'VariableNames', CLASIFICADORES, 'RowNames', NOMBRES_DESC);
 
 % Sensibilidad = Número de pixeles rojo fresa correctamente detectados
 %                /////////////////////////////////////////////////////
@@ -86,8 +87,6 @@ for i_desc = 1:N_DESC-1
 end
 
 %% KNN
-
-% DUDA como seleccionar k
 
 YTrain = CodifValoresColores == 255;
 

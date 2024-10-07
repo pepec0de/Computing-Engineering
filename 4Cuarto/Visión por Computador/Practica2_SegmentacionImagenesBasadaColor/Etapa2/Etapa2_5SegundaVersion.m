@@ -73,7 +73,12 @@ for img = 1:3
         n_pix_rojos = sum(region_rojo(:));
         % DUDA: así o con sum(IbinFresa(:))
         n_pix_total = n_pix_rojos + sum(region_verde(:));
-    
+        grado_madurez = n_pix_rojos/n_pix_total;
+        % DUDA esta bien esto???
+        if grado_madurez < 0.1
+            continue
+        end
+
         % Crop the original image based on the bounding box
         I_fresa = imcrop(I, [xStart, yStart, width, height]);
         
@@ -82,6 +87,6 @@ for img = 1:3
         visualiza_vec(I_fresa, Ipred_crop, Colores, true); 
         %imshow(I_fresa);
         title(['Fresa ' num2str(e) ' Grado de madurez: '...
-            num2str(n_pix_rojos/n_pix_total, 3)]), hold on;
+            num2str(grado_madurez, 3)]), hold on;
     end
 end    
