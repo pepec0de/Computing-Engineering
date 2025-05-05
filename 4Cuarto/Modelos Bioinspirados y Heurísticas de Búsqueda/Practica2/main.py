@@ -3,7 +3,6 @@ from busqueda_local import bl_mejor_vecino
 from busqueda_grasp import *
 from busqueda_ils import *
 from busqueda_vns import *
-from metricas import *
 
 prueba = load_mats("datasets/prueba.dat")
 tai25 = load_mats("datasets/tai25b.dat")
@@ -60,34 +59,33 @@ def practica2():
         
         grasp_logger.archivo = d['nombre']
         seeds = [42, 420, 4200, 42000, 80987]
-        """
+
         # Greedy
-        solucion, valor = busqueda_greedy(matD, matF, funcion_objetivo)
-        main_logger.log("Greedy", "N/A", valor, vector_to_str(solucion))
+        solucion = busqueda_greedy(matD, matF)
+        valor = funcion_objetivo(solucion, matD, matF)
+        main_logger.log("Greedy", "N/A", valor, 1, vector_to_str(solucion))
 
         # Busqueda Local
+        seeds = [42] # PARA TESTEAR
         for seed_bl in seeds:
-            solucion, valor = bl_mejor_vecino(matD, matF, funcion_objetivo, seed_bl)
-            main_logger.log("BL Mejor Vecino", seed_bl, valor, vector_to_str(solucion))
-        """
+            solucion, valor, evaluaciones = bl_mejor_vecino(seed_bl, matD, matF, funcion_objetivo, delta)
+            main_logger.log("BL Mejor Vecino", seed_bl, valor, evaluaciones, vector_to_str(solucion))
+        
         # GRASP
-        seeds = [42]
         l = int(np.round(0.1 * n))
-        solucion, valor = GRASP(matD, matF, l, seeds, grasp_logger)
-        main_logger.log("GRASP", vector_to_str(seeds), valor, vector_to_str(solucion))
+        solucion, valor, evaluaciones = GRASP(matD, matF, l, seeds, grasp_logger)
+        main_logger.log("GRASP", vector_to_str(seeds), valor, evaluaciones, vector_to_str(solucion))
 
         """
         # ILS
         seed = 42
-        solucion, valor, iters = ILS(matD, matF, seed)
-        print(f"[{d['nombre']}] # iters ILS: {iters}")
+        solucion, valor, evaluaciones = ILS(matD, matF, seed)
         main_logger.log("ILS", seed, valor, vector_to_str(solucion))
 
         # VNS
         for seed in seeds:
-            solucion, valor, iters = VNS(matD, matF, seed)
-            print(f"[{d['nombre']}] # iters VNS ({seed}): {iters}")
-            main_logger.log("VNS", seed, valor, vector_to_str(solucion))
+            solucion, valor, evaluaciones = VNS(matD, matF, seed)
+            main_logger.log("VNS", seed, valor, evaluaciones, vector_to_str(solucion))
         """
 
 if __name__ == '__main__':

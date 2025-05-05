@@ -63,34 +63,32 @@ def funcion_objetivo_original_QAP(solucion, matD, matF):
                     result += matD[i, j] * matF[solucion[i] , solucion[j] ]
     return result
 
-"""
-def funcion_objetivo(solucion, matD, matF):
-    return funcion_objetivo_original_QAP(solucion, matD, matF) #- delta(solucion, matD, matF)
-"""
+def delta(solucion, matD, matF, r, s):
+    n = len(solucion)
+    d = matD
+    f = matF
+    sol = solucion
 
-def delta(solucion, matD, matF):
-    result = 0
-    n = matD.shape[0]
-    r = s = np.random.randint(0, n)
-    while r == s:
-        s = np.random.randint(0, n)
-    
+    delta_val = 0
+
     for k in range(n):
-        if k != r and k != s:
-            result += matF[r][k] * \
-(matD[solucion[s] ][solucion[k] ] - matD[solucion[s] ][solucion[k] ]) + \
-matF[s][k] * \
-(matD[solucion[s] ][solucion[k] ] - matD[solucion[r] ][solucion[k] ]) + \
-matF[k][r] * \
-(matD[solucion[k] ][solucion[r] ] - matD[solucion[k] ][solucion[s] ]) + \
-matF[k][s] * \
-(matD[solucion[k] ][solucion[s] ] - matD[solucion[k] ][solucion[r] ]) + \
-matF[r][s] * \
-(matD[solucion[r] ][solucion[s] ] - matD[solucion[s] ][solucion[r] ]) + \
-matF[s][r] * \
-(matD[solucion[s] ][solucion[r] ] - matD[solucion[r] ][solucion[s] ])
-    
-    return result
+        if k == r or k == s:
+            continue
+
+        delta_val += (
+            f[r][k] * (d[sol[s]][sol[k]] - d[sol[r]][sol[k]]) +
+            f[s][k] * (d[sol[r]][sol[k]] - d[sol[s]][sol[k]]) +
+            f[k][r] * (d[sol[k]][sol[s]] - d[sol[k]][sol[r]]) +
+            f[k][s] * (d[sol[k]][sol[r]] - d[sol[k]][sol[s]])
+        )
+
+    # Parte constante fuera del bucle
+    delta_val += (
+        f[r][s] * (d[sol[s]][sol[r]] - d[sol[r]][sol[s]]) +
+        f[s][r] * (d[sol[r]][sol[s]] - d[sol[s]][sol[r]])
+    )
+
+    return delta_val
 
 def generar_solucion_inicial(n : int) -> np.ndarray:
     return np.random.permutation(n, dtype=np.uint8)
