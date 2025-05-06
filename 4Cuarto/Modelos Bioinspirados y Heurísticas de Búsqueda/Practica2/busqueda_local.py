@@ -13,31 +13,25 @@ def bl_mejor_vecino(seed, matD, matF, funcion_objetivo, delta):
     mejor_solucion = np.random.permutation(n_nodes)
     mejor_valor = funcion_objetivo(mejor_solucion, matD, matF)
     valor_mejor_vecino = mejor_valor
-    print(type(mejor_valor))
     seguir = True
 
     while seguir:
-
+        mejor_i = 0
+        mejor_j = 0
         for i in range(n_nodes - 1):
             for j in range(i + 1, n_nodes):
-                
-                #valor_vecino = funcion_objetivo(vecino, matD, matF)
-                #valor_vecino = mejor_valor - delta(vecino, matD, matF, i, j)
                 valor_vecino = mejor_valor - delta(mejor_solucion, matD, matF, i, j)
                 #if evals % 10000 == 0: print(evals)
-                #print(f"funcion_objetivo(vecino, matD, matF) = {funcion_objetivo(vecino, matD, matF)}")
-                #print(f"valor_vecino = valor_vecino = mejor_valor - delta(mejor_solucion, matD, matF, i, j) = {mejor_valor} - {delta(mejor_solucion, matD, matF, i, j)} = {valor_vecino}")
-                #if funcion_objetivo(vecino, matD, matF) != valor_vecino: print("KAPASAO")
                 evals += 1
 
                 if valor_vecino < valor_mejor_vecino:
-                    mejor_vecino = mejor_solucion.copy()
-                    mejor_vecino[i], mejor_vecino[j] = mejor_vecino[j], mejor_vecino[i]
+                    mejor_i = i
+                    mejor_j = j
                     valor_mejor_vecino = valor_vecino
         
         if valor_mejor_vecino < mejor_valor:
             mejor_valor = valor_mejor_vecino
-            mejor_solucion = mejor_vecino
+            mejor_solucion[mejor_i], mejor_solucion[mejor_j] = mejor_solucion[mejor_j], mejor_solucion[mejor_i]
         else:
             seguir = False
         

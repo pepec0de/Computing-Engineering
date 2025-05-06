@@ -2,7 +2,7 @@ from funciones import *
 from busqueda_local import bl_primer_mejor
 
 ################ Construccion de soluciones greedy probabilisticas ###########################################
-def generar_solucion_greedy(matD, matF, l : int, seed : float):
+def generar_greedy_prob(matD, matF, l : int, seed : float):
     """
     Construye una solución inicial para el QAP usando una heurística greedy probabilística.
 
@@ -53,8 +53,8 @@ def GRASP(matD, matF, l, semillas_bl, logger : Logger = None):
     mejor_valor = np.inf
     evaluaciones = 0
 
-    for seed_bl in semillas_bl: # 5 semillas!!
-        solucion_greedy, valor_greedy = generar_solucion_greedy(matD, matF, l, seed_bl)
+    for seed_bl in semillas_bl:
+        solucion_greedy, valor_greedy = generar_greedy_prob(matD, matF, l, seed_bl)
         if (logger != None): logger.log("Greedy Prob", seed_bl, valor_greedy, 1, vector_to_str(solucion_greedy))
 
         solucion_optimizada, valor_optimizada, eval = bl_primer_mejor(solucion_greedy, matD, matF, valor_greedy, funcion_objetivo)

@@ -63,7 +63,7 @@ def funcion_objetivo_original_QAP(solucion, matD, matF):
                     result += matD[i, j] * matF[solucion[i] , solucion[j] ]
     return result
 
-def delta(S, d, f, r, s):
+def delta_pocha(S, d, f, r, s):
     n = len(S)
     delta_val = 0
     for k in range(n):
@@ -81,11 +81,10 @@ def delta(S, d, f, r, s):
     )
     return delta_val
 
-def delta_numpy(S, d, f, r, s):
+def delta(S, d, f, r, s):
     S = np.asarray(S)
     n = len(S)
 
-    # Índices que no son r ni s
     k = np.array([k for k in range(n) if k != r and k != s])
 
     # Preextraer ubicaciones
@@ -99,7 +98,7 @@ def delta_numpy(S, d, f, r, s):
     term4 = d[k, s] * (f[Sk, Ss] - f[Sk, Sr])
 
     # Suma total de los cuatro vectores
-    delta_val = np.sum(term1 + term2 + term3 + term4, dtype=np.int16)
+    delta_val = np.sum(term1 + term2 + term3 + term4, dtype=np.int32)
 
     # Términos fuera del bucle
     delta_val += d[r][s] * (f[Sr][Ss] - f[Ss][Sr]) + d[s][r] * (f[Ss][Sr] - f[Sr][Ss])

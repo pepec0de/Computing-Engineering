@@ -43,7 +43,7 @@ def test_funcion_objetivo():
     print("##########################")
 
 def test_greedy_grasp():
-    print(generar_solucion_greedy(tai25['distancia'], tai25['flujo'], int(np.round(0.1*tai25['distancia'].shape[0]))))
+    print(generar_greedy_prob(tai25['distancia'], tai25['flujo'], int(np.round(0.1*tai25['distancia'].shape[0]))))
 
 
 def practica2():
@@ -66,17 +66,17 @@ def practica2():
         main_logger.log("Greedy", "N/A", valor, 1, vector_to_str(solucion))
 
         # Busqueda Local
-        seeds = [42] # PARA TESTEAR
+        #seeds = [42] # PARA TESTEAR
         for seed_bl in seeds:
-            solucion, valor, evaluaciones = bl_mejor_vecino(seed_bl, matD, matF, funcion_objetivo, delta_numpy)
+            solucion, valor, evaluaciones = bl_mejor_vecino(seed_bl, matD, matF, funcion_objetivo, delta)
             main_logger.log("BL Mejor Vecino", seed_bl, valor, evaluaciones, vector_to_str(solucion))
         
-        """
+        
         # GRASP
         l = int(np.round(0.1 * n))
         solucion, valor, evaluaciones = GRASP(matD, matF, l, seeds, grasp_logger)
         main_logger.log("GRASP", vector_to_str(seeds), valor, evaluaciones, vector_to_str(solucion))
-
+        """
         
         # ILS
         seed = 42
