@@ -21,13 +21,6 @@ def VNS(matD, matF, seed):
         if k > k_max:
             k = 1
         # Paso 3
-        """
-        k = 1: Se aplica un tamaño de s = n/8.
-        k = 2: Se aplica un tamaño de s = n/7.
-        k = 3: Se aplica un tamaño de s = n/6.
-        k = 4: Se aplica un tamaño de s = n/5.
-        k = 5: Se aplica un tamaño de s = n/4.
-        """
         s = int(np.round(n / (9 - k)))
         vecino = operador_sublista_aleatoria(mejor_solucion, s)
         # Paso 4

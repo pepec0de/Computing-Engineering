@@ -78,8 +78,7 @@ def practica2():
         for seed_bl in seeds:
             solucion, valor, evaluaciones = bl_mejor_vecino(seed_bl, matD, matF, funcion_objetivo, delta)
             main_logger.log("BL Mejor Vecino", seed_bl, valor, evaluaciones, vector_to_str(solucion))
-        
-        
+            
         # GRASP
         l = int(np.round(0.1 * n))
         solucion, valor, evaluaciones = GRASP(matD, matF, l, seeds, grasp_logger)
