@@ -4,8 +4,6 @@ from busqueda_local import bl_primer_mejor
 def VNS(matD, matF, seed):
     # Init semilla
     np.random.seed(seed)
-
-    iters = 0
     
     n = matD.shape[0]
     k_max = 5
@@ -13,12 +11,12 @@ def VNS(matD, matF, seed):
     k = 1
     bl = 0
 
-    mejor_solucion = generar_solucion_inicial(n)
-    mejor_valor = funcion_objetivo(mejor_solucion, matD, matF)
+    mejor_solucion = np.random.permutation(n)
+    mejor_valor = funcion_objetivo(mejor_solucion, matD, matF, funcion_objetivo=funcion_objetivo)
+    evaluaciones = 0
 
     # Paso 6
     while bl < bl_max:
-        iters += 1
         # Paso 2
         if k > k_max:
             k = 1
@@ -33,7 +31,8 @@ def VNS(matD, matF, seed):
         s = int(np.round(n / (9 - k)))
         vecino = operador_sublista_aleatoria(mejor_solucion, s)
         # Paso 4
-        vecino_opt, valor_vecino = bl_primer_mejor(vecino, matD, matF, funcion_objetivo)
+        vecino_opt, valor_vecino, evals = bl_primer_mejor(vecino, matD, matF, delta, funcion_objetivo=funcion_objetivo)
+        evaluaciones += evals
         bl += 1
         # Paso 5
         if valor_vecino < mejor_valor:
@@ -43,4 +42,4 @@ def VNS(matD, matF, seed):
         else:
             k += 1
 
-    return mejor_solucion, mejor_valor, iters
+    return mejor_solucion, mejor_valor, evaluaciones

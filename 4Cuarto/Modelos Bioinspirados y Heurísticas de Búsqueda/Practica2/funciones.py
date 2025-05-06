@@ -103,10 +103,7 @@ def delta(S, d, f, r, s):
     # Términos fuera del bucle
     delta_val += d[r][s] * (f[Sr][Ss] - f[Ss][Sr]) + d[s][r] * (f[Ss][Sr] - f[Sr][Ss])
 
-    return delta_val
-
-def generar_solucion_inicial(n : int) -> np.ndarray:
-    return np.random.permutation(n, dtype=np.uint8)
+    return delta_val 
 
 def operador_sublista_aleatoria(solucion, s : int):
     """

@@ -17,7 +17,7 @@ def main():
     VNS -> 5 ejecuciones
     """
     test_funcion_objetivo()
-    practica2()
+    #practica2()
     #main_logger = Logger("resultados/practica2.csv", False)
     #graficas(main_logger)
     
@@ -32,6 +32,14 @@ def test_funcion_objetivo():
                  79, 56, 65, 62, 73, 42, 81, 70, 68, 14, 2, 6, 18, 77, 12, 16, 52, 22, 35, 11, 36, 27, 50, 5, 
                  13, 76, 28, 33, 55, 69, 64, 82, 46, 53, 3, 0, 1, 30, 59, 9, 88, 89, 25, 80, 72, 20, 63, 21, 
                  44, 54, 67, 84, 34, 31, 61, 86, 41, 10, 17, 45, 19, 32, 71, 38, 66, 23, 4]
+    
+    tai150_optima = [83, 62, 114, 18, 57, 64, 50, 104, 102, 5, 29, 26, 82, 122, 98, 24, 146, 30, 124, 47, 46,
+                115, 75, 143, 103, 81, 112, 60, 108, 110, 131, 92, 53, 87, 140, 127, 109, 36, 145, 63, 129,
+                67, 123, 45, 120, 72, 91, 113, 73, 12, 21, 74, 137, 141, 118, 147, 125, 68, 41, 17, 52, 132,
+                130, 15, 88, 86, 136, 38, 119, 23, 20, 70, 1, 8, 90, 3, 96, 89, 148, 25, 59, 65, 121, 99, 55,
+                94, 126, 135, 19, 95, 76, 56, 48, 101, 138, 133, 34, 71, 28, 111, 31, 77, 40, 79, 128, 93, 35,
+                7, 13, 32, 39, 11, 105, 97, 33, 142, 149, 27, 116, 6, 66, 100, 107, 80, 106, 69, 4, 0, 54, 2,
+                117, 51, 9, 84, 78, 14, 22, 61, 42, 43, 37, 134, 44, 58, 144, 139, 49, 85, 16, 10]
 
     #print(f"prueba optima = {funcion_objetivo(prueba_optima, prueba['distancia'], prueba['flujo'])}")
     print("OPTIMOS")
@@ -39,7 +47,7 @@ def test_funcion_objetivo():
     #print(f"tai25 = kevin {funcion_objetivo_kevin(tai25_optima, tai25['distancia'], tai25['flujo'])}")
     print(f"sko90 = {funcion_objetivo(sko90_optima, sko90['distancia'], sko90['flujo'])}")
     #print(f"sko90 = kevin {funcion_objetivo_kevin(sko90_optima, sko90['distancia'], sko90['flujo'])}")
-    #print(f"tai150 = {funcion_objetivo(sko90_optima, sko90['distancia'], sko90['flujo'])}")
+    print(f"tai150 = {funcion_objetivo(tai150_optima, tai150['distancia'], tai150['flujo'])}")
     print("##########################")
 
 def test_greedy_grasp():
@@ -49,7 +57,7 @@ def test_greedy_grasp():
 def practica2():
     grasp_logger = Logger("resultados/GRASP.csv")
     
-    for d in [sko90]: # Datasets QAP
+    for d in [tai25]: # Datasets QAP
         main_logger.set_dataset(d['nombre'])
         grasp_logger.set_dataset(d['nombre'])
 
@@ -76,7 +84,6 @@ def practica2():
         l = int(np.round(0.1 * n))
         solucion, valor, evaluaciones = GRASP(matD, matF, l, seeds, grasp_logger)
         main_logger.log("GRASP", vector_to_str(seeds), valor, evaluaciones, vector_to_str(solucion))
-        """
         
         # ILS
         seed = 42
@@ -87,7 +94,6 @@ def practica2():
         for seed in seeds:
             solucion, valor, evaluaciones = VNS(matD, matF, seed)
             main_logger.log("VNS", seed, valor, evaluaciones, vector_to_str(solucion))
-        """
 
 if __name__ == '__main__':
     main()
