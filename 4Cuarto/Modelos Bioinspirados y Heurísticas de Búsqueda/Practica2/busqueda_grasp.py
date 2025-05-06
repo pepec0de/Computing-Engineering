@@ -51,16 +51,18 @@ def generar_solucion_greedy(matD, matF, l : int, seed : float):
 def GRASP(matD, matF, l, semillas_bl, logger : Logger = None):
     mejor_solucion = None
     mejor_valor = np.inf
+    evaluaciones = 0
 
     for seed_bl in semillas_bl: # 5 semillas!!
         solucion_greedy, valor_greedy = generar_solucion_greedy(matD, matF, l, seed_bl)
-        if (logger != None): logger.log("Greedy Prob", seed_bl, valor_greedy, 1, solucion_greedy)
+        if (logger != None): logger.log("Greedy Prob", seed_bl, valor_greedy, 1, vector_to_str(solucion_greedy))
 
-        solucion_optimizada, valor_optimizada, eval = bl_primer_mejor(solucion_greedy, matD, matF, valor_greedy, delta, funcion_objetivo)
-        if (logger != None): logger.log("BL Primer Mejor", "N/A", None, valor_optimizada)
+        solucion_optimizada, valor_optimizada, eval = bl_primer_mejor(solucion_greedy, matD, matF, valor_greedy, funcion_objetivo)
+        if (logger != None): logger.log("BL Primer Mejor", "N/A", valor_optimizada, eval, vector_to_str(solucion_optimizada))
+        evaluaciones += eval
 
         if valor_optimizada < mejor_valor:
             mejor_solucion = solucion_optimizada
             mejor_valor = valor_optimizada
 
-    return mejor_solucion, mejor_valor
+    return mejor_solucion, mejor_valor, evaluaciones

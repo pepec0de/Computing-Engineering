@@ -12,36 +12,38 @@ def bl_mejor_vecino(seed, matD, matF, funcion_objetivo, delta):
     n_nodes = matD.shape[0]
     mejor_solucion = np.random.permutation(n_nodes)
     mejor_valor = funcion_objetivo(mejor_solucion, matD, matF)
-
+    valor_mejor_vecino = mejor_valor
+    print(type(mejor_valor))
     seguir = True
-    valor_delta = 0
 
     while seguir:
-        valor_mejor_vecino = mejor_valor
-        vecino = mejor_solucion.copy()
-        valor_vecino = mejor_valor
 
         for i in range(n_nodes - 1):
             for j in range(i + 1, n_nodes):
-                vecino[i], vecino[j] = vecino[j], vecino[i]
-                valor_vecino = funcion_objetivo(vecino, matD, matF)
+                
+                #valor_vecino = funcion_objetivo(vecino, matD, matF)
+                #valor_vecino = mejor_valor - delta(vecino, matD, matF, i, j)
+                valor_vecino = mejor_valor - delta(mejor_solucion, matD, matF, i, j)
+                #if evals % 10000 == 0: print(evals)
+                #print(f"funcion_objetivo(vecino, matD, matF) = {funcion_objetivo(vecino, matD, matF)}")
+                #print(f"valor_vecino = valor_vecino = mejor_valor - delta(mejor_solucion, matD, matF, i, j) = {mejor_valor} - {delta(mejor_solucion, matD, matF, i, j)} = {valor_vecino}")
+                #if funcion_objetivo(vecino, matD, matF) != valor_vecino: print("KAPASAO")
                 evals += 1
 
                 if valor_vecino < valor_mejor_vecino:
+                    mejor_vecino = mejor_solucion.copy()
+                    mejor_vecino[i], mejor_vecino[j] = mejor_vecino[j], mejor_vecino[i]
                     valor_mejor_vecino = valor_vecino
-                    mejor_vecino = vecino.copy()
-
-                vecino[i], vecino[j] = vecino[j], vecino[i]
         
         if valor_mejor_vecino < mejor_valor:
-            mejor_solucion = mejor_vecino
             mejor_valor = valor_mejor_vecino
+            mejor_solucion = mejor_vecino
         else:
             seguir = False
         
     return mejor_solucion, valor_mejor_vecino, evals
 
-def bl_primer_mejor(solucion_actual, matD, matF, valor_fo, delta):
+def bl_primer_mejor(solucion_actual, matD, matF, valor_fo, funcion_objetivo):
     """
     Se hace la busqueda local del primer mejor
     No hay componentes aleatorias
@@ -62,8 +64,9 @@ def bl_primer_mejor(solucion_actual, matD, matF, valor_fo, delta):
                 #vecino = operador_opt2(mejor_solucion, i, j) ->
                 vecino[i], vecino[j] = vecino[j], vecino[i]
                 #valor_vecino = mejor_valor - delta(vecino, matD, matF, i, j)
-                valor_vecino = delta(vecino, matD, matF)
+                valor_vecino = funcion_objetivo(vecino, matD, matF)
                 evals += 1
+                print(evals)
 
                 if valor_vecino < mejor_valor:
                     mejor_solucion = vecino

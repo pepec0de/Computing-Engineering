@@ -68,15 +68,16 @@ def practica2():
         # Busqueda Local
         seeds = [42] # PARA TESTEAR
         for seed_bl in seeds:
-            solucion, valor, evaluaciones = bl_mejor_vecino(seed_bl, matD, matF, funcion_objetivo, delta)
+            solucion, valor, evaluaciones = bl_mejor_vecino(seed_bl, matD, matF, funcion_objetivo, delta_numpy)
             main_logger.log("BL Mejor Vecino", seed_bl, valor, evaluaciones, vector_to_str(solucion))
         
+        """
         # GRASP
         l = int(np.round(0.1 * n))
         solucion, valor, evaluaciones = GRASP(matD, matF, l, seeds, grasp_logger)
         main_logger.log("GRASP", vector_to_str(seeds), valor, evaluaciones, vector_to_str(solucion))
 
-        """
+        
         # ILS
         seed = 42
         solucion, valor, evaluaciones = ILS(matD, matF, seed)

@@ -51,7 +51,7 @@ def save(path, solucion, valor, iteraciones):
 # Funcion objetivo de kevin
 def funcion_objetivo(solucion, matD, matF):
     permutado = matF[solucion, :][:, solucion]
-    return np.sum(np.multiply(matD, permutado))
+    return np.sum(np.multiply(matD, permutado), dtype=np.int32)
 
 def funcion_objetivo_original_QAP(solucion, matD, matF):
     result = 0
@@ -63,30 +63,46 @@ def funcion_objetivo_original_QAP(solucion, matD, matF):
                     result += matD[i, j] * matF[solucion[i] , solucion[j] ]
     return result
 
-def delta(solucion, matD, matF, r, s):
-    n = len(solucion)
-    d = matD
-    f = matF
-    sol = solucion
-
+def delta(S, d, f, r, s):
+    n = len(S)
     delta_val = 0
-
     for k in range(n):
         if k == r or k == s:
             continue
-
         delta_val += (
-            f[r][k] * (d[sol[s]][sol[k]] - d[sol[r]][sol[k]]) +
-            f[s][k] * (d[sol[r]][sol[k]] - d[sol[s]][sol[k]]) +
-            f[k][r] * (d[sol[k]][sol[s]] - d[sol[k]][sol[r]]) +
-            f[k][s] * (d[sol[k]][sol[r]] - d[sol[k]][sol[s]])
+            d[r][k] * (f[S[r]][S[k]] - f[S[s]][S[k]]) +
+            d[k][r] * (f[S[k]][S[r]] - f[S[k]][S[s]]) +
+            d[s][k] * (f[S[s]][S[k]] - f[S[r]][S[k]]) +
+            d[k][s] * (f[S[k]][S[s]] - f[S[k]][S[r]])
         )
-
-    # Parte constante fuera del bucle
     delta_val += (
-        f[r][s] * (d[sol[s]][sol[r]] - d[sol[r]][sol[s]]) +
-        f[s][r] * (d[sol[r]][sol[s]] - d[sol[s]][sol[r]])
+        d[r][s] * (f[S[r]][S[s]] - f[S[s]][S[r]]) +
+        d[s][r] * (f[S[s]][S[r]] - f[S[r]][S[s]])
     )
+    return delta_val
+
+def delta_numpy(S, d, f, r, s):
+    S = np.asarray(S)
+    n = len(S)
+
+    # Índices que no son r ni s
+    k = np.array([k for k in range(n) if k != r and k != s])
+
+    # Preextraer ubicaciones
+    Sr, Ss = S[r], S[s]
+    Sk = S[k]
+
+    # Vectorizados
+    term1 = d[r, k] * (f[Sr, Sk] - f[Ss, Sk])
+    term2 = d[k, r] * (f[Sk, Sr] - f[Sk, Ss])
+    term3 = d[s, k] * (f[Ss, Sk] - f[Sr, Sk])
+    term4 = d[k, s] * (f[Sk, Ss] - f[Sk, Sr])
+
+    # Suma total de los cuatro vectores
+    delta_val = np.sum(term1 + term2 + term3 + term4, dtype=np.int16)
+
+    # Términos fuera del bucle
+    delta_val += d[r][s] * (f[Sr][Ss] - f[Ss][Sr]) + d[s][r] * (f[Ss][Sr] - f[Sr][Ss])
 
     return delta_val
 
