@@ -1,5 +1,6 @@
 from funciones import *
 from busqueda_local import bl_primer_mejor
+from logger import Logger
 
 ################ Construccion de soluciones greedy probabilisticas ###########################################
 def generar_greedy_prob(matD, matF, l : int, seed : float):

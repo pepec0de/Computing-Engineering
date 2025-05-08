@@ -3,6 +3,7 @@ from busqueda_local import bl_mejor_vecino
 from busqueda_grasp import *
 from busqueda_ils import *
 from busqueda_vns import *
+from logger import Logger
 
 prueba = load_mats("datasets/prueba.dat")
 tai25 = load_mats("datasets/tai25b.dat")
@@ -17,7 +18,7 @@ def main():
     VNS -> 5 ejecuciones
     """
     test_funcion_objetivo()
-    #practica2()
+    practica2()
     #main_logger = Logger("resultados/practica2.csv", False)
     #graficas(main_logger)
     
@@ -67,7 +68,7 @@ def practica2():
         
         grasp_logger.archivo = d['nombre']
         seeds = [42, 420, 4200, 42000, 80987]
-
+        """
         # Greedy
         solucion = busqueda_greedy(matD, matF)
         valor = funcion_objetivo(solucion, matD, matF)
@@ -88,7 +89,8 @@ def practica2():
         seed = 42
         solucion, valor, evaluaciones = ILS(matD, matF, seed)
         main_logger.log("ILS", seed, valor, vector_to_str(solucion))
-
+        """
+        seeds = [500, 1000, 10000, 42000, 80987]
         # VNS
         for seed in seeds:
             solucion, valor, evaluaciones = VNS(matD, matF, seed)

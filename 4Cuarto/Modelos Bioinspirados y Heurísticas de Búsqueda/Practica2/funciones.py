@@ -1,5 +1,4 @@
 import numpy as np
-from logger import Logger
 
 def load_mats(path, verbose=False):
     """

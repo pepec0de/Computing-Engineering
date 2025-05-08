@@ -1,4 +1,2 @@
-Hay que hacer la busqueda aleatorizada del primer vecino.
-Hay que buscar el 2-opt una cantidad de veces? O simplemente se para cuando el vecino te dé una solución mejor a la actual? En qué espacio de búsqueda se mira por el primer mejor vecino? Qué criterio determina la no mejora
-
-
+pagina 4 VNS solo una ejecucion??
+si solo cada algoritmo tiene una solucion es necesario calcular la media y la std??

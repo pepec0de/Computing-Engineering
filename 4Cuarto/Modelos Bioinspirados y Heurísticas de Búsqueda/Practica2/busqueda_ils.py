@@ -1,5 +1,6 @@
 from funciones import *
 from busqueda_local import bl_primer_mejor
+from logger import Logger
 
 """
 Se usa el Modelo estrategia (mu + lambda)

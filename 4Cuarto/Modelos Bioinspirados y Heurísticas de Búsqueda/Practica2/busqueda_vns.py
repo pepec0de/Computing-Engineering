@@ -12,7 +12,7 @@ def VNS(matD, matF, seed):
     bl = 0
 
     mejor_solucion = np.random.permutation(n)
-    mejor_valor = funcion_objetivo(mejor_solucion, matD, matF, funcion_objetivo=funcion_objetivo)
+    mejor_valor = funcion_objetivo(mejor_solucion, matD, matF)
     evaluaciones = 0
 
     # Paso 6
