@@ -20,6 +20,7 @@ def VNS(matD, matF, seed):
         # Paso 2
         if k > k_max:
             k = 1
+            #seguir = False ->>> asi se hace
         # Paso 3
         s = int(np.round(n / (9 - k)))
         vecino = operador_sublista_aleatoria(mejor_solucion, s)
