@@ -1,3 +1,8 @@
+*.bak
+*.dat
+*.sln
+*.csv
+
 # Compiled class file
 *.class
 
@@ -42,7 +47,7 @@ build/
 *.avi
 *.asv
 
-.code-workspace
+*.code-workspace
 
 # Miscellaneous
 *.class

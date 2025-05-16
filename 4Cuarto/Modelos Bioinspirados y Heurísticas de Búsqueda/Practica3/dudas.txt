@@ -1,0 +1,2 @@
+pagina 4 VNS solo una ejecucion??
+si solo cada algoritmo tiene una solucion es necesario calcular la media y la std??
